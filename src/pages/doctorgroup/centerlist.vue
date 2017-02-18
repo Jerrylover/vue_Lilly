@@ -5,10 +5,10 @@
         <div class="row" style="margin: 0px;border-bottom: 1px solid #ccc; padding-bottom: 0px">
             <div class="col-sm-12"  style="padding-left:0px; padding-right: 0px">
                 <h4>{{dg_project.title}}项目</h4>
-                <router-link v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px" to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
+                <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
                 <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                     <li>返回</li>
-                    <li><router-link href="#" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                    <li><router-link  href="#"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 </ol>
             </div>
         </div>
@@ -34,12 +34,12 @@
                 <td>{{center.dg_centerid}}</td>
                 <td>{{center.title}}</td>
                 <td>{{center.masters.join('、')}}</td>
-                <td><router-link class="scale" href="javascript:" to="{name:'doctorgroup-centerdetail', params: {'centerid': center.dg_centerid}}">{{center.doctorcnt}}</router-link></td>
-                <td><router-link class="scale" v-dg-privilege="projectid + '-1 | ' + center.dg_centerid + '-x | clearlink'" href="javascript:" style="text-decoration: none" to="{name: 'doctorgroup-patientlist', query:{'projectid': projectid, 'centerid': center.dg_centerid, 'doctorid': ''}}">{{center.patientcnt}}</router-link></td>
+                <td><router-link  class="scale" href="javascript:"  :to="{name:'doctorgroup-centerdetail', params: {'centerid': center.dg_centerid}}">{{center.doctorcnt}}</router-link></td>
+                <td><router-link  class="scale" v-dg-privilege="projectid + '-1 | ' + center.dg_centerid + '-x | clearlink'" href="javascript:" style="text-decoration: none"  :to="{name: 'doctorgroup-patientlist', query:{'projectid': projectid, 'centerid': center.dg_centerid, 'doctorid': ''}}">{{center.patientcnt}}</router-link></td>
                 <td>{{center.createtime}}</td>
                 <td>
-                    <router-link class="scale" href="javascript:" to="{name:'doctorgroup-centerdetail', params: {'centerid': center.dg_centerid}}">查看成员</router-link>
-                    <router-link class="scale" v-dg-privilege="projectid + '-1 | ' + center.dg_centerid + '-1'" href="javascript:" to="{name:'doctorgroup-modifycenter', params: {'centerid': center.dg_centerid, 'projectid': projectid}}">设置</router-link>
+                    <router-link  class="scale" href="javascript:"  :to="{name:'doctorgroup-centerdetail', params: {'centerid': center.dg_centerid}}">查看成员</router-link>
+                    <router-link  class="scale" v-dg-privilege="projectid + '-1 | ' + center.dg_centerid + '-1'" href="javascript:"  :to="{name:'doctorgroup-modifycenter', params: {'centerid': center.dg_centerid, 'projectid': projectid}}">设置</router-link>
                 </td>
             </tr>
             <tr v-if="centerlist.length == 0">
@@ -59,7 +59,7 @@
 </style>
 <script>
     import api from '../../config/api.js';
-    module.exports = {
+    export default {
         data: function() {
             return {
                 projectid: '',

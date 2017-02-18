@@ -575,7 +575,7 @@ import api from '../../config/api.js';
 import nationlist from '../../config/nationlist.js';
 import rule from '../../config/rule.js';
 import provinceAndCityList from '../../config/provinceAndCityList.js';
-module.exports = {
+export default {
     data: function() {
         return {
             picked1: '',
@@ -1026,7 +1026,7 @@ module.exports = {
                     }else {
                         that.$emit('show-popup', '保存成功', function() {
                             if (typeof data.patientid != ``) {
-                                that.$route.router.push({
+                                that.$router.push({
                                     path: '/patient/' + data.patientid + '/baseinfo'
                                 })
                             }

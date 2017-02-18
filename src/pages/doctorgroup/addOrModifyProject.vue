@@ -6,7 +6,7 @@
             <h4>{{pagetitle}}</h4>
             <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                 <li>返回</li>
-                <li><router-link href="#" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  href="#"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
             </ol>
         </div>
         <div class="row mg-t-20">
@@ -93,7 +93,7 @@
 </style>
 <script>
     import api from '../../config/api.js';
-    module.exports = {
+    export default {
         data: function() {
             return {
                 alertError: '',
@@ -205,7 +205,7 @@
         route: {
             data: function(transition) {
                 var self = this;
-                this.routeFrom = transition.to.name;
+                this.routeFrom = this.$route.name;
                 console.log(this.routeFrom);
                 console.log(transition.to);
                 if (this.routeFrom == 'doctorgroup-addproject') {
@@ -294,7 +294,7 @@
                 })
             },
             goProjectList: function() {
-                this.$route.router.push({
+                this.$router.push({
                     name: 'doctorgroup-projectlist',
                 })
             },

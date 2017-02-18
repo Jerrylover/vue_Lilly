@@ -34,7 +34,7 @@ label {
 </style>
 <script>
 import api from '../../config/api.js'
-module.exports = {
+export default {
     data: function() {
         return {
             password: '',

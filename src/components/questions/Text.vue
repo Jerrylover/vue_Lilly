@@ -31,7 +31,7 @@ div.select-unit span {
 }
 </style>
 <script>
-module.exports = {
+export default {
     data: function() {
         return {
             text: '',

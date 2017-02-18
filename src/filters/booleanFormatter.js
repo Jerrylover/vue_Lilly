@@ -1,4 +1,4 @@
-module.exports = function (boolean, trueText, falseText) {
+export default function (boolean, trueText, falseText) {
     var result;
 
     trueText = trueText || 'Yes';

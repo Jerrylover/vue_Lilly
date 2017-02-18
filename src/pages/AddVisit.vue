@@ -10,16 +10,17 @@
         </div>
         <div class="panel-body form">
           <div class="inner-addon right-addon">
-            <i class="fa fa-calendar-check-o fa-lg"></i>
-            <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
-            <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+            <!-- <i class="fa fa-calendar-check-o fa-lg"></i> -->
+            <!-- <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
+            <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
+            <el-date-picker v-model="value" type="date" placeholder=""></el-date-picker>
           </div>
           <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
-            <select class="form-control" v-model="typestr">
-                            <option value="门诊">门诊</option>
-                            <option value="住院">住院</option>
-                            <option value="出院">出院</option>
-                        </select>
+              <el-select v-model="typestr" placeholder="">
+                  <el-option label="门诊" value="门诊"></el-option>
+                  <el-option label="住院" value="住院"></el-option>
+                  <el-option label="出院" value="出院"></el-option>
+              </el-select>
           </div>
           <div class="form-group">
             <button class="btn btn-primary" @click="addVisit($event)">添加</button>
@@ -84,7 +85,7 @@
 .inner-addon {
   position: relative;
   float: left;
-  width: 28%;
+  /*width: 28%;*/
 }
 
 
@@ -124,28 +125,22 @@
 
 button {
   float: left;
-  margin-left: 50px;
+  /*margin-left: 50px;*/
 }
 </style>
 <script>
 import api from '../config/api.js'
 import common from '../lib/common.js'
 import libpatient from '../lib/patient.js'
-module.exports = {
+import util from '../lib/util.js'
+export default {
   data: function() {
     return {
       diseaseid: '',
       typestr: '门诊',
       patientname: '',
-      patientid: '',
       revisitRecords: '',
-      show: false,
-      type: "date", //date datetime
-      value: "",
-      begin: "",
-      x: 0,
-      y: 0,
-      range: false, //是否多选
+      value: '',
     }
   },
   components: {
@@ -173,30 +168,9 @@ module.exports = {
     }
   },
   methods: {
-    showCalendar: function(e) {
-      var that = this;
-      that.show = true;
-      that.x = e.target.offsetLeft;
-      that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-      var bindHide = function(event) {
-        if (event.target == e.target) {
-          return;
-        }
-        event.stopPropagation();
-
-        that.show = false;
-        document.removeEventListener('click', bindHide, false);
-        document.removeEventListener('touchstart', bindHide, false);
-      };
-      setTimeout(function() {
-        document.addEventListener('click', bindHide, false);
-        document.addEventListener('touchstart', bindHide, false);
-      }, 500);
-    },
     addVisit: function(e) {
       e.preventDefault();
       var self = this;
-      var util = require('../lib/util.js');
       $.ajax({
         url: api.get('revisitrecord.add'),
         type: 'post',
@@ -215,7 +189,7 @@ module.exports = {
           if (common.isGastricCancer(diseaseid)) {
             path = '/checkuptpl/' + self.patientid + '/child/zhusu1/主诉';
           }
-          self.$route.router.push({
+          self.$router.push({
             path: path,
             query: {
               date: self.value
@@ -283,6 +257,21 @@ module.exports = {
       }
       return value;
     }
+  },
+  mounted: function() {
+      this.value = util.getFormatDate();
+  },
+  created: function() {
+      this.fetchPatient();
+      this.fetchData();
+      this.diseaseid = common.getDiseaseId();
+  },
+  watch: {
+      '$route': (to, from) => {
+          this.fetchPatient();
+          this.fetchData();
+          this.diseaseid = common.getDiseaseId();
+      }
   }
 }
 </script>

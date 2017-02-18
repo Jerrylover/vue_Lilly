@@ -5,13 +5,13 @@
 <div class="container-fluid content">
     <div class="row table-header" style="border-bottom:1px solid #ccc;">
         <h4>患者列表</h4>
-        <div v-privilege="数据库-功能-患者审核" class="segmented-control a-new-patient col-sm-3" style="border:1px solid #ccc;padding:0" v-if="diseaseid == 3">
+        <div v-privilege="'数据库-功能-患者审核'" class="segmented-control a-new-patient col-sm-3" style="border:1px solid #ccc;padding:0" v-if="diseaseid == 3">
             <input type='radio' id="patient-list" />
             <label for="patient-list" :class="{active1: pathname == 'patient-list'}" @click="clickLabel($event, 'list')">患者列表</label>
             <input type='radio' id="patient-auditlist" />
             <label for="patient-auditlist" @click="clickLabel($event, 'auditlist')">待审列表 <span v-show="auditcnt > 0" class="badge" style="background-color:#DE5F5F">{{auditcnt}}</span></label>
         </div>
-        <a v-privilege="数据库-患者-添加" class="a-new-patient btn btn-default btn-sm" href="javascript:"  @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
+        <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-default btn-sm" href="javascript:"  @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
         <div class="form-group">
             <div class="input-group">
                 <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.enter='doSearch($event)'>
@@ -54,7 +54,7 @@
                     <td v-if="diseaseCount > 1">{{patient.diseasename}}</td>
                     <td v-html="isbindwxdesc(patient.isbindwx)"></td>
                     <td>
-                        <a v-privilege="数据库-患者-添加就诊" class="scale" style="margin-right:20px;" href="javascript:" @click='goVisit(index, $event)'>添加就诊</a>
+                        <a v-privilege="'数据库-患者-添加就诊'" class="scale" style="margin-right:20px;" href="javascript:" @click='goVisit(index, $event)'>添加就诊</a>
                         <a class="scale" href="javascript:" @click='goRevisitRecords(index, $event)'>查看病历</a>
                     </td>
                 </tr>
@@ -113,7 +113,7 @@ table thead th {
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import libpatient from '../../lib/patient.js'
-module.exports = {
+export default {
     data: function() {
         return {
             patients: '',
@@ -146,11 +146,11 @@ module.exports = {
     filters: {
 
     },
-    route: {
-        data: function(transition) {
+    methods: {
+        fetchData: function() {
             var self = this;
-            var queryStrings = transition.to.query;
-            this.pathname = transition.to.name;
+            var queryStrings = this.$route.query;
+            this.pathname = this.$route.name;
             $.ajax({
                     url: api.get('patient.list'),
                     type: 'post',
@@ -159,17 +159,13 @@ module.exports = {
                 }).done(function(d) {
                     var data = d.data;
                     self.patients = data.list;
-                    self.pagenum = data.page;
-                    self.pagesize = data.pagesize;
-                    self.total = data.total;
+                    self.pagenum = data.page - '';
+                    self.pagesize = data.pagesize - '';
+                    self.total = data.total - '';
                     self.patient_name = data.patient_name;
                     self.auditcnt = data.auditcnt;
-
-                    transition.next();
                 })
-        }
-    },
-    methods: {
+        },
         isbindwxdesc: function(value) {
             var desc = '';
             if (value == 1) {
@@ -183,7 +179,7 @@ module.exports = {
         },
         doSearch: function(e) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 path: '/patient/list',
                 query: {
                     'patient_name': this.patient_name
@@ -199,12 +195,12 @@ module.exports = {
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
                 if (common.isCancerDisease(diseaseId)) {
-                    this.$route.router.push({
+                    this.$router.push({
                         path: '/patient/' + patient.patient_id + '/baseinfo-lungcancer/'
                     });
 
                 }else {
-                    this.$route.router.push({
+                    this.$router.push({
                         path: '/patient/' + patient.patient_id + '/baseinfo/'
                     })
                 }
@@ -217,7 +213,7 @@ module.exports = {
             libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/' + patient.patient_id + '/revisitrecords/'
                 })
             }
@@ -229,7 +225,7 @@ module.exports = {
             libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/addvisit/' + patient.patient_id
                 })
             }
@@ -237,20 +233,31 @@ module.exports = {
         addPatient: function() {
             var diseaseId = common.getDiseaseId();
             if (common.isCancerDisease(diseaseId)) {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/new-lungcancer',
                 })
             }else{
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/new',
                 })
             }
         },
         clickLabel: function(e, path) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 path:'/patient/' + path,
             });
+        }
+    },
+    mounted: function() {
+        console.log('xxx');
+    },
+    created: function() {
+        this.fetchData();
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.fetchData();
         }
     }
 }

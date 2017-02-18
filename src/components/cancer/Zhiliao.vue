@@ -489,7 +489,7 @@ td.mytd table tr:first-of-type td, td.mytd table tr:first-of-type th {
 import api from '../../config/api.js'
 import util from '../../lib/util.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             chemoid: '',

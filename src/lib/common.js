@@ -1,9 +1,10 @@
-var cookie = require('./cookie.js');
-var api = require('../config/api.js')
-var config = require('../config/config.js')
-var util = require('../lib/util.js')
-require('./base64.js');
-module.exports = {
+import cookie from './cookie.js'
+import api from '../config/api.js'
+import config from '../config/config.js'
+import util from '../lib/util.js'
+import './base64.js'
+
+export default {
     'isLogin': function() {
         var code = cookie.get('_myuserid_');
         if (!code) {
@@ -87,7 +88,7 @@ module.exports = {
         });
         localStorage.clear();
         // window.location.reload();
-        vue.$route.router.push({
+        vue.$router.push({
             name: 'login'
         })
     },
@@ -103,6 +104,8 @@ module.exports = {
         var diseaseid = localStorage.getItem('_diseaseid_');
         diseaseid = typeof diseaseid != 'undefined' ? diseaseid : '';
         var diseases = this.getDiseases();
+
+
         if (diseases.length > 0) {
             if (!diseaseid || !util.inArray2(diseases, 'diseaseid', diseaseid)) {
                 diseaseid = diseases[0].diseaseid;

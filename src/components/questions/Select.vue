@@ -66,7 +66,7 @@ div.edss-tip>p {
 }
 </style>
 <script>
-module.exports = {
+export default {
     data: function() {
         return {
             selected: '',

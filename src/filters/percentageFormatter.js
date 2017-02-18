@@ -1,4 +1,4 @@
-module.exports = function (number, digits) {
+export default function (number, digits) {
     var result;
 
     if (digits === null || digits === undefined) {

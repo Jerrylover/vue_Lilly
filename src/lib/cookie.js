@@ -182,4 +182,4 @@
 // If used e.g. with Browserify and CommonJS, document is not declared.
 
 
-module.exports = cookie
+export default cookie

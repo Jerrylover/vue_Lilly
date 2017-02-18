@@ -11,7 +11,7 @@
             <input type='radio' id="patient-auditlist" />
             <label for="patient-auditlist" :class="{active1: pathname == 'patient-auditlist'}" @click="clickLabel($event, 'auditlist')">待审列表 <span v-show="auditcnt > 0" class="badge" style="background-color:#DE5F5F">{{auditcnt}}</span></label>
         </div>
-        <a v-privilege="数据库-患者-添加" class="a-new-patient btn btn-default btn-sm" href="javascript:" @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
+        <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-default btn-sm" href="javascript:" @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
         <div class="form-group" v-if="0">
             <div class="input-group">
                 <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.enter='doSearch($event)'>
@@ -119,7 +119,7 @@ tr.gray {
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import libpatient from '../../lib/patient.js'
-module.exports = {
+export default {
     data: function() {
         return {
             patients: '',
@@ -158,7 +158,7 @@ module.exports = {
     },
     route: {
         data: function(transition) {
-            this.pathname = transition.to.name;
+            this.pathname = this.$route.name;
             this.fetchData();
             transition.next();
         }
@@ -194,7 +194,7 @@ module.exports = {
         },
         doSearch: function(e) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 path: '/patient/list',
                 query: {
                     'patient_name': this.patient_name
@@ -209,12 +209,12 @@ module.exports = {
             libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
             if (typeof patient != 'undefined') {
                 if (common.isCancerDisease(diseaseId)) {
-                    this.$route.router.push({
+                    this.$router.push({
                         path: '/patient/' + patient.patient_id + '/baseinfo-lungcancer/'
                     });
 
                 } else {
-                    this.$route.router.push({
+                    this.$router.push({
                         path: '/patient/' + patient.patient_id + '/baseinfo/'
                     })
                 }
@@ -226,7 +226,7 @@ module.exports = {
             libpatient.setPatientName(patient.patient_id, patient.name);
             libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
             if (typeof patient != 'undefined') {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/' + patient.patient_id + '/revisitrecords/'
                 })
             }
@@ -237,7 +237,7 @@ module.exports = {
             libpatient.setPatientName(patient.patient_id, patient.name);
             libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
             if (typeof patient != 'undefined') {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/addvisit/' + patient.patient_id
                 })
             }
@@ -245,18 +245,18 @@ module.exports = {
         addPatient: function() {
             var diseaseId = common.getDiseaseId();
             if (common.isCancerDisease(diseaseId)) {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/new-lungcancer',
                 })
             } else {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/new',
                 })
             }
         },
         clickLabel: function(e, path) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 path: '/patient/' + path,
             });
         },

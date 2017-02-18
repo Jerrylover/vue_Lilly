@@ -33,9 +33,9 @@
             </div>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-centerlist', params:{'projectid': currentprojectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': currentprojectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li>
             </ol>
         </div>
         <div class="row">
@@ -97,7 +97,7 @@
     import api from '../../config/api.js';
     import common from '../../lib/common.js';
     import libpatient from '../../lib/patient.js'
-    module.exports = {
+    export default {
         data: function() {
             return {
                 pagenum: 1,
@@ -169,7 +169,7 @@
             changeproject: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
-                this.$route.router.push({
+                this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
                         projectid: self.projectlist[index].id,
@@ -179,7 +179,7 @@
             changecenter: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
-                this.$route.router.push({
+                this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
                         projectid: self.currentprojectid,
@@ -190,7 +190,7 @@
             changedoctor: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
-                this.$route.router.push({
+                this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
                         projectid: self.currentprojectid,
@@ -202,7 +202,7 @@
             dosearch: function(e) {
                 e.preventDefault();
                 this.$route.query.keyword = this.keyword;
-                this.$route.router.push({
+                this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: this.$route.query,
                 })
@@ -214,7 +214,7 @@
                 libpatient.setPatientName(patient.patient_id, patient.name);
                 libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
                 if (typeof patient != 'undefined') {
-                    this.$route.router.push({
+                    this.$router.push({
                         path: '/doctorgroup/' + patient.patient_id + '/revisitinfo/',
                         query: {
                             doctorid: patient.doctorid,
@@ -234,7 +234,7 @@
                 if (typeof patient != 'undefined') {
                     if (common.isCancerDisease(diseaseId)) {
                         console.log('1111');
-                        this.$route.router.push({
+                        this.$router.push({
                             path: '/doctorgroup/' + patient.patient_id + '/patientbaseinfo-lungcancer/',
                             query: {
                                 projectid: self.currentprojectid,
@@ -244,7 +244,7 @@
                         });
 
                     }else {
-                        this.$route.router.push({
+                        this.$router.push({
                             path: '/doctorgroup/' + patient.patient_id + '/patientbaseinfo/',
                             query: {
                                 projectid: self.currentprojectid,
@@ -255,6 +255,12 @@
                     }
                 }
             },
+        },
+        created: function() {
+            this.fetchData()
+        },
+        watch: {
+            '$route': 'fetchData'
         }
 
     }

@@ -26,9 +26,9 @@
         <div class="row" style="border-bottom: 1px solid #ccc">
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link href="javascript:" to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
             </ol>
         </div>
         <div class="row" style="margin-top: 20px">
@@ -80,7 +80,7 @@
 </style>
 <script>
     import api from '../../config/api.js';
-    module.exports = {
+    export default {
         data: function() {
             return {
                 path:'',
@@ -137,7 +137,7 @@
                 }
                 console.log('1111111111111111');
                 console.log(self.currentdisease);
-                self.$route.router.push({
+                self.$router.push({
                     name: 'doctorgroup-importpatients',
                     query: {
                         'diseaseid': self.currentdisease,

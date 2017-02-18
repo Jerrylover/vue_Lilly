@@ -2,11 +2,11 @@
 <div class="row table-header">
     <h4>{{patientname}}</h4>
     <a class="btn btn-md" :class="{'btn-default': active != 'basic', 'btn-primary': active == 'basic'}" href="javascript:" @click="goPatient">基本信息</a>
-    <router-link class="btn btn-md" :class="{'btn-default': active != 'revisitrecords', 'btn-primary': active == 'revisitrecords'}" to="{path: '/patient/' + patientid + '/revisitrecords'}">历次就诊</router-link>
-    <router-link v-privilege="数据库-患者-添加就诊" class="btn btn-md" :class="{'btn-default': active != 'addvist', 'btn-primary': active == 'addvist'}" href="javascript:" to="{path: '/addvisit/' + patientid}">添加就诊</router-link>
+    <router-link  class="btn btn-md" :class="{'btn-default': active != 'revisitrecords', 'btn-primary': active == 'revisitrecords'}"  :to="{path: '/patient/' + patientid + '/revisitrecords'}">历次就诊</router-link>
+    <router-link  v-privilege="'数据库-患者-添加就诊'" class="btn btn-md" :class="{'btn-default': active != 'addvist', 'btn-primary': active == 'addvist'}" href="javascript:"  :to="{path: '/addvisit/' + patientid}">添加就诊</router-link>
 
-    <router-link v-privilege="数据库-量表-入口" class="btn btn-md" :class="{'btn-default': active != 'addcheck', 'btn-primary': active == 'addcheck'}" to="{path:'/checkuptpl/' + patientid + '/child/'+ zhusuLink +'/主诉'}">数据录入</router-link>
-    <a v-privilege="数据库-患者-删除" :class="{'hidden': active != 'basic', '': active=='basic'}" href="javascript: " style="color:#ff0000;float:right;margin:20px 0 0 0;" @click="removePatientClick">删除患者</a>
+    <router-link  v-privilege="'数据库-量表-入口'" class="btn btn-md" :class="{'btn-default': active != 'addcheck', 'btn-primary': active == 'addcheck'}"  :to="{path:'/checkuptpl/' + patientid + '/child/'+ zhusuLink +'/主诉'}">数据录入</router-link>
+    <a v-privilege="'数据库-患者-删除'" :class="{'hidden': active != 'basic', '': active=='basic'}" href="javascript: " style="color:#ff0000;float:right;margin:20px 0 0 0;" @click="removePatientClick">删除患者</a>
 </div>
 </template>
 <style scoped>
@@ -39,7 +39,7 @@ a {
 import common from '../lib/common.js';
 import libpatient from '../lib/patient.js';
 import api from '../config/api.js';
-module.exports = {
+export default {
     data: function() {
         return {}
     },
@@ -58,11 +58,11 @@ module.exports = {
         goPatient: function() {
             var diseaseId = common.getDiseaseId();
             if (common.isCancerDisease(diseaseId)) {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/' + this.patientid + '/baseinfo-lungcancer/',
                 })
             } else {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/' + this.patientid + '/baseinfo/',
                 })
             }
@@ -82,7 +82,7 @@ module.exports = {
                         that.$emit('show-alert', d.errmsg);
                     } else {
                         that.$emit('show-popup', '删除成功', function() {
-                            that.$route.router.push({
+                            that.$router.push({
                                 path:'/'
                             })
                         });

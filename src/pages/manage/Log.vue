@@ -72,7 +72,7 @@ h4 {
 <script>
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             pagenum: 1,
@@ -104,7 +104,7 @@ module.exports = {
     methods: {
         clickSearch: function(e) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 name: 'log',
                 query: {
                     'patientname': this.patientname,

@@ -13,23 +13,23 @@
                         </ul>
                     </li>
                     <li v-bind:class="{activeFix: active == 'patient'}">
-                        <router-link href="#" to="{path:'/patientmgr/list'}">患者</router-link>
+                        <router-link  :to="{path:'/patientmgr/list'}">患者</router-link>
                     </li>
 
-                    <li v-privilege="数据库-菜单-数据统计1">
+                    <li v-privilege="'数据库-菜单-数据统计1'">
                         <a href="javascript:">数据统计</a>
                     </li>
-                    <li  v-privilege="数据库-菜单-管理" v-bind:class="{activeFix: active == 'manager'}">
-                        <router-link to="{name:'manager'}"><span class="badge pull-right" style="background:red;">new</span>管理</router-link>
+                    <li  v-privilege="'数据库-菜单-管理'" v-bind:class="{activeFix: active == 'manager'}">
+                        <router-link   :to="{name:'manager'}"><span class="badge pull-right" style="background:red;">new</span>管理</router-link>
                     </li>
-                    <li  v-privilege="数据库-菜单-操作日志" v-bind:class="{activeFix: active == 'log'}">
-                        <router-link to="{name:'log'}">操作日志</router-link>
+                    <li  v-privilege="'数据库-菜单-操作日志'" v-bind:class="{activeFix: active == 'log'}">
+                        <router-link   :to="{name:'log'}">操作日志</router-link>
                     </li>
                     <li v-bind:class="{activeFix: isuser}">
-                        <router-link to="{name:'user-info'}">个人中心</router-link>
+                        <router-link   :to="{name:'user-info'}">个人中心</router-link>
                     </li>
                     <li v-if="username == 'wangqian'" v-bind:class="{activeFix: active == 'doctorgroup'}">
-                        <router-link to="{name:'doctorgroup-projectlist'}">医生团队</router-link>
+                        <router-link   :to="{name:'doctorgroup-projectlist'}">医生团队</router-link>
                     </li>
                     <li>
                         <a href="javascript:" @click="logout($event)">退出 [{{name}}]</a>
@@ -211,12 +211,15 @@ tr.light-tr th {
     font-weight:normal;
     background: #F5F6FA;
 }
+.el-input__inner {
+    border-radius: 2px;
+}
 
 </style>
 <script>
 import common from '../lib/common.js';
 import config from '../config/config.js'
-module.exports = {
+export default {
     data: function() {
         return {
             state: 1,
@@ -290,7 +293,7 @@ module.exports = {
                 this.state = 1;
             }
             if (this.$route.name != 'patient-list') {
-                this.$route.router.push({
+                this.$router.push({
                     path: '/patient/list'
                 });
             } else {

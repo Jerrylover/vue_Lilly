@@ -8,10 +8,10 @@
             <h4>{{patientname}}</h4>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
             </ol>
         </div>
         <div class="row">
@@ -20,7 +20,7 @@
                     <tr id="baseinfohead" class="bg-F5F6FA">
                         <th colspan="6">基本信息
                             <template v-if="routepath == 'patient-baseinfo-lungcancer'">
-                                <router-link v-privilege="数据库-患者-修改" style="float: right;margin-right: 10px;" href="javascript:" to="{path:'/patient/'+patientid + '/modify-lungcancer/'}">基本信息修改</router-link>
+                                <router-link  v-privilege="'数据库-患者-修改'" style="float: right;margin-right: 10px;" href="javascript:"  :to="{path:'/patient/'+patientid + '/modify-lungcancer/'}">基本信息修改</router-link>
                                 <a style="float: right;margin-right: 10px;" href="javascript:" @click.stop="clickBind">{{wxtitle}}</a>
                             </template>
                         </th>
@@ -315,7 +315,7 @@ import util from '../../lib/util.js';
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import libpatient from '../../lib/patient.js'
-module.exports = {
+export default {
     data: function() {
         return {
             headerselected: 'patient',
@@ -409,7 +409,7 @@ module.exports = {
         data: function(transition) {
             var that = this;
             var patientname = libpatient.getPatientName(that.patientid)
-            that.routepath = transition.to.name;
+            that.routepath = this.$route.name;
             console.log(transition);
             if (that.routepath == 'doctorgroup-baseinfo-lungcancer') {
                 that.headerselected = 'doctorgroup';

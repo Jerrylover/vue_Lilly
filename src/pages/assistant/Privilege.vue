@@ -61,7 +61,7 @@ h4 {
 </style>
 <script>
 import api from '../../config/api.js'
-module.exports = {
+export default {
     data: function() {
         return {
             name: '',
@@ -148,7 +148,7 @@ module.exports = {
                     that.$emit('show-alert', d.errmsg);
                 } else {
                     that.$emit('show-popup', '保存成功', function() {
-                        that.$route.router.push({
+                        that.$router.push({
                             name: 'manager'
                         })
                     });

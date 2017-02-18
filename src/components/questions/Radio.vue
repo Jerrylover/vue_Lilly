@@ -84,7 +84,8 @@ div.edss-tip>p {
 }
 </style>
 <script>
-module.exports = {
+import edss from '../../config/edss.js'
+export default {
     data: function() {
         return {
             picked: '',
@@ -124,7 +125,6 @@ module.exports = {
         fs: function() {
             var fs = '';
             if (this.picked !== '') {
-                var edss = require('../../config/edss.js');
                 for (var i = 0; i < this.question.options.length; i++) {
                     if (this.question.options[i].id == this.picked) {
                         fs = this.question.options[i].content;

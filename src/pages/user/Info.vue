@@ -7,6 +7,7 @@
     <div class="row mg-t-20">
         <div class="col-lg-6 col-sm-12" style="padding:0">
             <table class="table table-bordered">
+                <tbody>
                 <tr>
                     <td class="col-sm-2">姓名</td>
                     <td>{{myuser.name}}</td>
@@ -31,6 +32,7 @@
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -43,19 +45,13 @@
 </style>
 <script>
 import api from '../../config/api.js'
-module.exports = {
+export default {
     data: function() {
         return {
             myuser: '',
         }
     },
     computed: {
-    },
-    route: {
-        data: function(transition) {
-            this.fetchAssistant();
-            transition.next();
-        }
     },
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
@@ -78,6 +74,12 @@ module.exports = {
                 }
             })
         },
+    },
+    created: function() {
+        this.fetchAssistant()
+    },
+    watch: {
+        '$route': 'fetchAssistant'
     }
 }
 </script>

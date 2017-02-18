@@ -29,7 +29,7 @@
 <script>
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             diseaseid: '',
@@ -54,7 +54,7 @@ module.exports = {
         selectDisease: function(e) {
             localStorage.setItem('_diseaseid_', this.diseaseid)
             // console.log(this.$route);
-            this.$route.router.push({
+            this.$router.push({
                 path: this.$route.query.from,
                 query: {
                     diseaseid: this.diseaseid

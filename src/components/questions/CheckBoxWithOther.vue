@@ -23,7 +23,7 @@
 </style>
 <script>
 import util from '../../lib/util.js';
-module.exports = {
+export default {
     data: function() {
         return {
             checked: [],

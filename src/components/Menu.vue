@@ -41,7 +41,8 @@ li:hover {
 </style>
 <script>
 import Vue from 'vue'
-module.exports = {
+import util from '../lib/util.js'
+export default {
     props: {
         model: Object,
         ischild: false,
@@ -88,7 +89,6 @@ module.exports = {
                 // console.log('暴击间隔', t - lastClickTime);
             }
             sessionStorage.setItem('clickTime', t);
-            var util = require('../lib/util.js');
             var obj = util.getAllFormData();
             var formSnap = sessionStorage.getItem('form-snap');
             var objSnap = JSON.parse(formSnap);
@@ -115,7 +115,7 @@ module.exports = {
                     var ename = that.model.link;
                     if (ename) {
                         window.scrollTo(0, 0);
-                        that.$route.router.push({
+                        that.$router.push({
                             name: 'checkuptpl-child',
                             params: {
                                 'patientid': that.patientid,
@@ -137,7 +137,7 @@ module.exports = {
                 var ename = this.model.link;
                 if (ename) {
                     window.scrollTo(0, 0);
-                    this.$route.router.push({
+                    this.$router.push({
                         name: 'checkuptpl-child',
                         params: {
                             'patientid': self.patientid,

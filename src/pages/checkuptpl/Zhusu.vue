@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group" style="margin-top:10px">
                     <div class="col-lg-6 col-lg-offset-1 col-sm-offset-2 col-sm-6">
-                        <button v-privilege="数据库-量表-添加和修改" :disabled='iserror' type="submit" class="btn btn-success btn-save" @click="save($event)">保存</button>
+                        <button v-privilege="'数据库-量表-添加和修改'" :disabled='iserror' type="submit" class="btn btn-success btn-save" @click="save($event)">保存</button>
                     </div>
                 </div>
             </form>
@@ -42,7 +42,7 @@
                             <tr v-for="item in revisitRecords">
                                 <td>{{item.date}}</td>
                                 <td width="80%">{{item.content}}</td>
-                                <td><a v-privilege="数据库-量表-添加和修改" href="javascript:" @click="modify(item, $event)">修改</a></td>
+                                <td><a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modify(item, $event)">修改</a></td>
                             </tr>
                         </tbody>
                 </table>
@@ -85,7 +85,8 @@
 </style>
 <script>
 import api from '../../config/api.js'
-module.exports = {
+import util from '../../lib/util.js'
+export default {
     data: function() {
         return {
             showPopup: false,
@@ -174,7 +175,7 @@ module.exports = {
                     self.$emit('show-alert', d.errmsg);
                 } else {
                     self.$emit('show-popup', '保存成功', function() {
-                        self.$route.router.push({
+                        self.$router.push({
                             query: {
                                 date: self.value
                             }
@@ -236,7 +237,6 @@ module.exports = {
     },
     watch: {
         'value': function(val, oldVal) {
-            var util = require('../../lib/util.js')
             if (util.inArray2(this.revisitRecords, 'date', val)) {
                 this.error = true;
             } else {
@@ -244,7 +244,6 @@ module.exports = {
             }
         },
         revisitRecords: function(val, oldVal) {
-            var util = require('../../lib/util.js')
             if (util.inArray2(this.revisitRecords, 'date', this.value)) {
                 this.error = true;
             } else {
@@ -254,7 +253,6 @@ module.exports = {
     },
     mounted: function() {
         this.$nextTick(function() {
-            var util = require('../../lib/util.js')
             this.action = '修改';
             this.value = util.getFormatDate();
             this.fetchData();

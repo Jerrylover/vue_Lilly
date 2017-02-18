@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
     domain = 'fangcunhulian.cn'
 }
 
-module.exports = {
+export default {
     host: host,
     hostUCenter: hostUCenter,
     dev: dev,

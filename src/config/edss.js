@@ -96,7 +96,7 @@ var tips = {
     '大脑':""
 }
 
-module.exports = {
+export default {
     fs: fs,
     fsMap:fsMap,
 }

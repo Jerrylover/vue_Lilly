@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     'appendUrl': function(url, param, value) {
         if (url.indexOf('?') > -1) {
             url += '&';

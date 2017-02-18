@@ -52,7 +52,7 @@ h4 {
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
 import rule from '../../config/rule.js'
-module.exports = {
+export default {
     data: function() {
         return {
             name: '',
@@ -77,7 +77,7 @@ module.exports = {
     },
     route: {
         data: function(transition) {
-            if (transition.to.name == 'assistant-modify') {
+            if (this.$route.name == 'assistant-modify') {
                 this.ismodify = true;
             }
             this.assistantid = transition.to.query.assistantid;
@@ -160,7 +160,7 @@ module.exports = {
                     that.$emit('show-alert', d.errmsg);
                 } else {
                     that.$emit('show-popup', '保存成功', function() {
-                        that.$route.router.push({
+                        that.$router.push({
                             name: 'manager'
                         })
                     });

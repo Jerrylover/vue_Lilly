@@ -1,4 +1,4 @@
-module.exports = function(vm) {
+export default function(vm) {
     $(function() {
         var fenqi = {};
         var fenqimap7 = {

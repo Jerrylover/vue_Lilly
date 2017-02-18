@@ -7,10 +7,10 @@
             <h4>{{patientname}}</h4>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
-                <li><router-link to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
             </ol>
         </div>
         <div class="row" v-if="isCancer">
@@ -242,7 +242,7 @@ span.title {
     import common from '../../lib/common.js'
     import libpatient from '../../lib/patient.js'
     import util from '../../lib/util.js'
-    module.exports = {
+    export default {
         data: function() {
             return {
                 projectid: '',
@@ -277,7 +277,7 @@ span.title {
     },
     route: {
         data: function(transition) {
-            this.routepath = transition.to.name;
+            this.routepath = this.$route.name;
             if (this.routepath == 'doctorgroup-revisitinfo') {
                 this.projectid = transition.to.query.projectid;
                 this.centerid = transition.to.query.centerid;

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="row">
         <router-view></router-view>
         <modal :show="showModal" width="300px">
             <div slot="header">
@@ -12,7 +12,7 @@
                 <div class="text-center" style="padding-top:20px"><span style="color:#eb4f38">{{sec}}</span> 秒后自动跳转</div>
             </div>
             <div slot="footer">
-                <div>如果您的浏览器没有自动跳转，请<router-link to="{path: '/login'}" @click="showModal = false">点击这里</router-link></div>
+                <div>如果您的浏览器没有自动跳转，请<router-link   :to="{path: '/login'}" @click="showModal = false">点击这里</router-link></div>
             </div>
         </modal>
         <div class="modal-mask" id="modal-loading" style="display:none;">
@@ -50,7 +50,8 @@
 }
 </style>
 <script>
-module.exports = {
+import common from './lib/common.js'
+export default {
     data: function() {
         return {
             showModal: false,
@@ -70,7 +71,7 @@ module.exports = {
     },
     mounted: function() {
         this.$nextTick(function() {
-            var common = require('./lib/common.js')
+
             var self = this;
             $(document).ajaxSuccess(function(event, xhr, settings) {
                 if (xhr.responseJSON.errno == 0) {
@@ -86,7 +87,7 @@ module.exports = {
                             window.setTimeout(function() {
                                 self.sec = 5;
                             }, 3000)
-                            self.$route.router.push({
+                            self.$router.push({
                                 path: '/login'
                             })
                             self.showModal = false;
@@ -103,7 +104,7 @@ module.exports = {
                             window.setTimeout(function() {
                                 self.sec = 5;
                             }, 3000)
-                            self.$route.router.push({
+                            self.$router.push({
                                 path: '/login'
                             })
                             self.showModal = false;
@@ -120,7 +121,7 @@ module.exports = {
                             window.setTimeout(function() {
                                 self.sec = 5;
                             }, 3000)
-                            self.$route.router.push({
+                            self.$router.push({
                                 path: '/login'
                             })
                             self.showModal = false;

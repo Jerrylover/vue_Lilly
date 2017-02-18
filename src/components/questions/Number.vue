@@ -39,7 +39,7 @@ span.input-group-addon {
 }
 </style>
 <script>
-module.exports = {
+export default {
     data: function() {
         return {
             number: '',

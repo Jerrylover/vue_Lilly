@@ -8,12 +8,12 @@ Vue.use(ElementUI)
 
 // Vue.filter('timestampFormat', require('./filters/timestampFormatter'));
 
-require('./lib/string.js')
-require('./vendor/font-awesome/css/font-awesome.min.css')
-require('./vendor/font-awesome/css/awesome-bootstrap-checkbox.css');
-require('./vendor/font-awesome/css/segment.css');
+import './lib/string.js'
+import './vendor/font-awesome/css/font-awesome.min.css'
+import './vendor/font-awesome/css/awesome-bootstrap-checkbox.css'
+import './vendor/font-awesome/css/segment.css'
 
-var common = require('./lib/common.js')
+import common from './lib/common.js'
 
 //自定义指令
 Vue.directive('privilege', {
@@ -21,8 +21,8 @@ Vue.directive('privilege', {
         // 准备工作
         // 例如，添加事件处理器或只需要运行一次的高耗任务
     },
-    update: function(el, newValue, oldValue) {
-        var privileges = newValue.split('|');
+    update: function(el, binding) {
+        var privileges = binding.value.split('|');
         var flag = false;
         for (var i=0; i<privileges.length; i++) {
             if (common.hasPrivilege($.trim(privileges[i]))) {
@@ -106,15 +106,15 @@ Vue.directive('dg-privilege', {
 
 
 // console.log(process.env.NODE_ENV)
-router.beforeEach(function(transition) {
-    if (transition.to.auth === true) {
+router.beforeEach((to, from, next) => {
+    if (to.auth === true) {
         if (common.isLogin() === false) {
-            transition.redirect({
+            next({
                 path: '/login'
             });
         }
     }
-    transition.next();
+    next();
 })
 
 new Vue({

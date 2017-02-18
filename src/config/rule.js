@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     checkPhone: function(number){
         if(!(/^1[3|4|5|7|8]\d{9}$/.test(number))){
             return false;

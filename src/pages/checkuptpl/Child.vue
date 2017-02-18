@@ -63,7 +63,7 @@ li.active a:hover {
 <script>
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             ismodify: false,

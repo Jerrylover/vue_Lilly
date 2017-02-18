@@ -152,7 +152,7 @@ input.borderbule {
 <script>
 import common from '../lib/common.js'
 import api from '../config/api.js'
-module.exports = {
+export default {
     data: function() {
         return {
             username: '',
@@ -207,7 +207,7 @@ module.exports = {
                         self.errmsg = d.errmsg;
                     } else {
                         common.login(d.data);
-                        self.$route.router.push({
+                        self.$router.push({
                             path: '/'
                         })
                     }

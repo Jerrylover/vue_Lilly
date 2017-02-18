@@ -751,7 +751,7 @@ import nationlist from '../../config/nationlist.js';
 import rule from '../../config/rule.js';
 import provinceAndCityList from '../../config/provinceAndCityList.js';
 import util from '../../lib/util.js';
-module.exports = {
+export default {
     data: function() {
         return {
             smokeEnvArr: ['二手', '三手', '厨房油烟', '其他'],//环境接触
@@ -1219,7 +1219,7 @@ module.exports = {
                     } else {
                         that.$emit('show-popup', '保存成功', function() {
                             if (typeof data.patientid != '') {
-                                that.$route.router.push({
+                                that.$router.push({
                                     path: '/patient/' + data.patientid + '/baseinfo-lungcancer'
                                 })
                             }

@@ -20,8 +20,8 @@
 }
 </style>
 <script>
-var util = require('../../lib/util.js');
-module.exports = {
+import util from '../../lib/util.js'
+export default {
     data: function() {
         return {
             error: false,

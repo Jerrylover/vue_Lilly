@@ -4,7 +4,7 @@
     <div class="container-fluid content">
         <div class="row table-header">
             <h4>助理账号管理</h4>
-            <router-link class="header-a btn btn-primary btn-sm" href="javascript:" to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
+            <router-link  class="header-a btn btn-primary btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
             <div class="form-group">
                 <div class="input-group">
                     <input class="input-search form-inline form-control" type="text" placeholder="输入名称" v-model='name' @keyup.enter='clickSearch'>
@@ -34,9 +34,9 @@
                     <td v-html="filterStatus(assistant.status)"></td>
                     <td>
                         <template v-if="!islock(assistant.status)">
-                            <router-link class="mg-r-20" to="{name:'assistant-modify', query:{assistantid:assistant.id}}">修改</router-link>
-                            <router-link class="mg-r-20" to="{name:'assistant-privilege', query:{assistantid:assistant.id}}">权限管理</router-link>
-                            <router-link class="mg-r-20" to="{name:'assistant-forcemodifypassword', query:{assistantid:assistant.id}}">重置密码</router-link>
+                            <router-link  class="mg-r-20"  :to="{name:'assistant-modify', query:{assistantid:assistant.id}}">修改</router-link>
+                            <router-link  class="mg-r-20"  :to="{name:'assistant-privilege', query:{assistantid:assistant.id}}">权限管理</router-link>
+                            <router-link  class="mg-r-20"  :to="{name:'assistant-forcemodifypassword', query:{assistantid:assistant.id}}">重置密码</router-link>
                             <a class="mg-r-20" href="javascript:" @click="clickLock(assistant)">锁定</a>
                         </template>
                         <template v-else>
@@ -82,7 +82,7 @@ h4 {
 <script>
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             pagenum: 1,
@@ -125,7 +125,7 @@ module.exports = {
         },
         clickSearch: function(e) {
             e.preventDefault();
-            this.$route.router.push({
+            this.$router.push({
                 path: '/manager',
                 query: {
                     'name': this.name

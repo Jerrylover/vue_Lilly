@@ -4,7 +4,7 @@
     <div class="container-fluid content">
         <div class="row table-header">
             <h4>项目列表</h4>
-            <router-link class="header-a btn btn-default btn-sm" href="javascript:" to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
+            <router-link  class="header-a btn btn-default btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
         </div>
         <div class="row">
         <table class="table table-bordered">
@@ -22,15 +22,15 @@
                 <td>{{dg_project.createtime}}</td>
                 <td>{{dg_project.masters.join('、')}}</td>
                 <td>
-                    <router-link class="scale" href="javascript:" to="{name: 'doctorgroup-patientlist', query: {'projectid':dg_project.dg_projectid, 'centerid': dg_project.mydoctor.dg_centerid, 'doctorid': dg_project.mydoctor.doctorid}}">{{dg_project.thedoctor_patientcnt}}</router-link>
+                    <router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-patientlist', query: {'projectid':dg_project.dg_projectid, 'centerid': dg_project.mydoctor.dg_centerid, 'doctorid': dg_project.mydoctor.doctorid}}">{{dg_project.thedoctor_patientcnt}}</router-link>
                 </td>
                 <td>
-                    <router-link class="scale" v-dg-privilege="dg_project.dg_projectid + '-1 | clearlink'" href="javascript:" to="{name: 'doctorgroup-patientlist', query: {'projectid':dg_project.dg_projectid, 'centerid': '', 'doctorid': ''}}">{{dg_project.theproject_patientcnt}}</router-link>
+                    <router-link  class="scale" v-dg-privilege="dg_project.dg_projectid + '-1 | clearlink'" href="javascript:"  :to="{name: 'doctorgroup-patientlist', query: {'projectid':dg_project.dg_projectid, 'centerid': '', 'doctorid': ''}}">{{dg_project.theproject_patientcnt}}</router-link>
                 </td>
                 <td>{{dg_project.theproject_doctorcnt}}</td>
                 <td>
-                    <router-link class="scale" href="javascript:" to="{name: 'doctorgroup-centerlist', params:{'projectid': dg_project.dg_projectid}}" style="text-decoration: none">查看中心</router-link>&nbsp;&nbsp;&nbsp;
-                    <router-link class="scale" v-dg-privilege="dg_project.dg_projectid + '-1'" href="javascript:" to="{name: 'doctorgroup-modifyproject', params: {'projectid': dg_project.dg_projectid}}" style="text-decoration:none">设置</router-link>
+                    <router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': dg_project.dg_projectid}}" style="text-decoration: none">查看中心</router-link>&nbsp;&nbsp;&nbsp;
+                    <router-link  class="scale" v-dg-privilege="dg_project.dg_projectid + '-1'" href="javascript:"  :to="{name: 'doctorgroup-modifyproject', params: {'projectid': dg_project.dg_projectid}}" style="text-decoration:none">设置</router-link>
                 </td>
             </tr>
             <tr>
@@ -56,7 +56,7 @@
 <script>
     import api from '../../config/api.js';
     import common from '../../lib/common.js';
-    module.exports = {
+    export default {
         data: function(){
             return {
                 dg_projectlist: [],

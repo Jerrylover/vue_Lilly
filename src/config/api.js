@@ -1,8 +1,8 @@
-require('../../config');
-var config = require('./config.js');
-var util = require('../lib/util.js')
-var cookie = require('../lib/cookie.js');
-var common = require('../lib/common.js')
+import '../../config'
+import config from './config.js'
+import util from '../lib/util.js'
+import cookie from '../lib/cookie.js'
+import common from '../lib/common.js'
 
 var urls = {
     'user': {
@@ -96,7 +96,7 @@ var urls = {
   }
 }
 
-module.exports = {
+export default {
     'get': function(str) {
         var params = str.split('.');
         var url = '';

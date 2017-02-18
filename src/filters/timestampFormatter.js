@@ -1,6 +1,6 @@
-var moment = require('moment');
+import moment from 'moment'
 
-module.exports = function (timestamp, format) {
+export default function (timestamp, format) {
     var result;
 
     timestamp = parseInt(timestamp);

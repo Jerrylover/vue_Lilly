@@ -1,4 +1,4 @@
-module.exports = function (size) {
+export default function (size) {
     var result;
 
     switch (true) {

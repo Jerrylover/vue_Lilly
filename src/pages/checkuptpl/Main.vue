@@ -28,7 +28,7 @@
                 </span>
         </div>
         <div slot="footer">
-            <div><router-link to="{path: '/'}" @click="showModal = false">返回首页</router-link></div>
+            <div><router-link   :to="{path: '/'}" @click="showModal = false">返回首页</router-link></div>
         </div>
     </modal>
     </div>
@@ -71,7 +71,7 @@ div.row-content {
 import api from '../../config/api.js'
 import libpatient from '../../lib/patient.js'
 import common from '../../lib/common.js'
-module.exports = {
+export default {
     data: function() {
         return {
             patientname: '',

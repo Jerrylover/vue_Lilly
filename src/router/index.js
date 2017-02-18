@@ -6,6 +6,14 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/',
+      name: 'webindex',
+      auth: true,
+      component: function(resolve) {
+        require(['../pages/patient/List.vue'], resolve);
+      }
+      },
+    {
       path: '/login',
       name: 'login',
       component: function(resolve) {
@@ -84,7 +92,7 @@ export default new Router({
         },
         {
           path: '/:patientid/modify-lungcancer',
-          name: 'patient-modifybaseinfo',
+          name: 'patient-modify-lungcancer-baseinfo',
           auth: true,
           component: function(resolve) {
             require(['../pages/patient/ModifyForLungcancer.vue'], resolve);
@@ -110,7 +118,6 @@ export default new Router({
     },
     {
       path: '/checkuptpl/:patientid',
-      name: 'checkuptpl',
       auth: true,
       component: function(resolve) {
         require(['../pages/checkuptpl/Main.vue'], resolve);
@@ -315,6 +322,6 @@ export default new Router({
           }
         }
     ]
-    }
+}
   ]
 })

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     getPatientName: function(patientid) {
         var json = sessionStorage.getItem(patientid);
         if (json == undefined || json.indexOf('{') == -1) {

@@ -33,7 +33,7 @@
         <div class="form-group" style="margin-top:10px">
             <div class="col-sm-7 row">
                 <div class="col-lg-9 col-lg-offset-3 col-sm-8 col-sm-offset-4">
-                    <button v-privilege="数据库-量表-添加和修改" :disabled='iserror' type="submit" class="btn btn-success btn-save" @click="save($event)">保存</button>
+                    <button v-privilege="'数据库-量表-添加和修改'" :disabled='iserror' type="submit" class="btn btn-success btn-save" @click="save($event)">保存</button>
                 </div>
             </div>
         </div>
@@ -57,8 +57,8 @@
                         <td v-if='isShowHospital'>{{checkup.hospitalstr}}</td>
                         <td v-for="xquestion in data.xquestions" v-html="getContent(xquestion, checkup)"></td>
                         <td>
-                            <a v-privilege="数据库-量表-添加和修改" href="javascript:" @click="modifyCheckup(checkup, $event)">修改</a>&nbsp;&nbsp;
-                            <a v-privilege="数据库-量表-删除" href="javascript:" @click="deleteCheckup(checkup, $event)">删除</a>
+                            <a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modifyCheckup(checkup, $event)">修改</a>&nbsp;&nbsp;
+                            <a v-privilege="'数据库-量表-删除'" href="javascript:" @click="deleteCheckup(checkup, $event)">删除</a>
                         </td>
                     </tr>
                 </tbody>
@@ -99,8 +99,8 @@
 <script>
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
-var util = require('../../lib/util.js');
-module.exports = {
+import util from '../../lib/util.js'
+export default {
     data: function() {
         return {
             edssFs: {}, //edss 需要计算的数据

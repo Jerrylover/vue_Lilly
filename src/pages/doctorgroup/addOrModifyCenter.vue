@@ -6,8 +6,8 @@
             <h4>{{dg_project.title}}项目&nbsp;&nbsp;&nbsp;{{pagetitle}}</h4>
             <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                 <li>返回</li>
-                <li><router-link class="scale" href="javascript:" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link class="scale" href="javascript:" to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
             </ol>
         </div>
         <div class="row mg-t-20">
@@ -44,7 +44,7 @@
 </style>
 <script>
     import api from '../../config/api.js';
-    module.exports = {
+    export default {
         data: function() {
             return {
                 projectid: '',
@@ -66,7 +66,7 @@
             data: function(transition) {
                 var self = this;
                 var url = '';
-                self.routeFrom = transition.to.name;
+                self.routeFrom = this.$route.name;
                 if (self.routeFrom == 'doctorgroup-addcenter') {
                     self.pagetitle = '添加中心';
                     self.pagepostbuttonname = "确认并添加中心";
@@ -188,7 +188,7 @@
             },
             goCenterlist: function() {
                 var self = this;
-                self.$route.router.push({
+                self.$router.push({
                     name: 'doctorgroup-centerlist',
                     params: {
                         projectid: self.projectid,

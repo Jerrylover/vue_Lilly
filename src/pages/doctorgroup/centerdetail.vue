@@ -13,12 +13,12 @@
             </div>
             <div style="display: inline-block;">
                 <a v-dg-privilege="dg_project.id + '-1 |' + currcenterid +'-1'" href="javascript:" class="btn btn-info" style="margin-left: 15px; margin-right: 10px" @click="addmember"><i class="fa fa-plus fa">&nbsp;添加医生</i></a>
-                <router-link v-dg-privilege="dg_project.id + '-2 |' + currcenterid + '-x'" href="javascript:" class="btn btn-warning" to="{name: 'doctorgroup-importpatients',query:{'diseaseid': getDiseaseid()}}" ><i class="fa fa-sign-in fa">&nbsp;批量导入患者</i></router-link>
+                <router-link  v-dg-privilege="dg_project.id + '-2 |' + currcenterid + '-x'" href="javascript:" class="btn btn-warning"  :to="{name: 'doctorgroup-importpatients',query:{'diseaseid': getDiseaseid()}}" ><i class="fa fa-sign-in fa">&nbsp;批量导入患者</i></router-link>
             </div>
             <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                 <li>返回</li>
-                <li><router-link class="scale" href="javascript:" to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link class="scale" href="javascript:" to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
             </ol>
         </div>
         <div class="row" style="margin-top:10px">
@@ -44,9 +44,9 @@
                 <td>{{member.doctorid}}</td>
                 <td>{{member.name}}</td>
                 <td>{{member.center_name}}</td>
-                <td class="linkstyle"><router-link class="scale" v-dg-privilege="projectid + '-1 | ' + member.center_id + '-x | clearlink'" href="javascript:" to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': currcenterid, 'doctorid': member.doctorid}}">{{member.patientcnt}}</router-link></td>
+                <td class="linkstyle"><router-link  class="scale" v-dg-privilege="projectid + '-1 | ' + member.center_id + '-x | clearlink'" href="javascript:"  :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': currcenterid, 'doctorid': member.doctorid}}">{{member.patientcnt}}</router-link></td>
                 <td class="linkstyle">
-                    <router-link class="scale" v-dg-privilege="projectid + '-1 | ' + member.center_id + '-x'" href="javascript:" to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': currcenterid, 'doctorid': member.doctorid}}" style="padding: 5px; text-decoration: none">查看患者</router-link>
+                    <router-link  class="scale" v-dg-privilege="projectid + '-1 | ' + member.center_id + '-x'" href="javascript:"  :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': currcenterid, 'doctorid': member.doctorid}}" style="padding: 5px; text-decoration: none">查看患者</router-link>
                     <template v-if="is_create == 1">
                         <a class="scale" v-if="member.is_project_master == 0"  href="javascript:" style="padding: 5px; text-decoration: none" @click="setprojectmaster(member)">设置为项目负责人</a>
                         <a class="scale" v-if="member.is_project_master == 1 && member.is_create == 0" href="javascript:" @click="removeprojectmaster(member)">取消项目负责人权限</a>
@@ -122,7 +122,7 @@
 <script>
     import api from '../../config/api.js';
     import common from '../../lib/common.js';
-    module.exports = {
+    export default {
         data: function() {
             return {
                 showModal: false,
@@ -209,7 +209,7 @@
                 // console.log(e.target.selectedIndex);
                 var index = e.target.selectedIndex;
                 self.currcenterid = self.dg_centers[index].id;
-                self.$route.router.push({
+                self.$router.push({
                     name: 'doctorgroup-centerdetail',
                     params: {
                         centerid: self.currcenterid,
