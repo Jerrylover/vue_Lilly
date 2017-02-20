@@ -45,8 +45,9 @@ Vue.directive('dg-privilege', {
         // 准备工作
         // 例如，添加事件处理器或只需要运行一次的高耗任务
     },
-    update: function(el, newValue, oldValue) {
+    update: function(el, binding) {
         var self = this;
+        var newValue = binding.value
         // console.log(self);
         // console.log('newValue', newValue);
         function hhh(dotype){
@@ -103,9 +104,6 @@ Vue.directive('dg-privilege', {
     }
 })
 
-
-
-// console.log(process.env.NODE_ENV)
 router.beforeEach((to, from, next) => {
     if (to.auth === true) {
         if (common.isLogin() === false) {

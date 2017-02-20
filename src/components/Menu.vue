@@ -5,8 +5,8 @@
             <!--<span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
  --></div>
         <ul class="list-unstyled" v-show="open" v-if="isFolder">
-            <menu class="item" v-for="model in model.submenus" :model="model" :ischild='true' :ename='ename' :patientid='patientid'>
-            </menu>
+            <fcmenu class="item" v-for="model in model.submenus" :model="model" :ischild='true' :ename='ename' :patientid='patientid'>
+            </fcmenu>
             <li @click="addChild" class="collapse">+</li>
         </ul>
     </li>
@@ -162,7 +162,7 @@ export default {
         }
     },
     components: {
-        'menu': function(resolve) {
+        'fcmenu': function(resolve) {
             require(['./Menu.vue'], resolve);
         }
     },

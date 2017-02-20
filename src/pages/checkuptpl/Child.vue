@@ -7,13 +7,13 @@
     </ul>
     <div class="ck-content">
         <template v-if="ename == 'zhusu'">
-            <zhusu :patientid="patientid" :ename="ename" :action='action'></zhusu>
+            <zhusu :patientid="patientid" :ename="ename" :action='action' v-on:change-action="changeAction"></zhusu>
         </template>
         <template v-if="fwzhiliao == true">
             <zhiliao :patientid="patientid" :ename="ename" :action='action'></zhiliao>
         </template>
         <template v-if="iscommon">
-          <checkuptpl :ename='ename' :patientid='patientid' :patientname='patientname' :checkuptpl='checkuptpl' :questionsheet="questionsheet" :questions="questions" :action='action' :ismodify='ismodify'>
+          <checkuptpl :ename='ename' :patientid='patientid' :patientname='patientname' :checkuptpl='checkuptpl' :questionsheet="questionsheet" :questions="questions" :action='action' v-on:change-action="changeAction">
           </checkuptpl>
         </template>
       </div>
@@ -66,15 +66,11 @@ import common from '../../lib/common.js'
 export default {
     data: function() {
         return {
-            ismodify: false,
             action: '添加',
-            patientid: '',
             patientname: '',
-            ename: '',
             checkuptpl: '',
             questionsheet: '',
             questions: '',
-            title: '主诉',
             diseaseid: '',
         }
     },
@@ -113,21 +109,20 @@ export default {
                 self.$nextTick(function() {
                     console.log('emit e-checkuptpl-ready')
                     self.$emit('e-checkuptpl-ready')
+                    self.$children.forEach(function(item, index) {
+                        if (typeof item['e-checkuptpl-ready'] == 'function') {
+                            item['e-checkuptpl-ready']();
+                        }
+                    })
                 });
                 // self.$nextTick(function(){
                 //     self.$emit('e-checkuptpl-ready')
                 // })
 
             })
-        }
-    },
-    route: {
-        data: function(transition) {
-            this.fetchCheckTpl();
-            this.ismodify = false;
-            this.action = '添加';
-            this.diseaseid = common.getDiseaseId();
-            console.log(this.diseaseid, this.fwzhiliao);
+        },
+        changeAction: function(action) {
+            this.action = action;
         }
     },
     components: {
@@ -141,6 +136,18 @@ export default {
     },
     mounted: function() {
 
+    },
+    created: function() {
+        this.fetchCheckTpl();
+        this.action = '添加';
+        this.diseaseid = common.getDiseaseId();
+    },
+    watch: {
+        '$route': function() {
+            this.fetchCheckTpl();
+            this.action = '添加';
+            this.diseaseid = common.getDiseaseId();
+        }
     }
 }
 </script>

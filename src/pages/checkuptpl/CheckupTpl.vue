@@ -7,10 +7,7 @@
                 <label for="inputEmail3" class="col-lg-3 col-sm-4 control-label  question-label">{{dateTitle}}</label>
                 <div class="col-lg-9 col-sm-8">
                     <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                        <input class="form-control controls" type="text" @click="showCalendar" name="_date" :value="value" v-model="value" placeholder="请输入日期">
-                        <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
-                        <span class="help-block" v-show="iserror">日期错误</span>
-                        <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                        <el-date-picker v-model="value" type="date" placeholder="请选择日期"></el-date-picker>
                     </div>
                 </div>
             </div>
@@ -51,17 +48,18 @@
                     <th v-for="xquestion in data.xquestions">{{xquestion.content}}</th>
                     <th class="col-lg-1 col-sm-2">操作</th>
                 </tr>
-                <tbody>
-                    <tr v-for="checkup in data.checkups">
-                        <td v-if="isShowDate">{{checkup.check_date}}</td>
-                        <td v-if='isShowHospital'>{{checkup.hospitalstr}}</td>
-                        <td v-for="xquestion in data.xquestions" v-html="getContent(xquestion, checkup)"></td>
-                        <td>
-                            <a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modifyCheckup(checkup, $event)">修改</a>&nbsp;&nbsp;
-                            <a v-privilege="'数据库-量表-删除'" href="javascript:" @click="deleteCheckup(checkup, $event)">删除</a>
-                        </td>
-                    </tr>
-                </tbody>
+            </thead>
+            <tbody>
+                <tr v-for="checkup in data.checkups">
+                    <td v-if="isShowDate">{{checkup.check_date}}</td>
+                    <td v-if='isShowHospital'>{{checkup.hospitalstr}}</td>
+                    <td v-for="xquestion in data.xquestions" v-html="getContent(xquestion, checkup)"></td>
+                    <td>
+                        <a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modifyCheckup(checkup, $event)">修改</a>&nbsp;&nbsp;
+                        <a v-privilege="'数据库-量表-删除'" href="javascript:" @click="deleteCheckup(checkup, $event)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <div class="col-sm-12 text-center" v-if="page * pagesize < total">
             <button class="btn btn-default" @click="showMore($event)">查看更多</button>
@@ -119,13 +117,10 @@ export default {
             pagesize: 200,
             total: 0,
             //日历参数
-            show: false,
-            type: "date", //date datetime
             value: "", //日期
-            begin: "",
-            x: 0,
-            y: 0,
-            range: false, //是否多选
+            iserror: false,
+            myaction: this.action,
+            ismodify: false,
         }
     },
     computed: {
@@ -174,9 +169,9 @@ export default {
             return edss;
         }
     },
-    props: ['action', 'ename', 'patientid', 'patientname', 'checkuptpl', 'questions', 'questionsheet', 'ismodify'],
+    props: ['action', 'ename', 'patientid', 'patientname', 'checkuptpl', 'questions', 'questionsheet'],
     components: {
-        'Text': function(resolve) {
+        'FCText': function(resolve) {
             require(['../../components/questions/Text.vue'], resolve);
         },
         'Ymd': function(resolve) {
@@ -188,16 +183,13 @@ export default {
         'MultChoiceWithOther': function(resolve) {
             require(['../../components/questions/CheckBoxWithOther.vue'], resolve);
         },
-        'Text': function(resolve) {
-            require(['../../components/questions/Text.vue'], resolve);
-        },
         'SelectOption': function(resolve) {
             require(['../../components/questions/Select.vue'], resolve);
         },
         'SelectOptionWithOther': function(resolve) {
             require(['../../components/questions/SelectOptionWithOther.vue'], resolve);
         },
-        'TextArea': function(resolve) {
+        'FCTextArea': function(resolve) {
             require(['../../components/questions/TextArea.vue'], resolve);
         },
         'Radio': function(resolve) {
@@ -212,38 +204,17 @@ export default {
         'Num': function(resolve) {
             require(['../../components/questions/Number.vue'], resolve);
         },
-        'SectionX': function(resolve) {
+        'SectionFC': function(resolve) {
             require(['../../components/questions/Date.vue'], resolve);
         },
         'calendar': function(resolve) {
             require(['../../components/calendar.vue'], resolve);
         },
-        'Caption': function(resolve) {
+        'FCCaption': function(resolve) {
             require(['../../components/questions/Caption.vue'], resolve);
         }
     },
     methods: {
-        showCalendar: function(e) {
-            // e.stopPropagation();
-            var that = this;
-            that.show = true;
-            $(e.target).show();
-            that.x = e.target.offsetLeft;
-            that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-            var bindHide = function(event) {
-                if (event.target == e.target) {
-                    return;
-                }
-                event.stopPropagation();
-                that.show = false;
-                document.removeEventListener('click', bindHide, false);
-                document.removeEventListener('touchstart', bindHide, false);
-            };
-            setTimeout(function() {
-                document.addEventListener('click', bindHide, false);
-                document.addEventListener('touchstart', bindHide, false);
-            }, 2000);
-        },
         doSave: function(data, e) {
             data.hospitalstr = this.hospital;
             if (this.hospital == '其他') {
@@ -268,10 +239,10 @@ export default {
                 if (d.errno != 0 && d.errno != -10) {
                     self.$emit('show-alert', d.errmsg);
                 } else {
-                    self.$emit('show-popup', '保存成功')
+                    self.$message({showClose: true,message: '保存成功'});
                     $(e.target).blur();
                     self.ismodify = false;
-                    self.action = '添加';
+                    self.myaction = '添加';
                     self.hospital = '本院';
                     self.hospitalother = '';
                     self.fetchData();
@@ -467,10 +438,9 @@ export default {
             }
 
             this.value = checkup.check_date;
-            var answers = this.checkupAnswers[checkup.id];
-            this.$set('answers', answers);
+            // var answers = this.checkupAnswers[checkup.id];
             this.ismodify = true;
-            this.action = '修改';
+            this.myaction = '修改';
             this.checkupid = checkup.id;
             this.$nextTick(function() {
                 this.$emit('modify-data')
@@ -566,17 +536,14 @@ export default {
             console.log('_maxcnt', _maxcnt);
             fs = edss.fsMap[max][maxcnt][_max][_maxcnt];
             return fs;
-        }
-    },
-
-    events: {
+        },
+        //////消息事件
         'e-checkuptpl-ready': function() {
             this.modify = false;
             this.fetchData();
             this.hospital = '本院';
             this.hospitalother = '';
             this.checkupid = '';
-            var util = require('../../lib/util.js');
             this.value = util.getFormatDate();
             this.edssFs = {};
             this.edssFsScore = 0;
@@ -589,6 +556,9 @@ export default {
             }, 1000);
             return true;
         },
+    },
+
+    events: {
         'edss-fs-change': function(questionName, fs) {
             if (fs == 6) {
                 return;
@@ -645,6 +615,11 @@ export default {
               fenqi(this);
             }
         })
+    },
+    watch: {
+        myaction: function(newVal, oldVal) {
+            this.$emit('change-action', newVal)
+        }
     }
 }
 </script>

@@ -5,11 +5,12 @@
                 <div class="form-group question-group">
                     <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">就诊日期</label>
                     <div class="col-sm-6">
-                        <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                            <input class="form-control controls" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期" :disabled='ismodify' name='_date' :value="value">
-                            <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
-                            <span class="help-block" v-show="iserror">日期已存在</span>
-                            <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                        <div class="block">
+                            <!-- <input class="form-control controls" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期" :disabled='ismodify' name='_date' :value="value"> -->
+                            <!-- <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
+                            <span class="help-block" v-show="iserror">日期已存在</span> -->
+                            <!-- <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
+                            <el-date-picker v-model="value" type="date" placeholder="" :disabled="true"></el-date-picker>
                         </div>
                     </div>
                 </div>
@@ -38,13 +39,14 @@
                             <th>主诉</th>
                             <th>操作</th>
                         </tr>
-                        <tbody>
-                            <tr v-for="item in revisitRecords">
-                                <td>{{item.date}}</td>
-                                <td width="80%">{{item.content}}</td>
-                                <td><a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modify(item, $event)">修改</a></td>
-                            </tr>
-                        </tbody>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in revisitRecords">
+                            <td>{{item.date}}</td>
+                            <td width="80%">{{item.content}}</td>
+                            <td><a v-privilege="'数据库-量表-添加和修改'" href="javascript:" @click="modify(item, $event)">修改</a></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -96,13 +98,9 @@ export default {
             error: true,
             revisitRecords: [],
             content: '',
-            show: false,
-            type: "date", //date datetime
             value: "", //日期
-            begin: "",
-            x: 0,
-            y: 0,
             range: false, //是否多选
+            myaction: this.action
         }
     },
     props: ['patientid', 'ename', 'action'],
@@ -112,9 +110,9 @@ export default {
                 return this.revisitRecords[0].revisitrecordid;
             }
         },
-        'patientid': function() {
-            return this.$route.params.patientid;
-        },
+        // 'patientid': function() {
+        //     return this.$route.params.patientid;
+        // },
         'iserror': function() {
             return this.error && !this.ismodify;
         },
@@ -123,33 +121,9 @@ export default {
         }
     },
     components: {
-        'calendar': function(resolve) {
-            require(['../../components/calendar.vue'], resolve);
-        }
+
     },
     methods: {
-        showCalendar: function(e) {
-            if (this.ismodify) {
-                return;
-            }
-            var that = this;
-            that.show = true;
-            that.x = e.target.offsetLeft;
-            that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-            var bindHide = function(event) {
-                if (event.target == e.target) {
-                    return;
-                }
-                event.stopPropagation();
-                that.show = false;
-                document.removeEventListener('click', bindHide, false);
-                document.removeEventListener('touchstart', bindHide, false);
-            };
-            setTimeout(function() {
-                document.addEventListener('click', bindHide, false);
-                document.addEventListener('touchstart', bindHide, false);
-            }, 500);
-        },
         'save': function(e) {
             e.preventDefault();
             var self = this;
@@ -170,17 +144,15 @@ export default {
                     revisitrecordid: self.revisitrecordid
                 }
             }).done(function(d) {
-                self.action = '添加';
                 if (d.errno != 0 && d.errno != -10) {
                     self.$emit('show-alert', d.errmsg);
                 } else {
-                    self.$emit('show-popup', '保存成功', function() {
-                        self.$router.push({
-                            query: {
-                                date: self.value
-                            }
-                        })
-                    })
+                    self.$message({
+                        showClose: true,
+                        message: '保存成功',
+                        type: 'success',
+                        duration: 1000
+                    });
 
                     self.fetchData(self.value);
                     $(e.target).blur();
@@ -190,7 +162,7 @@ export default {
         modify: function(item, e) {
             var self = this;
             this.ismodify = true;
-            this.action = '修改';
+            this.myaction = '修改';
             this.value = item.date;
             this.content = item.content;
             this.revisitrecordid = item.revisitrecordid;
@@ -249,12 +221,15 @@ export default {
             } else {
                 this.error = false;
             }
+        },
+        myaction: function(newVal, oldVal) {
+            this.$emit('change-action', newVal)
         }
     },
     mounted: function() {
         this.$nextTick(function() {
-            this.action = '修改';
             this.value = util.getFormatDate();
+            this.myaction = '修改';
             this.fetchData();
 
             var self = this;

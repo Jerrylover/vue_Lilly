@@ -7,7 +7,7 @@
             <div class="container col-lg-2 col-sm-3 container-left">
                 <div class="div1">
                     <ul class="list-unstyled">
-                        <menu v-for="model in treeData" :model="model" :patientid="patientid" :ename="ename"></menu>
+                        <fcmenu v-for="model in treeData" :model="model" :patientid="patientid" :ename="ename"></fcmenu>
                     </ul>
                 </div>
             </div>
@@ -75,7 +75,6 @@ export default {
     data: function() {
         return {
             patientname: '',
-            menu: '',
             treeData: [],
             name: '',
             showModal: false
@@ -96,7 +95,7 @@ export default {
         'calendar': function(resolve) {
             require(['../../components/calendar.vue'], resolve);
         },
-        'menu': function(resolve) {
+        'fcmenu': function(resolve) {
             require(['../../components/Menu.vue'], resolve);
         },
         'modal': function(resolve) {

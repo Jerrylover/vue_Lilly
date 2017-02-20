@@ -9,10 +9,8 @@ export default new Router({
       path: '/',
       name: 'webindex',
       auth: true,
-      component: function(resolve) {
-        require(['../pages/patient/List.vue'], resolve);
-      }
-      },
+      redirect: '/patient/list'
+    },
     {
       path: '/login',
       name: 'login',
@@ -27,7 +25,7 @@ export default new Router({
       },
       children: [
         {
-          path: '/auditlist',
+          path: 'auditlist',
           name: 'patient-auditlist',
           auth: true,
           component: function(resolve) {
@@ -35,7 +33,7 @@ export default new Router({
           }
         },
         {
-          path: '/list',
+          path: 'list',
           name: 'patient-list',
           auth: true,
           component: function(resolve) {
@@ -43,7 +41,7 @@ export default new Router({
           }
         },
         {
-          path: '/new',
+          path: 'new',
           name: 'patient-new',
           auth: true,
           component: function(resolve) {
@@ -51,7 +49,7 @@ export default new Router({
           }
         },
         {
-          path: '/new-lungcancer',
+          path: 'new-lungcancer',
           name: 'patient-new-lungcancer',
           auth: true,
           component: function(resolve) {
@@ -59,7 +57,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/baseinfo/',
+          path: ':patientid/baseinfo/',
           name: 'patient-baseinfo',
           auth: true,
           component: function(resolve) {
@@ -67,7 +65,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/baseinfo-lungcancer/',
+          path: ':patientid/baseinfo-lungcancer/',
           name: 'patient-baseinfo-lungcancer',
           auth: true,
           component: function(resolve) {
@@ -75,7 +73,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/revisitrecords',
+          path: ':patientid/revisitrecords',
           name: 'patient-revisitrecord',
           auth: true,
           component: function(resolve) {
@@ -83,7 +81,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/modify',
+          path: ':patientid/modify',
           name: 'patient-modifybaseinfo',
           auth: true,
           component: function(resolve) {
@@ -91,7 +89,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/modify-lungcancer',
+          path: ':patientid/modify-lungcancer',
           name: 'patient-modify-lungcancer-baseinfo',
           auth: true,
           component: function(resolve) {
@@ -99,7 +97,7 @@ export default new Router({
           }
         },
         {
-          path: '/selectdisease',
+          path: 'selectdisease',
           name: 'patient-selectdisease',
           auth: true,
           component: function(resolve) {
@@ -124,15 +122,15 @@ export default new Router({
       },
       children: [
         {
-          path: '/',
-          name: 'checkuptpl-main',
+          path: '',
+          name: 'checkuptpl-zhusu',
           auth: true,
           component: function(resolve) {
             require(['../pages/checkuptpl/Zhusu.vue'], resolve);
           }
         },
         {
-          path: '/child/:ename/:name',
+          path: 'child/:ename/:name',
           name: 'checkuptpl-child',
           auth: true,
           component: function(resolve) {
@@ -162,7 +160,7 @@ export default new Router({
       },
       children: [
         {
-          path: '/add',
+          path: 'add',
           name: 'assistant-add',
           auth: true,
           component: function(resolve) {
@@ -170,7 +168,7 @@ export default new Router({
           }
         },
         {
-          path: '/modify',
+          path: 'modify',
           name: 'assistant-modify',
           auth: true,
           component: function(resolve) {
@@ -178,7 +176,7 @@ export default new Router({
           }
         },
         {
-          path: '/forcemodifypassword',
+          path: 'forcemodifypassword',
           name: 'assistant-forcemodifypassword',
           auth: true,
           component: function(resolve) {
@@ -186,7 +184,7 @@ export default new Router({
           }
         },
         {
-          path: '/privilege',
+          path: 'privilege',
           name: 'assistant-privilege',
           auth: true,
           component: function(resolve) {
@@ -202,7 +200,7 @@ export default new Router({
       },
       children: [
         {
-          path: '/projectlist',
+          path: 'projectlist',
           name: 'doctorgroup-projectlist',
           auth: true,
           component: function(resolve) {
@@ -210,7 +208,7 @@ export default new Router({
           }
         },
         {
-          path: '/addproject',
+          path: 'addproject',
           name: 'doctorgroup-addproject',
           auth: true,
           component: function(resolve) {
@@ -250,7 +248,7 @@ export default new Router({
           }
         },
         {
-          path: '/patientlist',
+          path: 'patientlist',
           name: 'doctorgroup-patientlist',
           auth: true,
           component: function(resolve) {
@@ -290,7 +288,7 @@ export default new Router({
           }
         },
         {
-          path: '/:patientid/patientbaseinfo-lungcancer/',
+          path: ':patientid/patientbaseinfo-lungcancer/',
           name: 'doctorgroup-baseinfo-lungcancer',
           auth: true,
           component: function(resolve) {
@@ -306,7 +304,7 @@ export default new Router({
       },
       children: [
         {
-          path: '/info',
+          path: 'info',
           name: 'user-info',
           auth: true,
           component: function(resolve) {
@@ -314,7 +312,7 @@ export default new Router({
           }
         },
         {
-          path: '/modifypassword',
+          path: 'modifypassword',
           name: 'user-modifypassword',
           auth: true,
           component: function(resolve) {

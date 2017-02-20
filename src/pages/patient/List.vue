@@ -250,13 +250,12 @@ export default {
         }
     },
     mounted: function() {
-        console.log('xxx');
     },
     created: function() {
         this.fetchData();
     },
     watch: {
-        '$route': function(to, from) {
+        $route () {
             this.fetchData();
         }
     }
