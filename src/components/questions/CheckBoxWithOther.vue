@@ -70,7 +70,7 @@ export default {
             this.checked = checked;
             return true;
         },
-        'modifDone': function() {
+        'modifyDone': function() {
             this.checked = [];
             this.showOther = false;
             this.otherContent = '';

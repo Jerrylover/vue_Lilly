@@ -9,7 +9,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "el-moment": "^1.0.0",
     "element-ui": "^1.1.6",
+    "moment": "^2.17.1",
     "vue": "^2.1.10",
     "vue-router": "^2.2.0"
   },

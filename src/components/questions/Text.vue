@@ -72,7 +72,7 @@ export default {
         },
     },
     methods: {
-        'modifydata': function() {
+        'modifyData': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }

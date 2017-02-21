@@ -48,6 +48,7 @@ export default {
             domain: config.domain,
             path: '/'
         });
+        console.log('---myuserid----', data.code)
         localStorage.setItem('_username_', data.username);
         localStorage.setItem('_name_', data.name);
         localStorage.setItem('_hospitalid_', data.hospitalid);
@@ -101,10 +102,8 @@ export default {
         return diseases;
     },
     'getDiseaseId': function() {
-        var diseaseid = localStorage.getItem('_diseaseid_');
-        diseaseid = typeof diseaseid != 'undefined' ? diseaseid : '';
+        var diseaseid = localStorage.getItem('_diseaseid_') || '';
         var diseases = this.getDiseases();
-
 
         if (diseases.length > 0) {
             if (!diseaseid || !util.inArray2(diseases, 'diseaseid', diseaseid)) {

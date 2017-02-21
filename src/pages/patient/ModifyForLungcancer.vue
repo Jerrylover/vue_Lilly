@@ -45,7 +45,9 @@
                             <div class="col-lg-8 col-sm-8 clearPadding">
                                 <!-- <input id="birthday" class="form-control" name="patient-birthday" type="text" @click="showCalendar" v-model="patientinfo.birthday"> -->
                                 <!-- <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
-                                <el-date-picker v-model="patientinfo.birthday" type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
+                                <el-moment v-model="patientinfo.birthday" format="YYYY-MM-DD">
+                                    <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
+                                </el-moment>
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -239,7 +241,9 @@
                             <div class="col-lg-8 col-sm-7 clearPadding">
                                 <!-- <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date"> -->
                                 <!-- <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
-                                <el-date-picker v-model="patientinfo.create_doc_date" type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
+                                <el-moment v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
+                                    <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
+                                </el-moment>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -1231,7 +1235,6 @@ export default {
         show: function() {
 
         },
-
         getDefaultDate: function(birthday, type) {
             var today = util.getFormatDate();
             if (this.isModify()) {

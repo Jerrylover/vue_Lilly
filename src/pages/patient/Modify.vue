@@ -43,8 +43,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">生日</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input id="birthday" name="patient-birthday" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.birthday">
-                                <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                                <el-moment v-model="patientinfo.birthday" format="YYYY-MM-DD">
+                                    <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
+                                </el-moment>
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -125,7 +126,7 @@
                                 <input name="patient-mobile" class="form-control" type="text" v-model="patientinfo.mobile">
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
-                                <span class="padding-5px" style="color:red;line-height:2.4">*</span>
+                                <span class="padding-5px" style="color:red;line-height:2.4"></span>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -177,8 +178,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-5">建档日期</label>
                             <div class="col-lg-8 col-sm-7 clearPadding">
-                                <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date">
-                                <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                                <el-moment v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
+                                    <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
+                                </el-moment>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -200,35 +202,35 @@
                         <label class="col-lg-1 col-sm-2">自身免疫病</label>
                         <div class="col-lg-11 col-sm-10 clear-padding-left">
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value1" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value1" value="红斑狼疮" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value1">红斑狼疮</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value2" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value2" value="干燥综合征" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value2">干燥综合征</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value3" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value3" value="白塞氏病" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value3">白塞氏病</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value4" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value4" value="风湿性关节炎" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value4">风湿性关节炎</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value5" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value5" value="克隆氏病" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value5">克隆氏病</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value6" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value6" value="溃疡性结肠炎" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value6">溃疡性结肠炎</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value7" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value7" value="重症肌无力" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value7">重症肌无力</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
-                                    <input type="checkbox" id="value8" v-model.lazy="past_main_history_checkboxs">&nbsp;
+                                    <input type="checkbox" id="value8" value="桥本式甲状腺炎" v-model.lazy="past_main_history_checkboxs">&nbsp;
                                     <label for="value8">桥本氏甲状腺炎</label>
                                 </div>
                                 <div class="checkbox checkbox-inline checkbox-info clearMargin">
@@ -406,6 +408,9 @@
     </div>
 </template>
 <style scoped>
+.el-date-editor.el-input {
+    width:100%
+}
 h4 {
     float: left;
     padding-left: 10px;
@@ -586,12 +591,7 @@ export default {
             showForBirthday: false,
             showForMenstruationHistory: false,
             showForCreateDocDate: false,
-            type: "date", //date datetime
             value: "",
-            begin: "",
-            x: 0,
-            y: 0,
-            range: false, //是否多选
 
             //select二级联动
             currentAddressProvinceIndex: 0,
@@ -658,10 +658,346 @@ export default {
     },
     route: {
         data: function(transition) {
+
+        }
+    },
+    watch: {
+        'patientinfo.menstruationStopTime': function(vale, oldval) {},
+        '$route': function() {
+            this.initPage()
+        }
+    },
+    computed: {
+        pagetitle: function() {
+            var title = '';
+            if (this.patientid) {
+                title = this.patientinfo.name + '修改';
+            } else {
+                title = '新增患者';
+            }
+            return title;
+        },
+        maleStyle: function() {
+            if (this.patientinfo.sex == "1") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        femaleStyle: function() {
+            if (this.patientinfo.sex == "2") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        menstruation_history: function() {
+            var result = '';
+            if (this.patientinfo.sex == '2' && this.femaleStyle) {
+                result = this.firstMenstruationAge + "|" + this.menstruationStatus + "|";
+                if (this.menstruationStatus == "正常") {
+                    result += (this.menstruationHoldOnDays + "|" + this.menstruationPeriod);
+                }else if (this.menstruationStatus == "停经") {
+                    result += (this.picked1 + "|");
+                    if (this.picked1 == "生理性") {
+                        result += this.menstruationStopTime;
+                    }else if(this.picked1 == "病理性") {
+                        result += this.menstruationStopReason;
+                    }
+                }
+                return result;
+            }else {
+                return "|||";
+            }
+        },
+        childbearing_history: function() {
+            if (this.patientinfo.sex == '2' && this.femaleStyle) {
+                return this.pregnantTimes + "|" + this.childbirthTimes + "|" + this.pregnantTime + "|" + this.childbirthTime;
+            }else{
+                return "|||";
+            }
+        },
+        past_main_history: function() {
+            var result = "";
+            result = this.past_main_history_checkboxs.join("|");
+            if (this.other_input_checkbox) {
+                result += ("+" + this.other_input);
+            }
+            return result;
+        },
+        doctorname: function() {
+            return common.getName();
+        },
+        hospital: function() {
+            return common.getHospital();
+        },
+        patientid: function() {
+            return this.$route.params.patientid != undefined ? this.$route.params.patientid : '';
+        },
+        diseaseCount: function() {
+            var diseases = common.getDiseases();
+            if ($.isArray(diseases)) {
+                return diseases.length;
+            }
+
+            return 0;
+        }
+    },
+    components: {
+        'appHeader': require('../../components/Header.vue'),
+        'appFooter': require('../../components/Footer.vue'),
+        'visitHeader': require('../../components/VisitHeader.vue'),
+        calendar: function(resolve) {
+            require(['../../components/calendar.vue'], resolve);
+        }
+    },
+    methods: {
+        maleSelectClick: function() {
+            this.patientinfo.sex = "1";
+        },
+        femaleSelectClick: function() {
+            this.patientinfo.sex = "2";
+        },
+        menstruationNormalClick: function() {
+            this.menstruationNormalStyle = true;
+            this.menstruationStopStyle = false;
+            this.menstruationStatus = "正常";
+        },
+        menstruationStopClick: function() {
+            this.menstruationNormalStyle = false;
+            this.menstruationStopStyle = true;
+            this.menstruationStatus = "停经";
+        },
+        save: function() {
+            var httpurl = this.patientid == '' ? 'patient.addpost' : 'patient.modifypost';
+            var that = this;
+            switch (true) {
+                case this.patientinfo.name.trim() == "":
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者姓名',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-name']").focus();
+                      }
+                    });
+                    return;
+                    break;
+                    // case this.patientinfo.out_case_no.trim() == "":
+                    // that.$emit('show-alert', "请输入病历号", function(){
+                    //     $("input[name='out-case-no']").focus();
+                    // });
+                    // return ;
+                    // break;
+                case this.patientinfo.sex == 0:
+                    that.$emit('show-alert', "", function() {
+                        //
+                    });
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者性别',
+                      type: 'error',
+                      onClose: () => {
+                      }
+                    });
+                    return;
+                    break;
+                // case this.patientinfo.mobile.trim() == "":
+                //     that.$emit('show-alert', "请输入患者本人手机", function() {
+                //         $("input[name='patient-mobile']").focus();
+                //     });
+                //     return;
+                //     break;
+                case this.patientinfo.birthday.trim() == "":
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者生日',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-birthday']").focus();
+                      }
+                    });
+                    return;
+                    break;
+                case $.trim(this.patientinfo.prcrid) == "":
+                    this.$message({
+                      showClose: true,
+                      message: '请输入身份证号',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-prcrid']").focus();
+                      }
+                    });
+                    return ;
+                    break;
+                default:
+                    break;
+            }
+            //校验手机号
+            if ($.trim(this.patientinfo.mobile) != "" && !rule.checkPhone(this.patientinfo.mobile)) {
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的手机号',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-mobile']").focus();
+                  }
+                });
+                return;
+            }
+            //校验邮箱号
+            if ($.trim(this.patientinfo.email) != "" && !rule.checkEmail(this.patientinfo.email)) {
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的邮箱',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-email']").focus();
+                  }
+                });
+                return;
+            }
+            //校验身份证号
+            if ($.trim(this.patientinfo.prcrid) != "" && !rule.checkIDcard(this.patientinfo.prcrid)) {
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的身份证号',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-prcrid']").focus();
+                  }
+                });
+                return;
+            }
+            //校验备用联系人手机号
+            if ( $.trim(this.patientinfo.other_contacts[0].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[0].mobile)) {
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的备用联系人号码',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='spare_contacts_mobile']").focus();
+                  }
+                });
+                return;
+            }
+
+            //全部提交字段，方便测试
+            // console.log("name", this.patientinfo.name);
+            // console.log('out_case_no', this.patientinfo.out_case_no);
+            // console.log('sex', this.patientinfo.sex);
+            // console.log('birthday', this.patientinfo.birthday);
+            // console.log('nation', this.patientinfo.nation);
+            // console.log('career', this.patientinfo.career);
+            // console.log('prcrid', this.patientinfo.prcrid);
+            // console.log('marry_status', this.patientinfo.marry_status);
+            // console.log('address.provincestr', this.patientinfo.address.provincestr);
+            // console.log('address.citystr', this.patientinfo.address.citystr);
+            // console.log('birth_place.provincestr', this.patientinfo.birth_place.provincestr);
+            // console.log('birth_place.citystr', this.patientinfo.birth_place.citystr);
+            // console.log('mobile', this.patientinfo.mobile);
+            // console.log('email', this.patientinfo.email);
+            // console.log('other_contacts.name', this.patientinfo.other_contacts[0].name);
+            // console.log('other_contacts.shipstr', this.patientinfo.other_contacts[0].shipstr);
+            // console.log('other_contacts.mobile', this.patientinfo.other_contacts[0].mobile);
+            // console.log('create_doc_date', this.patientinfo.create_doc_date);
+            // console.log('past_main_history', this.past_main_history);
+            // console.log('past_other_history', this.patientinfo.past_other_history);
+            // console.log('family_history', this.patientinfo.family_history);
+            // console.log('menstruation_history', this.menstruation_history);
+            // console.log('childbearing_history', this.childbearing_history);
+            // console.log('allergy_history', this.patientinfo.allergy_history);
+
+            $.ajax({
+                    url: api.get(httpurl),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        patientid: this.patientid,
+                        name: this.patientinfo.name,
+                        out_case_no: this.patientinfo.out_case_no,
+                        sex: this.patientinfo.sex,
+                        birthday: this.patientinfo.birthday,
+                        nation: this.patientinfo.nation,
+                        career: this.patientinfo.career,
+                        prcrid: this.patientinfo.prcrid,
+                        marry_status: this.patientinfo.marry_status,
+                        address: this.patientinfo.address,
+                        birth_place: this.patientinfo.birth_place,
+                        mobile: this.patientinfo.mobile,
+                        email: this.patientinfo.email,
+                        other_contacts: this.patientinfo.other_contacts,
+                        create_doc_date: this.patientinfo.create_doc_date,
+                        past_main_history: this.past_main_history,
+                        past_other_history: this.patientinfo.past_other_history,
+                        family_history: this.patientinfo.family_history,
+                        menstruation_history: this.menstruation_history,
+                        childbearing_history: this.childbearing_history,
+                        allergy_history: this.patientinfo.allergy_history,
+                    },
+                })
+                .done(function(response) {
+                    var data = response.data;
+                    if (response.errno != 0 && response.errno != -10) {
+                        that.$message({
+                          showClose: true,
+                          message: response.errmsg,
+                          type: 'error',
+                          onClose: () => {
+                              $("input[name='out-case-no']").focus();
+                          }
+                        });
+                    } else {
+                        that.$message({
+                          showClose: true,
+                          message: '保存成功',
+                          type: 'success',
+                          duration: 1500,
+                          onClose: () => {
+                              if (typeof data.patientid != ``) {
+                                  that.$router.push({
+                                      path: '/patient/' + data.patientid + '/baseinfo'
+                                  })
+                              }
+                          }
+                        });
+                    }
+                })
+        },
+        selectChangeForBirthPlaceProvince: function(e) {
+            this.currentBirthPlaceProvinceIndex = e.target.selectedIndex -1;
+            this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
+        },
+        selectChangeForCurrentAddress: function(e) {
+            this.currentAddressProvinceIndex = e.target.selectedIndex -1;
+            this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
+        },
+        showAlertMsg: function(msg) {},
+        show: function() {
+
+        },
+        isModify: function() {
+            return !!this.patientid;
+        },
+        getDefaultDate: function(birthday, type) {
+            var today = util.getFormatDate();
+            if (this.isModify()) {
+                if (birthday == undefined || birthday == '' || birthday == null) {
+                    return '';
+                }
+            } else {
+                if (type == 'birthday') {
+                    return '';
+                }
+                return today;
+            }
+            return today;
+        },
+        initPage: function() {
             var that = this;
             if (!that.isModify()) {
                 if (this.diseaseCount > 1) {
-                    transition.redirect({
+                    this.$router.replace({
                         path: '/patient/selectdisease'
                     });
                 }
@@ -787,311 +1123,8 @@ export default {
             }
         }
     },
-    watch: {
-        'patientinfo.menstruationStopTime': function(vale, oldval) {}
-    },
-    computed: {
-        pagetitle: function() {
-            var title = '';
-            if (this.patientid) {
-                title = this.patientinfo.name + '修改';
-            } else {
-                title = '新增患者';
-            }
-            return title;
-        },
-        maleStyle: function() {
-            if (this.patientinfo.sex == "1") {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        femaleStyle: function() {
-            if (this.patientinfo.sex == "2") {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        menstruation_history: function() {
-            var result = '';
-            if (this.patientinfo.sex == '2' && this.femaleStyle) {
-                result = this.firstMenstruationAge + "|" + this.menstruationStatus + "|";
-                if (this.menstruationStatus == "正常") {
-                    result += (this.menstruationHoldOnDays + "|" + this.menstruationPeriod);
-                }else if (this.menstruationStatus == "停经") {
-                    result += (this.picked1 + "|");
-                    if (this.picked1 == "生理性") {
-                        result += this.menstruationStopTime;
-                    }else if(this.picked1 == "病理性") {
-                        result += this.menstruationStopReason;
-                    }
-                }
-                return result;
-            }else {
-                return "|||";
-            }
-        },
-        childbearing_history: function() {
-            if (this.patientinfo.sex == '2' && this.femaleStyle) {
-                return this.pregnantTimes + "|" + this.childbirthTimes + "|" + this.pregnantTime + "|" + this.childbirthTime;
-            }else{
-                return "|||";
-            }
-        },
-        past_main_history: function() {
-            var result = "";
-            result = this.past_main_history_checkboxs.join("|");
-            if (this.other_input_checkbox) {
-                result += ("+" + this.other_input);
-            }
-            return result;
-        },
-        doctorname: function() {
-            return common.getName();
-        },
-        hospital: function() {
-            return common.getHospital();
-        },
-        patientid: function() {
-            return this.$route.params.patientid != undefined ? this.$route.params.patientid : '';
-        },
-        diseaseCount: function() {
-            var diseases = common.getDiseases();
-            if ($.isArray(diseases)) {
-                return diseases.length;
-            }
-
-            return 0;
-        }
-    },
-    components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
-        calendar: function(resolve) {
-            require(['../../components/calendar.vue'], resolve);
-        }
-    },
-    methods: {
-        maleSelectClick: function() {
-            this.patientinfo.sex = "1";
-        },
-        femaleSelectClick: function() {
-            this.patientinfo.sex = "2";
-        },
-        menstruationNormalClick: function() {
-            this.menstruationNormalStyle = true;
-            this.menstruationStopStyle = false;
-            this.menstruationStatus = "正常";
-        },
-        menstruationStopClick: function() {
-            this.menstruationNormalStyle = false;
-            this.menstruationStopStyle = true;
-            this.menstruationStatus = "停经";
-        },
-        save: function() {
-            var httpurl = this.patientid == '' ? 'patient.addpost' : 'patient.modifypost';
-            var that = this;
-            switch (true) {
-                case this.patientinfo.name.trim() == "":
-                    that.$emit('show-alert', "请输入患者姓名", function() {
-                        $("input[name='patient-name']").focus();
-                    });
-                    return;
-                    break;
-                    // case this.patientinfo.out_case_no.trim() == "":
-                    // that.$emit('show-alert', "请输入病历号", function(){
-                    //     $("input[name='out-case-no']").focus();
-                    // });
-                    // return ;
-                    // break;
-                case this.patientinfo.sex == 0:
-                    that.$emit('show-alert', "请输入患者性别", function() {
-                        //
-                    });
-                    return;
-                    break;
-                // case this.patientinfo.mobile.trim() == "":
-                //     that.$emit('show-alert', "请输入患者本人手机", function() {
-                //         $("input[name='patient-mobile']").focus();
-                //     });
-                //     return;
-                //     break;
-                case this.patientinfo.birthday.trim() == "":
-                    that.$emit('show-alert', "请输入患者生日", function() {
-                        $("input[name='patient-birthday']").focus();
-                    });
-                    return;
-                    break;
-                case $.trim(this.patientinfo.prcrid) == "":
-                    that.$emit('show-alert', "请输入身份证号", function(){
-                        $("input[name='patient-prcrid']").focus();
-                    });
-                    return ;
-                    break;
-                default:
-                    break;
-            }
-            //校验手机号
-            if ($.trim(this.patientinfo.mobile) != "" && !rule.checkPhone(this.patientinfo.mobile)) {
-                that.$emit('show-alert', "请输入正确的手机号", function() {
-                    $("input[name='patient-mobile']").focus();
-                });
-                return;
-            }
-            //校验邮箱号
-            if ($.trim(this.patientinfo.email) != "" && !rule.checkEmail(this.patientinfo.email)) {
-                that.$emit('show-alert', "请输入正确的邮箱号", function() {
-                    $("input[name='patient-email']").focus();
-                });
-                return;
-            }
-            //校验身份证号
-            if ($.trim(this.patientinfo.prcrid) != "" && !rule.checkIDcard(this.patientinfo.prcrid)) {
-                that.$emit('show-alert', "请输入正确的身份证号", function() {
-                    $("input[name='patient-prcrid']").focus();
-                });
-                return;
-            }
-            //校验备用联系人手机号
-            if ( $.trim(this.patientinfo.other_contacts[0].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[0].mobile)) {
-                that.$emit('show-alert', "请输入正确的备用联系人号码", function() {
-                    $("input[name='spare_contacts_mobile']").focus();
-                });
-                return;
-            }
-
-            //全部提交字段，方便测试
-            // console.log("name", this.patientinfo.name);
-            // console.log('out_case_no', this.patientinfo.out_case_no);
-            // console.log('sex', this.patientinfo.sex);
-            // console.log('birthday', this.patientinfo.birthday);
-            // console.log('nation', this.patientinfo.nation);
-            // console.log('career', this.patientinfo.career);
-            // console.log('prcrid', this.patientinfo.prcrid);
-            // console.log('marry_status', this.patientinfo.marry_status);
-            // console.log('address.provincestr', this.patientinfo.address.provincestr);
-            // console.log('address.citystr', this.patientinfo.address.citystr);
-            // console.log('birth_place.provincestr', this.patientinfo.birth_place.provincestr);
-            // console.log('birth_place.citystr', this.patientinfo.birth_place.citystr);
-            // console.log('mobile', this.patientinfo.mobile);
-            // console.log('email', this.patientinfo.email);
-            // console.log('other_contacts.name', this.patientinfo.other_contacts[0].name);
-            // console.log('other_contacts.shipstr', this.patientinfo.other_contacts[0].shipstr);
-            // console.log('other_contacts.mobile', this.patientinfo.other_contacts[0].mobile);
-            // console.log('create_doc_date', this.patientinfo.create_doc_date);
-            // console.log('past_main_history', this.past_main_history);
-            // console.log('past_other_history', this.patientinfo.past_other_history);
-            // console.log('family_history', this.patientinfo.family_history);
-            // console.log('menstruation_history', this.menstruation_history);
-            // console.log('childbearing_history', this.childbearing_history);
-            // console.log('allergy_history', this.patientinfo.allergy_history);
-
-            $.ajax({
-                    url: api.get(httpurl),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: this.patientid,
-                        name: this.patientinfo.name,
-                        out_case_no: this.patientinfo.out_case_no,
-                        sex: this.patientinfo.sex,
-                        birthday: this.patientinfo.birthday,
-                        nation: this.patientinfo.nation,
-                        career: this.patientinfo.career,
-                        prcrid: this.patientinfo.prcrid,
-                        marry_status: this.patientinfo.marry_status,
-                        address: this.patientinfo.address,
-                        birth_place: this.patientinfo.birth_place,
-                        mobile: this.patientinfo.mobile,
-                        email: this.patientinfo.email,
-                        other_contacts: this.patientinfo.other_contacts,
-                        create_doc_date: this.patientinfo.create_doc_date,
-                        past_main_history: this.past_main_history,
-                        past_other_history: this.patientinfo.past_other_history,
-                        family_history: this.patientinfo.family_history,
-                        menstruation_history: this.menstruation_history,
-                        childbearing_history: this.childbearing_history,
-                        allergy_history: this.patientinfo.allergy_history,
-                    },
-                })
-                .done(function(response) {
-                    var data = response.data;
-                    if (response.errno != 0 && response.errno != -10) {
-                        that.$emit("show-alert", response.errmsg, function() {
-                            $("input[name='out-case-no']").focus();
-                        })
-                    }else {
-                        that.$emit('show-popup', '保存成功', function() {
-                            if (typeof data.patientid != ``) {
-                                that.$router.push({
-                                    path: '/patient/' + data.patientid + '/baseinfo'
-                                })
-                            }
-                        })
-                    }
-                })
-        },
-        showCalendar: function(e) {
-            e.stopPropagation();
-            var that = this;
-            if (e.target.id == "birthday") {
-                that.showForBirthday = true;
-            } else if (e.target.id == "menstruationHistory") {
-                that.showForMenstruationHistory = true;
-            } else if (e.target.id == "createDocDate") {
-                that.showForCreateDocDate = true;
-            }
-
-            that.xN = e.target.offsetLeft;
-            that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-            var bindHide = function(event) {
-                if (event.target == e.target) {
-                    return;
-                }
-                // console.log('----document----', event);
-                event.stopPropagation();
-                that.showForBirthday = false;
-                that.showForMenstruationHistory = false;
-                that.showForCreateDocDate = false;
-                document.removeEventListener('click', bindHide, false);
-                document.removeEventListener('touchstart', bindHide, false);
-            };
-            setTimeout(function() {
-                document.addEventListener('click', bindHide, false);
-                document.addEventListener('touchstart', bindHide, false);
-            }, 500);
-        },
-        selectChangeForBirthPlaceProvince: function(e) {
-            this.currentBirthPlaceProvinceIndex = e.target.selectedIndex -1;
-            this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
-        },
-        selectChangeForCurrentAddress: function(e) {
-            this.currentAddressProvinceIndex = e.target.selectedIndex -1;
-            this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
-        },
-        showAlertMsg: function(msg) {},
-        show: function() {
-
-        },
-        isModify: function() {
-            return !!this.patientid;
-        },
-        isShowDefaultDate: function(birthday, type) {
-            if (this.isModify()) {
-                if (birthday == undefined || birthday == '' || birthday == null) {
-                    return false;
-                }
-            } else {
-                if (type == 'birthday') {
-                    return false;
-                }
-                return true;
-            }
-            return true;
-        },
+    created: function() {
+        this.initPage()
     }
 }
 </script>

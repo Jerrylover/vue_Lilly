@@ -166,7 +166,7 @@ export default {
             require(['./Menu.vue'], resolve);
         }
     },
-    beforeRouteEnter: function(done) {
+    created: function() {
         if (this.model.hasOwnProperty('submenus')) {
             for (var i = 0; i < this.model.submenus.length; i++) {
                 if (this.model.submenus[i].link == this.ename) {
@@ -175,8 +175,7 @@ export default {
                 }
             }
         }
-        done();
-
+        // done();
     }
 }
 </script>

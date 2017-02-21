@@ -158,7 +158,7 @@ export default {
                     data: queryStrings,
                 }).done(function(d) {
                     var data = d.data;
-                    self.patients = data.list;
+                    self.patients = data.list || [];
                     self.pagenum = data.page - '';
                     self.pagesize = data.pagesize - '';
                     self.total = data.total - '';

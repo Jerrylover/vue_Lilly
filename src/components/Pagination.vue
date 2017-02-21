@@ -32,6 +32,7 @@ span.text:hover {
 }
 </style>
 <script>
+import Bus from '../lib/bus.js'
 export default {
   props: {
     cur: {
@@ -115,7 +116,7 @@ export default {
     pageClick: function(page) {
       if (page != this.myCur) {
         this.myCur = page
-        this.$emit('page-click', page)
+        Bus.$emit('page-click', page)
         var query = {}
         for (var i in this.$route.query) {
           query[i] = this.$route.query[i]

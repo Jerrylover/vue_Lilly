@@ -1,6 +1,7 @@
 <template>
     <div class="edss-tip">
         <table class="table table-bordered table-striped">
+            <tbody>
             <tr>
                 <th>颅神经</th>
                 <th>备 注</th>
@@ -82,8 +83,10 @@
                     <p>4=重度</p>
                 </td>
             </tr>
+            </tbody>
         </table>
         <table class="table table-bordered table-striped">
+            <tbody>
             <tr>
                 <td>0.正常</td>
             </tr>
@@ -102,6 +105,7 @@
             <tr>
                 <td>5.无法吞咽或说话</td>
             </tr>
+        </tbody>
         </table>
     </div>
 </template>

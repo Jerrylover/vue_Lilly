@@ -18,29 +18,29 @@ export default function(vm) {
             'X-X-M1': 'IV',
         }
         var fenqimap7 = {
-                'Tx-N0-M0': 'Occult',
-                'Tis-N0-M0': 'S0',
-                'T1a-N0-M0': 'IA',
-                'T1b-N0-M0': 'IA',
-                'T2a-N0-M0': 'IB',
-                'T1a-N1-M0': 'IIA',
-                'T1b-N1-M0': 'IIA',
-                'T2a-N1-M0': 'IIA',
-                'T2b-N0-M0': 'IIA',
-                'T2b-N1-M0': 'IIB',
-                'T3-N0-M0': 'IIB',
-                'T1a-N2-M0': 'IIIA',
-                'T1b-N2-M0': 'IIIA',
-                'T2a-N2-M0': 'IIIA',
-                'T2b-N2-M0': 'IIIA',
-                'T3-N1-M0': 'IIIA',
-                'T3-N2-M0': 'IIIA',
-                'T4-N0-M0': 'IIIA',
-                'T4-N1-M0': 'IIIA',
-                'T4-N2-M0': 'IIIB',
-                'X-N3-M0': 'IIIB', //特殊判断一下
-                'X-X-M1a': 'IV',
-                'X-X-M1b': 'IV'
+            'Tx-N0-M0': 'Occult',
+            'Tis-N0-M0': 'S0',
+            'T1a-N0-M0': 'IA',
+            'T1b-N0-M0': 'IA',
+            'T2a-N0-M0': 'IB',
+            'T1a-N1-M0': 'IIA',
+            'T1b-N1-M0': 'IIA',
+            'T2a-N1-M0': 'IIA',
+            'T2b-N0-M0': 'IIA',
+            'T2b-N1-M0': 'IIB',
+            'T3-N0-M0': 'IIB',
+            'T1a-N2-M0': 'IIIA',
+            'T1b-N2-M0': 'IIIA',
+            'T2a-N2-M0': 'IIIA',
+            'T2b-N2-M0': 'IIIA',
+            'T3-N1-M0': 'IIIA',
+            'T3-N2-M0': 'IIIA',
+            'T4-N0-M0': 'IIIA',
+            'T4-N1-M0': 'IIIA',
+            'T4-N2-M0': 'IIIB',
+            'X-N3-M0': 'IIIB', //特殊判断一下
+            'X-X-M1a': 'IV',
+            'X-X-M1b': 'IV'
             }
             //分期6
         $(document).on('change', '#fenqi6-T', function() {

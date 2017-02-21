@@ -12,16 +12,13 @@
                 <div class="text-center" style="padding-top:20px"><span style="color:#eb4f38">{{sec}}</span> 秒后自动跳转</div>
             </div>
             <div slot="footer">
-                <div>如果您的浏览器没有自动跳转，请<router-link   :to="{path: '/login'}" @click="showModal = false">点击这里</router-link></div>
+                <div>如果您的浏览器没有自动跳转，请<a href="javascript:" @click.stop.prevent="goLogin">点击这里</a>
             </div>
         </modal>
         <div class="modal-mask" id="modal-loading" style="display:none;">
             <i class="fa fa-spinner fa-pulse fa-3x fa-fw modal-wrapper"></i>
             <span class="sr-only">Loading...</span>
         </div>
-        <popup :show="showPopup" :msg="popupMsg" type="right"></popup>
-        <alert :show="showAlert" :msg="alertMsg" :type="alertType"></alert>
-        <prompt :show="showPrompt" :msg="promptMsg"></prompt>
     </div>
 </template>
 <style scoped>
@@ -67,6 +64,7 @@ export default {
             promptCancelCallback: '',
             msg: '',
             alertType: 'error',
+            timer: '',
         }
     },
     mounted: function() {
@@ -81,9 +79,9 @@ export default {
                 } else if (xhr.responseJSON.errno == -10) {
                     self.showModal = true;
                     self.msg = '您的会话已过期，请重新登录';
-                    var timer = window.setInterval(function() {
+                    self.timer = window.setInterval(function() {
                         if (self.sec == 0) {
-                            clearInterval(timer);
+                            clearInterval(self.timer);
                             window.setTimeout(function() {
                                 self.sec = 5;
                             }, 3000)
@@ -151,76 +149,15 @@ export default {
         'modal': function(resolve) {
             require(['./components/Modal.vue'], resolve);
         },
-        'popup': function(resolve) {
-            require(['./components/Popup.vue'], resolve);
-        },
-        'alert': function(resolve) {
-            require(['./components/Alert.vue'], resolve);
-        },
-        'prompt': function(resolve) {
-            require(['./components/Prompt.vue'], resolve);
-        }
     },
-    events: {
-        'hide-loading-modal': function() {
-            this.showModal = false;
-        },
-        'show-popup': function(msg, f, timeout) {
-            this.showModal = false;
-            this.showAlert = false;
-            this.showPrompt = false;
-            this.showPopup = true;
-            this.popupMsg = msg;
-            var self = this;
-            if (timeout == undefined || timeout == '' || timeout == null) {
-                timeout = 800;
-            }
-            setTimeout(function() {
-                self.showPopup = false;
-                if (typeof f == 'function') {
-                    f();
-                }
-            }, timeout)
-        },
-        'show-alert': function(msg, f, type) {
-            this.showModal = false;
-            this.showPopup = false;
-            this.showPrompt = false;
-            this.showAlert = true;
-            this.alertMsg = msg;
-            this.alertCallback = function() {};
-            if (type != undefined) {
-                this.alertType = type;
-            }
-            if (typeof f == 'function') {
-                this.alertCallback = f;
-            }
-        },
-        'show-prompt': function(msg, f1, f2) {
-            this.showModal = false;
-            this.showPopup = false;
-            this.showAlert = false;
-            this.showPrompt = true;
-            this.promptMsg = msg;
-            this.promptOKCallback = function() {};
-            if (typeof f1 == 'function') {
-                this.promptOKCallback = f1;
-            }
-            if (typeof f2 == 'function') { //取消回调
-                this.promptCancelCallback = f2;
-            }
-        },
-        'alert-close-click': function(event) {
-            (this.alertCallback)();
-        },
-        'prompt-ok-click': function(event) {
-            console.log('callback');
-            (this.promptOKCallback)();
-        },
-        'prompt-cancel-click': function(event) {
-            if (typeof this.promptCancelCallback == 'function') {
-                (this.promptCancelCallback)();
-            }
+    methods: {
+        goLogin: function() {
+            clearInterval(this.timer);
+            this.showModal = false
+            this.$router.push({
+                name: 'login'
+            })
+
         }
     }
 }

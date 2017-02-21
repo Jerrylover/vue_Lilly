@@ -29,7 +29,6 @@ export default {
                 return true;
             }
             this.text = this.answer.content;
-            console.log(' textarea modify-data', this.answer)
             return true;
         },
         'modifyDone': function() {

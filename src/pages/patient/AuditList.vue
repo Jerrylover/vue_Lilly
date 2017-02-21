@@ -262,7 +262,11 @@ export default {
         },
         auditPass: function(e, patient) {
             var that = this;
-            this.$emit('show-prompt', '确定要审核通过吗？', function() {
+            this.$confirm("确定要审核通过吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
                 $.ajax({
                     url: api.get('patient.auditpass'),
                     type: 'post',
@@ -271,15 +275,23 @@ export default {
                         patientid: patient.patient_id
                     }
                 }).done(function(d) {
-                    that.$emit('show-popup', '操作成功');
+                    that.$message({
+                        type: 'success',
+                        message: '操作成功'
+                    })
                     that.fetchData();
                 })
-            })
+            }).catch(() => {
 
+            });
         },
         auditRefuse: function(e, patient) {
             var that = this;
-            this.$emit('show-prompt', '确定要审核拒绝吗？', function() {
+            this.$confirm("确定要审核通过吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
                 $.ajax({
                     url: api.get('patient.auditrefuse'),
                     type: 'post',
@@ -288,10 +300,15 @@ export default {
                         patientid: patient.patient_id
                     }
                 }).done(function(d) {
-                    that.$emit('show-popup', '操作成功');
+                    that.$message({
+                        type: 'success',
+                        message: '审核成功'
+                    })
                     that.fetchData();
                 })
-            });
+            }).catch(() => {
+
+            })
         }
     }
 }

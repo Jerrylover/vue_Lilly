@@ -69,7 +69,11 @@ export default {
         },
         removePatientClick: function() {
             var that = this;
-            this.$emit('show-prompt', '是否删除该患者，患者删除后则连同数据库中的数据及诊后管理数据同时删除。请谨慎处理', function() {
+            this.$confirm("是否删除该患者，患者删除后则连同数据库中的数据及诊后管理数据同时删除。请谨慎处理", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
                 $.ajax({
                     url: api.get('patient.delete'),
                     type: "post",
@@ -79,16 +83,25 @@ export default {
                     }
                 }).done(function(d) {
                     if (d.errno != 0 && d.errno != -10) {
-                        that.$emit('show-alert', d.errmsg);
+                        that.$message({
+                            type: 'error',
+                            message: d.errmsg
+                        });
                     } else {
-                        that.$emit('show-popup', '删除成功', function() {
-                            that.$router.push({
-                                path:'/'
-                            })
+                        that.$message({
+                            type: 'success',
+                            message: '删除成功!',
+                            onClose: function() {
+                                that.$router.push({
+                                    path:'/'
+                                })
+                            }
                         });
                     }
                 });
-            })
+            }).catch(() => {
+
+            });
         }
     }
 }

@@ -2,7 +2,7 @@
 <div>
     <ul class="nav nav-tabs bg-gray" id="nav-tabs-1">
         <li class="active" for="div_visit">
-            <a href="javascript:"> &nbsp;&nbsp;<strong>{{title}}（{{action}}）</strong>&nbsp;&nbsp;</a>
+            <a href="javascript:"> &nbsp;&nbsp;<strong>{{title | filterTitle}}（{{action}}）</strong>&nbsp;&nbsp;</a>
         </li>
     </ul>
     <div class="ck-content">
@@ -63,6 +63,7 @@ li.active a:hover {
 <script>
 import api from '../../config/api.js'
 import common from '../../lib/common.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -108,12 +109,7 @@ export default {
 
                 self.$nextTick(function() {
                     console.log('emit e-checkuptpl-ready')
-                    self.$emit('e-checkuptpl-ready')
-                    self.$children.forEach(function(item, index) {
-                        if (typeof item['e-checkuptpl-ready'] == 'function') {
-                            item['e-checkuptpl-ready']();
-                        }
-                    })
+                    Bus.$emit('e-checkuptpl-ready')
                 });
                 // self.$nextTick(function(){
                 //     self.$emit('e-checkuptpl-ready')
@@ -133,6 +129,11 @@ export default {
             require(['../../components/cancer/Zhiliao.vue'], resolve);
         },
         'checkuptpl': require('./CheckupTpl.vue')
+    },
+    filters: {
+        filterTitle: function(value) {
+            return value.replace(/\(.*?\)/, '')
+        }
     },
     mounted: function() {
 

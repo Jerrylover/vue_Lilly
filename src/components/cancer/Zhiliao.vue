@@ -9,6 +9,7 @@
             </div>
             <div class="question-group">
                 <table class="table table-bordered" style="margin-bottom:0;" v-if="chemos.length > 0">
+                    <tbody>
                     <tr style="background:#eee;">
                         <th>化疗性质</th>
                         <th>化疗方案</th>
@@ -19,6 +20,7 @@
                         <td>{{lastChemoPickedPkgname}}</td>
                         <td>{{lastChemoPickedStage}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <p v-else>暂无记录</p>
             </div>
@@ -36,11 +38,14 @@
                 </div>
                 <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">化疗开始时间</label>
                 <div class="col-sm-3" style="">
-                    <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                        <input id="calendar-chemo" class="form-control controls" type="text" @click="showCalendar" v-model="startdate" placeholder="请输入日期" name='_date' :value="startdate">
+                    <div class="block">
+                        <!-- <input id="calendar-chemo" class="form-control controls" type="text" @click="showCalendar" v-model="startdate" placeholder="请输入日期" name='_date' :value="startdate">
                         <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
                         <span class="help-block" v-show="iserror">日期已存在</span>
-                        <calendar :show="show" :value="startdate" v-on:calendar-change-value="changeStartdate" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                        <calendar :show="show" :value="startdate" v-on:calendar-change-value="changeStartdate" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
+                        <el-moment v-model="startdate" format="YYYY-MM-DD">
+                            <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
+                        </el-moment>
                     </div>
                 </div>
             </div>
@@ -62,7 +67,7 @@
                 <div class="col-sm-3" style="">
                     <div>
                         <select class="form-control" v-model="pickedType" @change="typeChange">
-                            <option v-for="(type, effects) in types" :value="type">{{type}}</option>
+                            <option v-for="(effects, type) in types" :value="type">{{type}}</option>
                           </select>
                     </div>
                 </div>
@@ -187,6 +192,7 @@
                         <div style="max-height:200px;overflow-y:auto;overflow-x:hidden" @mouseenter="doMouseenter($event)" @mouseleave="doMouseleave($event)">
                             <table class="table table-bordered" style="border:0">
                                 <thead>
+                                    <tr>
                                     <th class="td-search" style="border-bottom:1px dashed #ccc;">药品名称</th>
                                     <!--<th class="td-search" style="border-bottom:1px dashed #ccc;">标准用法</th>
                                 <th class="td-search" style="border-bottom:1px dashed #ccc;">标准剂量</th>-->
@@ -293,11 +299,10 @@
                     <div class="form-group question-group">
                         <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">开始日期</label>
                         <div class="col-sm-3" style="">
-                            <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                                <input id="calendar-radiation" class="form-control controls" type="text" @click="showCalendar" v-model="xstartdate" placeholder="请输入日期" name='_date' :value="xstartdate">
-                                <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}"></span>
-                                <span class="help-block" v-show="iserror">日期已存在</span>
-                                <calendar :show="xshow" :value="xstartdate" v-on:calendar-change-value="changeXStartdate" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                            <div class="block">
+                                <el-moment v-model="xstartdate" format="YYYY-MM-DD">
+                                    <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
+                                </el-moment>
                             </div>
                         </div>
                         <label for="inputEmail3" class="col-lg-1 col-sm-1 control-label question-label" style="padding-right:0;margin-left:20px;">部位</label>
@@ -325,7 +330,7 @@
                         </div>
                         <label for="inputEmail3" class="col-lg-1 col-sm-1 control-label question-label" style="padding-right:0;margin-left:20px;">剂量</label>
                         <div class="col-sm-3" style="">
-                            <div :class="form-control">
+                            <div class="">
                                 <input class="form-control controls" type="text" v-model="xdose">
                             </div>
                         </div>
@@ -337,7 +342,7 @@
                     <div class="form-group question-group">
                         <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">持续时间</label>
                         <div class="col-sm-3" style="">
-                            <div :class="form-control">
+                            <div class="">
                                 <input class="form-control controls" type="text" v-model="xtimespan">
                             </div>
                         </div>
@@ -373,31 +378,35 @@
                             <th>放疗</th>
                             <th>操作</th>
                         </tr>
-                        <tbody>
-                            <tr v-for="chemo in chemos">
-                                <td>
-                                    <p>化疗医院：{{chemo.hospital}}</p>
-                                    <p>开始时间：{{chemo.startdate}}</p>
-                                    <p>化疗方案：{{chemo.pkg_name}}</p>
-                                    <p>化疗性质：{{chemo.type}}</p>
-                                    <p>化疗疗程：{{chemo.stage}}</p>
-                                </td>
-                                <td>{{chemo.progress_reason}}</td>
-                                <td class="mytd" v-html="formatePkgItems(chemo.pkg_items)"></td>
-                                <td>{{chemo.effect_name}}</td>
-                                <td>{{chemo.effect_content}}</td>
-                                <td class="mytd" v-html="formteSideEffectItems(chemo.sideeffect_items)"></td>
-                                <td class="mytd" v-html="formateXContent(chemo)"></td>
-                                <td><a href="javascript:" @click="chemoModify(chemo)">修改</a><br/>
-                                </br/><a href="javascript:" @click="chemoRemove(chemo)">删除</a></td>
-                            </tr>
-                        </tbody>
+                    </thead>
+                    <tbody>
+                        <tr v-for="chemo in chemos">
+                            <td>
+                                <p>化疗医院：{{chemo.hospital}}</p>
+                                <p>开始时间：{{chemo.startdate}}</p>
+                                <p>化疗方案：{{chemo.pkg_name}}</p>
+                                <p>化疗性质：{{chemo.type}}</p>
+                                <p>化疗疗程：{{chemo.stage}}</p>
+                            </td>
+                            <td>{{chemo.progress_reason}}</td>
+                            <td class="mytd" v-html="formatePkgItems(chemo.pkg_items)"></td>
+                            <td>{{chemo.effect_name}}</td>
+                            <td>{{chemo.effect_content}}</td>
+                            <td class="mytd" v-html="formteSideEffectItems(chemo.sideeffect_items)"></td>
+                            <td class="mytd" v-html="formateXContent(chemo)"></td>
+                            <td><a href="javascript:" @click="chemoModify(chemo)">修改</a><br/>
+                            </br/><a href="javascript:" @click="chemoRemove(chemo)">删除</a></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
+.el-date-editor.el-input {
+    width:100%
+}
 .div-table {
     padding: 0;
 }
@@ -492,6 +501,7 @@ import common from '../../lib/common.js'
 export default {
     data: function() {
         return {
+            mm: '',
             chemoid: '',
             chemos: [],
             searchCheckedList: [], //选中的搜索结果
@@ -578,15 +588,9 @@ export default {
             error: false,
             content: '',
 
-            show: false,
-            xshow: false,
-            type: "date", //date datetime
             startdate: "", //化疗日期
             xstartdate: "", //放疗日期
-            begin: "",
-            x: 0,
-            y: 0,
-            range: false, //是否多选
+
             bsa: '',
             hospital: '',//化疗医院
             progress_reason: '',//进展原因
@@ -595,7 +599,7 @@ export default {
             lastChemoPickedStage: '',//上次化疗疗程
         }
     },
-    props: ['patientid', 'ename', 'action'],
+    props: ['ename', 'action'],
     computed: {
         'patientid': function() {
             return this.$route.params.patientid;
@@ -611,27 +615,19 @@ export default {
         }
     },
     components: {
-        'calendar': function(resolve) {
-            require(['../../components/calendar.vue'], resolve);
-        }
+
     },
     methods: {
-        changeStartdate: function(value) {
-            this.startdate = value;
-        },
-        changeXStartdate: function(value) {
-            this.xstartdate = value;
-        },
         formatePkgItems: function(pkgitems) {
             if (pkgitems == '') {
                 return '';
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">药品名</td><td width="25%">实际用量</td><td width="20%">用药途径</td><td width="20%">用药时长</td><td>备注</td></tr>';
-            var html = '<table class="table mytable">'
+            var html = '<table class="table mytable"><tbody>'
             $.each(pkgitems, function(index, pkgitem) {
                 html += '<tr><td style="border-top:0;">' + pkgitem.name + '</td><td style="border-top:0;">' + pkgitem.method3 + '</td><td style="border-top:0;">' + pkgitem.pickedmethod4 + '</td><td style="border-top:0;">' + pkgitem.pickedtime + '</td><td style="border-top:0;">' + pkgitem.remark + '</td></tr>';
             })
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         formteSideEffectItems: function(sideeffect_items) {
@@ -639,27 +635,27 @@ export default {
                 return '';
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">名称</td><td width="80%">程度</td></tr>';
-            var html = '<table class="table mytable">';
+            var html = '<table class="table mytable"><tbody>';
             $.each(sideeffect_items, function(index, sideeffect_item) {
                 html += '<tr><td style="border-top:0;">' + sideeffect_item[0] + '</td><td style="border-top:0;">' + sideeffect_item[1] + '</td></tr>';
             })
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         formateXContent: function(medicine) {
             if (medicine.x_yes == 0 || medicine == '') {
                 return '';
             }
-            var html = '<table class="table mytable">';
+            var html = '<table class="table mytable"><tbody>';
             html += '<tr><th style="font-weight:normal;border-top:0;">开始日期</th><td style="border-top:0;">' + medicine.x_startdate + '</td></tr><tr><th style="font-weight:normal;border-top:0;">部位</th><td style="border-top:0;">' + medicine.x_part + '</td></tr>';
             html += '<tr><th style="font-weight:normal;border-top:0;">模式</th><td style="border-top:0;">' + medicine.x_type + '</td></tr><tr><th style="font-weight:normal;border-top:0;">剂量</th><td style="border-top:0;">' + medicine.x_dose + '</td></tr>';
             html += '<tr><th style="font-weight:normal;border-top:0;">持续时间</th><td style="border-top:0;">' + medicine.x_timespan + '天</td></tr>';
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         resetBadReaction: function(arr) {
-            Vue.set(arr, 0, '')
-            Vue.set(arr, 1, '')
+            this.$set(arr, 0, '')
+            this.$set(arr, 1, '')
         },
         closeSearchMedicineDiv: function() {
             this.isShowSearchMedicineDiv = false;
@@ -681,6 +677,7 @@ export default {
             })
         },
         pkgnameChange: function() {
+            console.log('pkgname change')
             if (!this.ismodify) {
                 if (this.pickedPkgname != this.lastChemoPickedPkgname) {//方案和最近一次的方案不一样
                     this.pickedStage = this.stages[0];
@@ -720,7 +717,6 @@ export default {
                 medicine.pickedmethod2 = medicine.method2[i];
                 medicine.method3 = medicine.pickedmethod2.replace('/m2','');
             });
-
         },
         getFormData: function() {
             var data = {};
@@ -767,30 +763,6 @@ export default {
 
             return data;
         },
-        showCalendar: function(e) {
-            var that = this;
-            that.x = e.target.offsetLeft;
-            that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-            if (e.target.id == "calendar-chemo") {
-                that.show = true;
-            } else if (e.target.id == "calendar-radiation") {
-                that.xshow = true;
-            }
-            var bindHide = function(event) {
-                if (event.target == e.target) {
-                    return;
-                }
-                event.stopPropagation();
-                that.show = false;
-                that.xshow = false;
-                document.removeEventListener('click', bindHide, false);
-                document.removeEventListener('touchstart', bindHide, false);
-            };
-            setTimeout(function() {
-                document.addEventListener('click', bindHide, false);
-                document.addEventListener('touchstart', bindHide, false);
-            }, 500);
-        },
         'save': function(e) {
             var data = this.getFormData();
             data.patientid = this.patientid;
@@ -814,10 +786,17 @@ export default {
                 data: data,
             }).done(function(d) {
                 if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
+                    that.$message({
+                        type: 'error',
+                        message: d.errmsg
+                    })
                 } else {
-                    that.$emit('show-popup', '保存成功', function() {
-                        document.location.reload();
+                    that.$message({
+                        type: 'success',
+                        message: '保存成功',
+                        onClose: function() {
+                            document.location.reload();
+                        }
                     })
                 }
             })
@@ -839,6 +818,10 @@ export default {
             })
         },
         initSomeData: function() {
+            console.log('----init some data----')
+            this.mm = '11111'
+            this.pickedPkgname = '其他'
+            console.log("I can't say anything")
             if (util.isArray(this.chemos) && this.chemos.length > 0) {
                 var chemo = this.chemos[0];
                 //化疗医院继承上次
@@ -853,7 +836,9 @@ export default {
                 this.pickedOtherType = str1[1];
                 //化疗方案和用药继承上次
                 var str2 = chemo.pkg_name.split(' ');
+
                 this.pickedPkgname = str2[0];
+                console.log('+++++++++++pickedPkgname', this.pickedPkgname)
                 this.pickedOtherPkgname = str2[1];
                 ////这里的方法不是最好的，但是暂时没有想到更好的既考虑性能又兼顾逻辑的方法
                 var that = this;
@@ -987,7 +972,11 @@ export default {
         },
         chemoRemove: function(chemo) {
             var that = this;
-            this.$emit('show-prompt', '确定要删除该量表吗？', function() {
+            this.$confirm("确定要删除该量表吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
                 $.ajax({
                     url: api.get('chemo.delete'),
                     type: 'post',
@@ -997,13 +986,22 @@ export default {
                     }
                 }).done(function(d) {
                     if (d.errno != 0 && d.errno != -10) {
-                        self.$emit('show-alert', d.errmsg);
+                        that.$message({
+                            type: 'error',
+                            message: d.errmsg
+                        })
                     } else {
-                        that.$emit('show-popup', '删除成功');
+                        that.$message({
+                            type: 'success',
+                            message: '删除成功'
+                        })
                     }
                     that.fetchData();
                 });
+            }).catch(() => {
+
             });
+
         },
         chemoModify: function(chemo1) { //修改
             var that = this;
@@ -1088,7 +1086,12 @@ export default {
 
     },
     watch: {
-
+        pickedPkgname: function(newval, oldval) {
+            console.log('++pickedpkgname----new', newval, '----old', oldval)
+        },
+        mm: function(newval, oldval) {
+            console.log('++mm----new', newval, '----old', oldval)
+        }
     },
     mounted: function() {
         this.$nextTick(function() {
@@ -1109,7 +1112,7 @@ export default {
                 $.each(that.medicineMaps, function(index, list) {
                     $.each(list, function(index1, one){
                         one._id = Math.round(Math.random() * 100000000);
-                        console.log('one-id-----', one._id)
+                        // console.log('one-id-----', one._id)
                     })
 
                 })

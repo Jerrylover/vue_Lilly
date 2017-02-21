@@ -339,17 +339,11 @@
                 self.searchresultdoctor.mobile = '';
                 self.searchresultdoctor.hospital = '';
                 if (this.doctornameForSearch.trim() == '') {
-                    // this.$emit('show-alert', '医生姓名不能为空', function(){
-                    //     $("input[name='doctorname']").focus();
-                    // })
                     this.searchresult = '医生姓名不能为空';
                     $("input[name='doctorname']").focus();
                     return ;
                 }
                 if (this.doctormobileForSearch.trim() == '') {
-                    // this.$emit('show-alert', '医生电话不能为空', function(){
-                    //     $("input[name='doctormobile']").focus();
-                    // })
                     this.searchresult = '医生电话不能为空';
                     $("input[name='doctormobile']").focus();
                     return ;
@@ -380,7 +374,10 @@
             addmemberpost: function() {
                 var self = this;
                 if (this.searchresultdoctor.name.trim() == '') {
-                    this.$emit('show-alert', '请先搜索医生');
+                    this.$message({
+                        type: 'error',
+                        message: '请先搜索医生'
+                    })
                     return ;
                 }
                 $.ajax({

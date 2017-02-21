@@ -124,7 +124,6 @@ export default {
                 return false;
             }
             if (!rule.checkPhone(this.mobile)) {
-                this.$emit('show-alert', '请输入正确的手机号');
                 this.$message({
                     showClose: true,
                     type: 'error',

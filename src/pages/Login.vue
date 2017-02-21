@@ -199,8 +199,7 @@ export default {
                         username: this.username,
                         password: this.password
                     },
-                })
-                .done(function(d) {
+                }).done(function(d) {
                     if (d.errno != 0 && d.errno != -10) {
                         // alert(d.errmsg);
                         self.loginFailure = false;

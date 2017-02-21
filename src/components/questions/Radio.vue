@@ -209,7 +209,7 @@ export default {
             console.log('popover ishidden', popover.is(':hidden'));
             if (popover.is(':hidden')) {
                 this.showPopover = false;
-                this.$emit('edss-hide-popover');
+                Bus.$emit('edss-hide-popover');
             }
 
             this.showHide(option);
@@ -224,7 +224,7 @@ export default {
         },
         faClick: function(e) {
             if (this.showPopover == false) {
-                this.$emit('edss-hide-popover');
+                Bus.$emit('edss-hide-popover');
                 var target = e.target;
                 var popover = $(e.target).siblings('div');
                 var height = popover.outerHeight();
@@ -261,17 +261,18 @@ export default {
             if (option.showenames != '') {
                 var enameArr = option.showenames.split(',');
                 $.each(enameArr, function(index, ename) {
-                    that.$emit('show-component', ename);
+                    Bus.$emit('show-component', ename);
                 })
             }
             if (option.hideenames != '') {
                 var enameArr = option.hideenames.split(',');
                 $.each(enameArr, function(index, ename) {
-                    that.$emit('hide-component', ename);
+                    Bus.$emit('hide-component', ename);
                 })
             }
         },
         'modifyData': function() {
+            console.log('radio modify-data', this.answer)
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -316,8 +317,7 @@ export default {
         'fs': function(newval, oldval) {
             if (this.isEdss) {
                 newval = newval === '' ? 0 : newval - '';
-                console.log('xxxxxx---')
-                // Bus.$emit('edss-fs-change', this.question.content, newval);
+                Bus.$emit('edss-fs-change', this.question.content, newval);
                 //todo
             }
         }
@@ -325,6 +325,7 @@ export default {
     created: function() {
         Bus.$on('modify-done', this.modifyDone)
         Bus.$on('modify-data', this.modifyData)
+        console.log('modify-data on...')
         Bus.$on('show-component-notify', this.showComponentNotify)
         Bus.$on('hide-component-notify', this.hideComponentNotify)
         Bus.$on('edss-hide-popover-child', this.edssHidePopoverChild)

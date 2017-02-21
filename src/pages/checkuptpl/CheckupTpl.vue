@@ -7,7 +7,9 @@
                 <label for="inputEmail3" class="col-lg-3 col-sm-4 control-label  question-label">{{dateTitle}}</label>
                 <div class="col-lg-9 col-sm-8">
                     <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                        <el-date-picker v-model="value" type="date" placeholder="请选择日期"></el-date-picker>
+                        <el-moment v-model="value" format="YYYY-MM-DD">
+                            <el-date-picker type="date" placeholder="请选择日期"></el-date-picker>
+                        </el-moment>
                     </div>
                 </div>
             </div>
@@ -99,6 +101,9 @@ import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import util from '../../lib/util.js'
 import Bus from '../../lib/bus.js'
+import edss from '../../config/edss.js'
+import feiaiFenqi from '../js/FeiaiFenqi.js'
+import weiaiFenqi from '../js/WeiaiFenqi.js'
 export default {
     data: function() {
         return {
@@ -238,9 +243,9 @@ export default {
                 data: data
             }).done(function(d) {
                 if (d.errno != 0 && d.errno != -10) {
-                    self.$emit('show-alert', d.errmsg);
+                    self.$message({showClose: true, message: d.errmsg, type: 'error'});
                 } else {
-                    self.$message({showClose: true,message: '保存成功'});
+                    self.$message({showClose: true, message: '保存成功'});
                     $(e.target).blur();
                     self.ismodify = false;
                     self.myaction = '添加';
@@ -277,11 +282,13 @@ export default {
             if (!this.ismodify) { //新增
                 if (this.isExist(data.checkdate)) {
                     var that = this;
-                    this.$emit('show-prompt', '该日期已经存在检查报告，确定要覆盖吗?', function() {
-                        //确定
-                        that.doSave(data, e);
-                    }, function() {
-                        //取消
+                    this.$confirm("该日期已经存在检查报告，确定要覆盖吗？", '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
+                        this.doSave(data, e);
+                    }).catch(() => {
                         $(e.target).blur();
                     });
                 } else {
@@ -296,7 +303,11 @@ export default {
                         }
                         if (data.checkdate == checkup.check_date) {
                             //todo 想修改日期成已经存在的检查报告，这里禁止
-                            this.$emit('show-alert', '您所选择的日期已经存在量表数据，请修改对应日期的量表，谢谢！');
+                            this.$message({
+                                showClose: true,
+                                message: '',
+                                type: '您所选择的日期已经存在量表数据，请修改对应日期的量表，谢谢！',
+                            })
                             return false;
                         }
                     }
@@ -390,7 +401,6 @@ export default {
             if (answer.options.length > 0) {
                 if (this.ename == 'edss' && (xquestion.content == '视觉' || xquestion.content == '大小便')) {
                     var option = answer.options[0]; //单选题，直接取了
-                    var edss = require('../../config/edss.js');
                     optionContent = option.content; /*+ '<br>转化后: ' + edss.fs[xquestion.content][option.content];*/
                 } else if (this.ename == 'edss' && xquestion.content == '行动') {
                     var option = answer.options[0]; //单选题，直接取了
@@ -439,19 +449,23 @@ export default {
             }
 
             this.value = checkup.check_date;
-            // var answers = this.checkupAnswers[checkup.id];
+            this.answers = Object.assign({}, this.checkupAnswers[checkup.id]);
             this.ismodify = true;
             this.myaction = '修改';
             this.checkupid = checkup.id;
             this.$nextTick(function() {
-                this.$emit('modify-data')
+                Bus.$emit('modify-data')
             })
             window.scrollTo(0, 0);
         },
         deleteCheckup: function(checkup, e) {
             e.preventDefault();
             var that = this;
-            this.$emit('show-prompt', '确定要删除该量表吗？', function() {
+            this.$confirm("确定要删除该量表吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
                 $.ajax({
                     url: api.get('checkup.delete'),
                     type: 'post',
@@ -461,12 +475,20 @@ export default {
                     }
                 }).done(function(d) {
                     if (d.errno != 0 && d.errno != -10) {
-                        self.$emit('show-alert', d.errmsg);
+                        that.$message({
+                            type: 'error',
+                            message: d.errmsg
+                        });
                     } else {
-                        that.$emit('show-popup', '删除成功');
+                        that.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
                     }
                     that.fetchData();
                 });
+            }).catch(() => {
+
             });
         },
         showMore: function(e) {
@@ -491,10 +513,9 @@ export default {
                     arr.push(0);
                 }
             }
-            var edss = require('../../config/edss.js');
             //寻找最大值
             var max = Math.max(...arr);
-            console.log('max', max);
+
             fs = edss.fsMap[max];
             if (typeof fs == 'number') {
                 return fs;
@@ -563,11 +584,10 @@ export default {
             }
             this.edssFs[questionName] = fs;
             this.edssFsScore = this.getFs(this.edssFs);
-
             Bus.$emit('edss-notify', this.edssScore);
         },
         'edssMovingChange': function(moving) {
-            Bus.edssMovingScore = moving;
+            this.edssMovingScore = moving;
             Bus.$emit('edss-notify', this.edssScore)
         },
         'edssHidePopover': function() {
@@ -595,10 +615,10 @@ export default {
             Bus.$emit('bsa-notify', bsa);
         },
         'showComponent': function(ename) {
-            this.$emit('show-component-notify', ename);
+            Bus.$emit('show-component-notify', ename);
         },
         'hideComponent': function(ename) {
-            this.$emit('hide-component-notify', ename);
+            Bus.$emit('hide-component-notify', ename);
         }
     },
     created: function() {
@@ -611,21 +631,23 @@ export default {
         Bus.$on('hide-component', this.hideComponent)
     },
     mounted: function() {
+        console.log('mounted.......')
         this.$nextTick(function() {
             var diseasdId = common.getDiseaseId();
             var fenqi = '';
             if (common.isLungCancer(diseasdId)) {
-              fenqi = require('../js/FeiaiFenqi.js');
-              fenqi(this);
+              feiaiFenqi(this);
             } else if (common.isGastricCancer(diseasdId)) {
-              fenqi = require('../js/WeiaiFenqi.js');
-              fenqi(this);
+              weiaiFenqi(this);
             }
         })
     },
     watch: {
         myaction: function(newVal, oldVal) {
             this.$emit('change-action', newVal)
+        },
+        '$route': function(to, from) {
+            this.ismodify = false;
         }
     }
 }

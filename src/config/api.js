@@ -117,8 +117,7 @@ export default {
             code = typeof code == 'undefined' ? '' : code;
             url = util.appendUrl(url, '_code_', code);
         }
-        diseaseid = localStorage.getItem('_diseaseid_');
-        diseaseid = typeof diseaseid == 'undefined' ? '' : diseaseid;
+        diseaseid = common.getDiseaseId()
         url = util.appendUrl(url, '_diseaseid_', diseaseid);
 
         var state = localStorage.getItem('_state_');

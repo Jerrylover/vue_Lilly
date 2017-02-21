@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import ElMoment from 'el-moment'
 import App from './App.vue'
 import router from './router'
 
 Vue.use(ElementUI)
+Vue.use(ElMoment)
 
 // Vue.filter('timestampFormat', require('./filters/timestampFormatter'));
 
