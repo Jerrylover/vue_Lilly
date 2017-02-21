@@ -98,6 +98,7 @@
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import util from '../../lib/util.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -248,7 +249,7 @@ export default {
                     self.fetchData();
                     self.value = util.getFormatDate();
                     self.$nextTick(function() {
-                        self.$emit('modify-done');
+                        Bus.$emit('modify-done');
                     })
                 }
             })
@@ -538,7 +539,7 @@ export default {
             return fs;
         },
         //////消息事件
-        'e-checkuptpl-ready': function() {
+        'checkuptplReady': function() {
             this.modify = false;
             this.fetchData();
             this.hospital = '本院';
@@ -556,26 +557,23 @@ export default {
             }, 1000);
             return true;
         },
-    },
-
-    events: {
-        'edss-fs-change': function(questionName, fs) {
+        'edssFsChange': function(questionName, fs) {
             if (fs == 6) {
                 return;
             }
             this.edssFs[questionName] = fs;
             this.edssFsScore = this.getFs(this.edssFs);
 
-            this.$emit('edss-notify', this.edssScore);
+            Bus.$emit('edss-notify', this.edssScore);
         },
-        'edss-moving-change': function(moving) {
-            this.edssMovingScore = moving;
-            this.$emit('edss-notify', this.edssScore)
+        'edssMovingChange': function(moving) {
+            Bus.edssMovingScore = moving;
+            Bus.$emit('edss-notify', this.edssScore)
         },
-        'edss-hide-popover': function() {
-            this.$emit('edss-hide-popover-child')
+        'edssHidePopover': function() {
+            Bus.$emit('edss-hide-popover-child')
         },
-        'bsa-wh-change': function(name, value) {
+        'bsaWhChange': function(name, value) {
             if (value == '' || value == undefined) {
                 value = 0;
             }
@@ -594,14 +592,23 @@ export default {
                 bsa = '';
             }
 
-            this.$emit('bsa-notify', bsa);
+            Bus.$emit('bsa-notify', bsa);
         },
-        'show-component': function(ename) {
+        'showComponent': function(ename) {
             this.$emit('show-component-notify', ename);
         },
-        'hide-component': function(ename) {
+        'hideComponent': function(ename) {
             this.$emit('hide-component-notify', ename);
         }
+    },
+    created: function() {
+        Bus.$on('e-checkuptpl-ready', this.checkuptplReady)
+        Bus.$on('edss-fs-change', this.edssFsChange)
+        Bus.$on('edss-moving-change', this.edssMovingChange)
+        Bus.$on('edss-hide-popover', this.edssHidePopover)
+        Bus.$on('bsa-wh-change', this.bsaWhChange)
+        Bus.$on('show-component', this.showComponent)
+        Bus.$on('hide-component', this.hideComponent)
     },
     mounted: function() {
         this.$nextTick(function() {

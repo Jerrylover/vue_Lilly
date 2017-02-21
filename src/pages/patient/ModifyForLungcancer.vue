@@ -43,8 +43,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">生日</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input id="birthday" class="form-control" name="patient-birthday" type="text" @click="showCalendar" v-model="patientinfo.birthday">
-                                <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                                <!-- <input id="birthday" class="form-control" name="patient-birthday" type="text" @click="showCalendar" v-model="patientinfo.birthday"> -->
+                                <!-- <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
+                                <el-date-picker v-model="patientinfo.birthday" type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -236,8 +237,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-5">建档日期</label>
                             <div class="col-lg-8 col-sm-7 clearPadding">
-                                <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date">
-                                <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
+                                <!-- <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date"> -->
+                                <!-- <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
+                                <el-date-picker v-model="patientinfo.create_doc_date" type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -578,6 +580,9 @@
     </div>
 </template>
 <style scoped>
+.el-date-editor.el-input {
+    width:100%
+}
 h4 {
     float: left;
     padding-left: 10px;
@@ -866,57 +871,10 @@ export default {
             diseaseid: '',
         }
     },
-    route: {
-        data: function(transition) {
-            var that = this;
-            this.diseaseid = transition.to.query.diseaseid != undefined ? transition.to.query.diseaseid : '';
-            if (!that.isModify()) {
-                if (this.diseaseCount > 1 && !this.diseaseid) {
-                    transition.redirect({
-                        path: '/patient/selectdisease',
-                        query: {from: transition.to.path}
-                    });
-                }
-            }
-            if (this.isModify()) {
-                $.ajax({
-                    url: api.get('patient.baseinfo'),
-                    type: "post",
-                    dataType: 'json',
-                    data: {
-                        patientid: that.patientid,
-                    }
-                }).done(function(response) {
-                    if (response.errno == 0) {
-                        that.handleSuccessData(that, response);
-                    }
-                })
-            }
-
-            if (!util.isObject(that.patientinfo.birth_place)) {
-                that.patientinfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientinfo.address)) {
-                that.patientinfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientinfo.other_contacts)) {
-                that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-            }
-            if (!util.isObject(that.patientinfo.native_place)) {
-                that.patientinfo.birth_place = {provincestr: '', citystr: ''};
-            }
-            if (!util.isObject(that.patientinfo.blood_type)) {
-                that.patientinfo.blood_type = {first: '', second: ''};
-            }
-            if (!util.isObject(that.patientinfo.self_history)) {
-                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-            if (!util.isObject(that.patientinfo.smoke_history)) {
-                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-        }
-    },
     watch: {
+        '$route': function(to, from) {
+            this.initPage(to)
+        },
         smoke_one: function(newval, oldval) {
             var one = Number(newval);
             var two = Number(this.smoke_two);
@@ -1273,18 +1231,20 @@ export default {
         show: function() {
 
         },
-        isShowDefaultDate: function(birthday, type) {
+
+        getDefaultDate: function(birthday, type) {
+            var today = util.getFormatDate();
             if (this.isModify()) {
                 if (birthday == undefined || birthday == '' || birthday == null) {
-                    return false;
+                    return '';
                 }
             } else {
                 if (type == 'birthday') {
-                    return false;
+                    return '';
                 }
-                return true;
+                return today;
             }
-            return true;
+            return today;
         },
         isModify: function() {
             return !!this.patientid;
@@ -1409,8 +1369,60 @@ export default {
                 }
                 that.patientinfo = Object.assign({}, that.patientinfo);
 
+        },
+        initPage: function(to) {
+            var that = this;
+            to = to || this.$route
+            this.diseaseid = to.query.diseaseid != undefined ?to.query.diseaseid : '';
+            if (!that.isModify()) {
+                if (this.diseaseCount > 1 && !this.diseaseid) {
+                    this.$router.replace({
+                        path: '/patient/selectdisease',
+                        query: {from: to.path}
+                    });
+                }
+            }
+            if (this.isModify()) {
+                $.ajax({
+                    url: api.get('patient.baseinfo'),
+                    type: "post",
+                    dataType: 'json',
+                    data: {
+                        patientid: that.patientid,
+                    }
+                }).done(function(response) {
+                    if (response.errno == 0) {
+                        that.handleSuccessData(that, response);
+                    }
+                })
+            }
+
+            if (!util.isObject(that.patientinfo.birth_place)) {
+                that.patientinfo.birth_place = {provincestr: "", citystr: ''};
+            }
+            if (!util.isObject(that.patientinfo.address)) {
+                that.patientinfo.address = {provincestr: '', citystr: ''};
+            }
+            if (!util.isArray(that.patientinfo.other_contacts)) {
+                that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+            }
+            if (!util.isObject(that.patientinfo.native_place)) {
+                that.patientinfo.birth_place = {provincestr: '', citystr: ''};
+            }
+            if (!util.isObject(that.patientinfo.blood_type)) {
+                that.patientinfo.blood_type = {first: '', second: ''};
+            }
+            if (!util.isObject(that.patientinfo.self_history)) {
+                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
+            }
+            if (!util.isObject(that.patientinfo.smoke_history)) {
+                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
+            }
         }
 
+    },
+    created: function() {
+        this.initPage()
     }
 }
 </script>

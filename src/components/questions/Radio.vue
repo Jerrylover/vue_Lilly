@@ -6,7 +6,7 @@
             <div class="segmented-control" style="width:100%;border:1px solid #ccc">
                 <input type="hidden" class="input-special" v-if="isshow" v-model="dvalue" :name="name">
                 <input type1="fs-radio" v-for="option in question.options" type="radio" :id="'inlineRadio' + option.id" :name="name" :value='option.id' v-model='picked'>
-                <label v-for="option in question.options" :for="'inlineRadio' + option.id" :_id='_id' :_class='_class' :data-value="option.content" @click="clickLabel(option, $event)" :class="{active1: optionActive(option)}"
+                <label v-for="option in question.options" :for="'inlineRadio' + option.id" :_id='_id(option)' :_class='_class' :data-value="option.content" @click="clickLabel(option, $event)" :class="{active1: optionActive(option)}"
                     :optionid="option.id">{{option.content}}</label>
             </div>
         </div>
@@ -85,6 +85,7 @@ div.edss-tip>p {
 </style>
 <script>
 import edss from '../../config/edss.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -98,7 +99,7 @@ export default {
             isShowComponent: true,
         }
     },
-    props: ['checkuptpl', 'questionsheet', 'question', 'checkuptpl', 'questionsheet', 'answer'],
+    props: ['checkuptpl', 'questionsheet', 'question', 'questionsheet', 'answer'],
     computed: {
         name: function() {
             return 'sheets[XQuestionSheet][' + this.questionsheet.id + '][' + this.question.id + '][options][]';
@@ -149,9 +150,6 @@ export default {
                 ret = 'fenqi-label';
             }
             return ret;
-        },
-        _id: function() {
-            return checkuptpl.ename + '-' + question.ename + '-' + option.content
         }
     },
     components: {
@@ -185,48 +183,12 @@ export default {
         '大脑': require('./edss/大脑.vue'),
     },
     events: {
-        'modify-data': function() {
-            if ($.isEmptyObject(this.answer)) {
-                return true;
-            }
-            if (this.answer.options.length > 0) {
-                var option = this.answer.options[0];
-                this.picked = option.id;
-                this.selectedQualitative = this.answer.qualitative;
-                if (this.isLastQualitative(this.answer.qualitative)) {
-                    this.showOther = true;
-                } else {
-                    this.showOther = false;
-                }
-                this.otherContent = this.answer.content;
-                this.showHide(option);
-            }
-            // console.log('radio modify-data', this.answer)
-            return true;
-        },
-        'modify-done': function() {
-            this.picked = '';
-            this.selectedQualitative = '';
-            this.showOther = false;
-            this.otherContent = '';
-            this.isShowComponent = !this.question.isdefaulthide;
-            return true;
-        },
-        'edss-hide-popover-child': function() {
-            this.showPopover = false;
-        },
-        'show-component-notify': function(ename) {
-            if (this.question.ename == ename) {
-                this.isShowComponent = true;
-            }
-        },
-        'hide-component-notify': function(ename) {
-            if (this.question.ename == ename) {
-                this.isShowComponent = false;
-            }
-        }
+
     },
     methods: {
+        _id: function(option) {
+            return this.checkuptpl.ename + '-' + this.question.ename + '-' + option.content;
+        },
         isLastQualitative: function(qualitative) { //判断点击的是最后一个
             var len = this.qualitatives.length;
             return this.qualitatives[len - 1] == qualitative && qualitative == '其他';
@@ -235,12 +197,12 @@ export default {
             e.preventDefault();
             if (this.picked == option.id) {
                 this.picked = '';
-                this.$set('isshow', true);
-                this.$set('dvalue', -1);
+                this.isshow = true;
+                this.dvalue = -1;
             } else {
                 this.picked = option.id;
-                this.$set('isshow', false);
-                this.$set('dvalue', '');
+                this.isshow = false;
+                this.dvalue = '';
             }
             var label = $(e.target);
             var popover = label.parent().parent().parent().siblings('div[class="col-sm-1 question"]').find('div.popover');
@@ -308,15 +270,64 @@ export default {
                     that.$emit('hide-component', ename);
                 })
             }
+        },
+        'modifyData': function() {
+            if ($.isEmptyObject(this.answer)) {
+                return true;
+            }
+            if (this.answer.options.length > 0) {
+                var option = this.answer.options[0];
+                this.picked = option.id;
+                this.selectedQualitative = this.answer.qualitative;
+                if (this.isLastQualitative(this.answer.qualitative)) {
+                    this.showOther = true;
+                } else {
+                    this.showOther = false;
+                }
+                this.otherContent = this.answer.content;
+                this.showHide(option);
+            }
+            // console.log('radio modify-data', this.answer)
+            return true;
+        },
+        'modifyDone': function() {
+            this.picked = '';
+            this.selectedQualitative = '';
+            this.showOther = false;
+            this.otherContent = '';
+            this.isShowComponent = !this.question.isdefaulthide;
+            return true;
+        },
+        'edssHidePopoverChild': function() {
+            this.showPopover = false;
+        },
+        'showComponentNotify': function(ename) {
+            if (this.question.ename == ename) {
+                this.isShowComponent = true;
+            }
+        },
+        'hideComponentNotify': function(ename) {
+            if (this.question.ename == ename) {
+                this.isShowComponent = false;
+            }
         }
     },
     watch: {
         'fs': function(newval, oldval) {
             if (this.isEdss) {
                 newval = newval === '' ? 0 : newval - '';
-                this.$emit('edss-fs-change', this.question.content, newval);
+                console.log('xxxxxx---')
+                // Bus.$emit('edss-fs-change', this.question.content, newval);
+                //todo
             }
         }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
+        Bus.$on('edss-hide-popover-child', this.edssHidePopoverChild)
     },
     mounted: function() {
         this.$nextTick(function() {

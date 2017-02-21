@@ -21,6 +21,7 @@
 }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -32,20 +33,25 @@ export default {
     computed: {
 
     },
-    events: {
-      'modify-done': function() {
+    methods: {
+      'modifyDone': function() {
           this.isShowComponent = !this.question.isdefaulthide;
       },
-      'show-component-notify': function(ename) {
+      'showComponentNotify': function(ename) {
           if (this.question.ename == ename) {
               this.isShowComponent = true;
           }
       },
-      'hide-component-notify': function(ename) {
+      'hideComponentNotify': function(ename) {
           if (this.question.ename == ename) {
               this.isShowComponent = false;
           }
       }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
     },
     mounted: function() {
         this.$nextTick(function() {

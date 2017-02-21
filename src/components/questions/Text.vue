@@ -31,6 +31,7 @@ div.select-unit span {
 }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -70,8 +71,8 @@ export default {
             return this.qualitatives instanceof Array && this.qualitatives[0] != '';
         },
     },
-    events: {
-        'modify-data': function() {
+    methods: {
+        'modifydata': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -80,23 +81,29 @@ export default {
             this.selectedQualitative = this.answer.qualitative;
             return true;
         },
-        'modify-done': function() {
+        'modifyDone': function() {
             this.text = '';
             this.selectedUnit = '';
             this.selectedQualitative = '';
             this.isShowComponent = !this.question.isdefaulthide;
             return true;
         },
-        'show-component-notify': function(ename) {
+        'showComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = true;
             }
         },
-        'hide-component-notify': function(ename) {
+        'hideComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = false;
             }
         }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
     },
     mounted: function() {
         this.$nextTick(function() {

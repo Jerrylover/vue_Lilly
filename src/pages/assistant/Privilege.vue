@@ -73,9 +73,9 @@ export default {
     },
     computed: {
         filteredPrivileges: function() {
-            var self = this
-            return self.allprivileges.filter(function (privilege) {
-                return privilege.name.indexOf(self.word) !== -1
+            var that = this
+            return that.allprivileges.filter(function (privilege) {
+                return privilege.name.indexOf(that.word) !== -1
             })
         }
     },
@@ -147,13 +147,32 @@ export default {
                 if (d.errno != 0 && d.errno != -10) {
                     that.$emit('show-alert', d.errmsg);
                 } else {
-                    that.$emit('show-popup', '保存成功', function() {
-                        that.$router.push({
-                            name: 'manager'
-                        })
-                    });
+                    that.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: '保存成功',
+                        onClose: function() {
+                            that.$router.push({
+                                name: 'manager'
+                            })
+                        }
+                    })
                 }
             })
+        }
+    },
+    created: function() {
+        this.assistantid = this.$route.query.assistantid;
+        if (this.assistantid != undefined && this.assistantid != '') {
+            this.fetchPrivileges();
+        }
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.assistantid = to.query.assistantid;
+            if (this.assistantid != undefined && this.assistantid != '') {
+                this.fetchPrivileges();
+            }
         }
     }
 }

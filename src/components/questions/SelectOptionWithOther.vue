@@ -17,6 +17,7 @@
 </div>
 </template>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -61,12 +62,12 @@ export default {
 
             if (this.picked == option.id && !this.showOther) {
                 this.picked = '';
-                this.$set('isshow', true);
-                this.$set('dvalue', -1);
+                this.isshow = true;
+                this.dvalue = -1;
             } else {
                 this.picked = option.id;
-                this.$set('isshow', false);
-                this.$set('dvalue', '');
+                this.isshow = false;
+                this.dvalue = '';
             }
         },
         showHide: function(option) {
@@ -83,10 +84,8 @@ export default {
                     that.$emit('hide-component', ename);
                 })
             }
-        }
-    },
-    events: {
-        'modify-data': function() {
+        },
+        'modifyData': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -104,23 +103,29 @@ export default {
 
             return true;
         },
-        'modify-done': function() {
+        'modifyDone': function() {
             this.selected = '';
             this.otherContent = '';
             this.showOther = false;
             this.isShowComponent = !this.question.isdefaulthide;
             return true;
         },
-        'show-component-notify': function(ename) {
+        'showComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = true;
             }
         },
-        'hide-component-notify': function(ename) {
+        'hideComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = false;
             }
         }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
     },
     mounted: function() {
         this.$nextTick(function() {

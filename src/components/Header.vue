@@ -13,7 +13,7 @@
                         </ul>
                     </li>
                     <li v-bind:class="{activeFix: active == 'patient'}">
-                        <router-link  :to="{path:'/patientmgr/list'}">患者</router-link>
+                        <router-link  :to="{path:'/patient/list'}">患者</router-link>
                     </li>
 
                     <li v-privilege="'数据库-菜单-数据统计1'">
@@ -204,15 +204,14 @@ div.content {
 .mg-r-10 {
     margin-right: 10px;
 }
-.header-a {
-    margin: 5px 0 10px 20px;
-}
+
 tr.light-tr th {
     font-weight:normal;
     background: #F5F6FA;
 }
 .el-input__inner {
     border-radius: 2px;
+    border-color: #ccc;
 }
 
 </style>

@@ -16,6 +16,7 @@
         </div>
         <div class="row">
             <table class="table table-bordered margin-top-20px">
+                <tbody>
                 <tr>
                     <tr id="baseinfohead" class="bg-F5F6FA">
                         <th colspan="6">基本信息
@@ -196,6 +197,7 @@
                         <td colspan="5">{{patientInfo.remark_doctor}}</td>
                     </tr>
                 </tr>
+            </tbody>
             </table>
         </div>
     </div>
@@ -405,129 +407,6 @@ export default {
             }
         }
     },
-    route: {
-        data: function(transition) {
-            var that = this;
-            var patientname = libpatient.getPatientName(that.patientid)
-            that.routepath = this.$route.name;
-            console.log(transition);
-            if (that.routepath == 'doctorgroup-baseinfo-lungcancer') {
-                that.headerselected = 'doctorgroup';
-                that.projectid = transition.to.query.projectid;
-                that.centerid = transition.to.query.centerid;
-                that.doctorid = transition.to.query.doctorid;
-                that.dg_group = '1';
-            }
-            if (patientname) {
-                that.patientname = patientname;
-            }
-            //获取wxuser信息
-            if (that.routepath != 'doctorgroup-baseinfo-lungcancer') {
-                that.fetchWxUser();
-            }
-            $.ajax({
-                url: api.get('patient.baseinfo'),
-                type: "post",
-                dataType: "json",
-                data: {
-                    patientid: that.patientid,
-                    dg_group: that.dg_group,
-                }
-            }).done(function(response) {
-                var patientInfo = response.data;
-                that.patientInfo = patientInfo;
-                that.patientname = that.patientInfo.name;
-
-                if ($.trim(that.patientInfo.past_main_history) != '') {
-                    var index = that.patientInfo.past_main_history.indexOf('+');
-                    var other = '';
-                    var past_main_history = "";
-                    if (index > -1) {
-                        other = that.patientInfo.past_main_history.substring(index + 1, that.patientInfo.past_main_history.length);
-                        past_main_history = that.patientInfo.past_main_history.substring(0, index);
-                        that.patientInfo.past_main_history = past_main_history.replace(/\|/g, ',') + ',' + other;
-                    }else {
-                        that.patientInfo.past_main_history = that.patientInfo.past_main_history.replace(/\|/g, ",");
-                    }
-                }
-
-                if (that.patientInfo.sex == 1) {
-                    that.patientInfo.sexinfo = "男";
-                    that.hideFemalePart = true;
-                } else if (that.patientInfo.sex == 2) {
-                    that.patientInfo.sexinfo = "女";
-                    that.hideFemalePart = false;
-                    if ($.trim(that.patientInfo.menstruation_history) != "") {
-                        var menstruationArr = that.patientInfo.menstruation_history.split("|");
-                        if (menstruationArr[0] != undefined) {
-                            that.patientInfo.firstMenstruationAge = menstruationArr[0];
-                        } else {
-                            that.patientInfo.firstMenstruationAge = " ";
-                        }
-
-                        if (menstruationArr[1] != undefined && menstruationArr[1] == '正常') {
-                            that.patientInfo.menstruationStatus = menstruationArr[1];
-                            that.patientInfo.menstruationPeriod = menstruationArr[2]+ "天/" + menstruationArr[3]+ "天";
-                        } else if(menstruationArr[1] != undefined && menstruationArr[1] == '停经'){
-                            that.patientInfo.menstruationStatus = menstruationArr[1];
-                            if (menstruationArr[2] != undefined && menstruationArr[2] == "生理性") {
-                                that.patientInfo.menstruationStopPicked = menstruationArr[2];
-                                that.patientInfo.menstruationStopTime = menstruationArr[3] + '岁';
-                            }else if(menstruationArr[2] != undefined && menstruationArr[2] == '病理性') {
-                                that.patientInfo.menstruationStopPicked = menstruationArr[2];
-                                that.patientInfo.menstruationStopReason = menstruationArr[3];
-                            }
-                        }
-                    }
-                    if ($.trim(that.patientInfo.childbearing_history) != "") {
-                        var childbirthString = that.patientInfo.childbearing_history.split("|");
-                        if (childbirthString[0] != undefined && $.trim(childbirthString[0]) != "" && childbirthString[1] != undefined && $.trim(childbirthString[1]) != "") {
-                            that.patientInfo.childbirth = "孕" + childbirthString[0] + "产" + childbirthString[1];
-                        } else {
-                            that.patientInfo.childbirth = " ";
-                        }
-
-                        if (childbirthString[2] != undefined) {
-                            that.patientInfo.pregnantTime = childbirthString[2];
-                        } else {
-                            that.patientInfo.pregnantTime = " ";
-                        }
-
-                        if (childbirthString[3] != undefined) {
-                            that.patientInfo.childbirthTime = childbirthString[3];
-                        } else {
-                            that.patientInfo.childbirthTime = " ";
-                        }
-                    }
-                } else if (that.patientInfo.sex == 0) {
-                    that.patientInfo.sexinfo = "未知";
-                    that.hideFemalePart = false;
-                }
-            });
-            if (!util.isObject(that.patientInfo.birth_place)) {
-                that.patientInfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientInfo.address)) {
-                that.patientInfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientInfo.other_contacts)) {
-                that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-            }
-            if (!util.isObject(that.patientInfo.native_place)) {
-                that.patientInfo.birth_place = {provincestr: '', citystr: ''};
-            }
-            if (!util.isObject(that.patientInfo.blood_type)) {
-                that.patientInfo.blood_type = {first: '', second: ''};
-            }
-            if (!util.isObject(that.patientInfo.self_history)) {
-                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-            if (!util.isObject(that.patientInfo.smoke_history)) {
-                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
@@ -663,6 +542,127 @@ export default {
             $('body').removeClass('no-scroll');
             $('#modal').addClass('hidden');
             this.showModal = false;
+        },
+        fetchData: function() {
+            var that = this;
+            $.ajax({
+                url: api.get('patient.baseinfo'),
+                type: "post",
+                dataType: "json",
+                data: {
+                    patientid: that.patientid,
+                    dg_group: that.dg_group,
+                }
+            }).done(function(response) {
+                var patientInfo = response.data;
+                that.patientInfo = patientInfo;
+                that.patientname = that.patientInfo.name;
+
+                if ($.trim(that.patientInfo.past_main_history) != '') {
+                    var index = that.patientInfo.past_main_history.indexOf('+');
+                    var other = '';
+                    var past_main_history = "";
+                    if (index > -1) {
+                        other = that.patientInfo.past_main_history.substring(index + 1, that.patientInfo.past_main_history.length);
+                        past_main_history = that.patientInfo.past_main_history.substring(0, index);
+                        that.patientInfo.past_main_history = past_main_history.replace(/\|/g, ',') + ',' + other;
+                    }else {
+                        that.patientInfo.past_main_history = that.patientInfo.past_main_history.replace(/\|/g, ",");
+                    }
+                }
+
+                if (that.patientInfo.sex == 1) {
+                    that.patientInfo.sexinfo = "男";
+                    that.hideFemalePart = true;
+                } else if (that.patientInfo.sex == 2) {
+                    that.patientInfo.sexinfo = "女";
+                    that.hideFemalePart = false;
+                    if ($.trim(that.patientInfo.menstruation_history) != "") {
+                        var menstruationArr = that.patientInfo.menstruation_history.split("|");
+                        if (menstruationArr[0] != undefined) {
+                            that.patientInfo.firstMenstruationAge = menstruationArr[0];
+                        } else {
+                            that.patientInfo.firstMenstruationAge = " ";
+                        }
+
+                        if (menstruationArr[1] != undefined && menstruationArr[1] == '正常') {
+                            that.patientInfo.menstruationStatus = menstruationArr[1];
+                            that.patientInfo.menstruationPeriod = menstruationArr[2]+ "天/" + menstruationArr[3]+ "天";
+                        } else if(menstruationArr[1] != undefined && menstruationArr[1] == '停经'){
+                            that.patientInfo.menstruationStatus = menstruationArr[1];
+                            if (menstruationArr[2] != undefined && menstruationArr[2] == "生理性") {
+                                that.patientInfo.menstruationStopPicked = menstruationArr[2];
+                                that.patientInfo.menstruationStopTime = menstruationArr[3] + '岁';
+                            }else if(menstruationArr[2] != undefined && menstruationArr[2] == '病理性') {
+                                that.patientInfo.menstruationStopPicked = menstruationArr[2];
+                                that.patientInfo.menstruationStopReason = menstruationArr[3];
+                            }
+                        }
+                    }
+                    if ($.trim(that.patientInfo.childbearing_history) != "") {
+                        var childbirthString = that.patientInfo.childbearing_history.split("|");
+                        if (childbirthString[0] != undefined && $.trim(childbirthString[0]) != "" && childbirthString[1] != undefined && $.trim(childbirthString[1]) != "") {
+                            that.patientInfo.childbirth = "孕" + childbirthString[0] + "产" + childbirthString[1];
+                        } else {
+                            that.patientInfo.childbirth = " ";
+                        }
+
+                        if (childbirthString[2] != undefined) {
+                            that.patientInfo.pregnantTime = childbirthString[2];
+                        } else {
+                            that.patientInfo.pregnantTime = " ";
+                        }
+
+                        if (childbirthString[3] != undefined) {
+                            that.patientInfo.childbirthTime = childbirthString[3];
+                        } else {
+                            that.patientInfo.childbirthTime = " ";
+                        }
+                    }
+                } else if (that.patientInfo.sex == 0) {
+                    that.patientInfo.sexinfo = "未知";
+                    that.hideFemalePart = false;
+                }
+            });
+            if (!util.isObject(that.patientInfo.birth_place)) {
+                that.patientInfo.birth_place = {provincestr: "", citystr: ''};
+            }
+            if (!util.isObject(that.patientInfo.address)) {
+                that.patientInfo.address = {provincestr: '', citystr: ''};
+            }
+            if (!util.isArray(that.patientInfo.other_contacts)) {
+                that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+            }
+            if (!util.isObject(that.patientInfo.native_place)) {
+                that.patientInfo.birth_place = {provincestr: '', citystr: ''};
+            }
+            if (!util.isObject(that.patientInfo.blood_type)) {
+                that.patientInfo.blood_type = {first: '', second: ''};
+            }
+            if (!util.isObject(that.patientInfo.self_history)) {
+                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
+            }
+            if (!util.isObject(that.patientInfo.smoke_history)) {
+                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
+            }
+        },
+        initPage: function() {
+            var patientname = libpatient.getPatientName(this.patientid)
+            if (patientname) {
+                this.patientname = patientname;
+            }
+            this.routepath = this.$route.name;
+            var query = this.$route.query;
+            if (this.routepath == 'doctorgroup-baseinfo-lungcancer') {
+                this.headerselected = 'doctorgroup';
+                this.projectid = query.projectid;
+                this.centerid = query.centerid;
+                this.doctorid = query.doctorid;
+                this.dg_group = '1';
+            } else {
+                this.fetchWxUser();//获取wxuser信息
+            }
+            this.fetchData();
         }
     },
     filters: {
@@ -713,6 +713,12 @@ export default {
             }
             return val.select + ' ' + val.beizhu;
         }
+    },
+    created: function() {
+        this.initPage()
+    },
+    watch: {
+        '$route': 'initPage'
     }
 }
 </script>

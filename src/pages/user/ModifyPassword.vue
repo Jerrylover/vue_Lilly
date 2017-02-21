@@ -44,11 +44,6 @@ export default {
     },
     computed: {
     },
-    route: {
-        data: function(transition) {
-            transition.next();
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
@@ -57,15 +52,27 @@ export default {
     methods: {
         clickSave: function() {
             if (this.password == '') {
-                this.$emit('show-alert', '密码不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '密码不能为空'
+                })
                 return false;
             }
             if ($.trim(this.newpassword) == '') {
-                this.$emit('show-alert', '新密码不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '新密码不能为空'
+                })
                 return false;
             }
             if (this.newpassword != this.newpasswordrepeat) {
-                this.$emit('show-alert', '两次输入的密码不一致');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '两次输入的密码不一致'
+                })
                 return false;
             }
             var that = this;
@@ -80,13 +87,22 @@ export default {
                 },
             }).done(function(d) {
                 if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
+                    that.$message({
+                        showClose: true,
+                        type: 'error',
+                        message: d.errmsg
+                    })
                 } else {
-                    that.$emit('show-popup', '修改成功', function() {
-                        that.password = '';
-                        that.newpassword = '';
-                        that.newpasswordrepeat = '';
-                    });
+                    that.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: '修改成功',
+                        onClose: function() {
+                            that.password = '';
+                            that.newpassword = '';
+                            that.newpasswordrepeat = '';
+                        }
+                    })
                 }
 
             })

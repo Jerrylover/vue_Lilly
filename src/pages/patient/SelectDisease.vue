@@ -45,11 +45,6 @@ export default {
             return common.getDiseases();
         }
     },
-    route: {
-        data: function(transition) {
-            this.diseaseid = common.getDiseaseId();
-        }
-    },
     methods: {
         selectDisease: function(e) {
             localStorage.setItem('_diseaseid_', this.diseaseid)
@@ -64,6 +59,14 @@ export default {
     },
     filters: {
 
+    },
+    created: function() {
+        this.diseaseid = common.getDiseaseId();
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.diseaseid = common.getDiseaseId();
+        }
     }
 }
 </script>

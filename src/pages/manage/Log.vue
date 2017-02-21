@@ -23,6 +23,7 @@
         </div>
         <div class="row mg-t-20">
             <table class="table table-bordered">
+                <tbody>
                 <tr class="light-tr">
                     <th>操作时间</th>
                     <th>患者</th>
@@ -38,6 +39,7 @@
                 <tr v-if="oplogs.length < 1">
                     <td colspan="6" class='text-center'>暂无数据</td>
                 </tr>
+                </tbody>
             </table>
         </div>
         <div class="row">
@@ -121,10 +123,10 @@ export default {
                 data: querys,
             }).done(function(d) {
                 if (d.data) {
-                    that.total = d.data.total;
+                    that.total = d.data.total - '';
                     that.oplogs = d.data.list;
-                    that.pagesize = d.data.pagesize;
-                    that.pagenum = d.data.pagenum;
+                    that.pagesize = d.data.pagesize - '';
+                    that.pagenum = d.data.pagenum - '';
                     that.patientname = d.data.patientname;//患者名称
                     that.assistantname = d.data.assistantname;//助理账号
                     that.assistants = d.data.assistants;
@@ -137,6 +139,20 @@ export default {
     },
     mounted: function() {
 
+    },
+    created: function() {
+        var queryStrings = this.$route.query;
+        this.patientname = queryStrings.patientname;
+        this.assistantname = queryStrings.assistantname;
+        this.fetchLogData(queryStrings);
+    },
+    watch: {
+        '$route': function(to, from) {
+            var queryStrings = to.query;
+            this.patientname = queryStrings.patientname;
+            this.assistantname = queryStrings.assistantname;
+            this.fetchLogData(queryStrings);
+        }
     }
 }
 </script>

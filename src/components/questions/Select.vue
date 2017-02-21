@@ -66,6 +66,7 @@ div.edss-tip>p {
 }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -90,40 +91,12 @@ export default {
         'moving': require('./edss/行动.vue')
     },
     events: {
-        'modify-data': function() {
-            if ($.isEmptyObject(this.answer)) {
-                return true;
-            }
-            if (this.answer.options.length > 0) {
-                var option = this.answer.options[0];
-                this.selected = option.id;
-                this.showHide(option);
-            }
-            return true;
-        },
-        'modify-done': function() {
-            this.selected = '';
-            this.isShowComponent = !this.question.isdefaulthide;
-            return true;
-        },
-        'edss-hide-popover-child': function() {
-            this.showPopover = false;
-        },
-        'show-component-notify': function(ename) {
-            if (this.question.ename == ename) {
-                this.isShowComponent = true;
-            }
-        },
-        'hide-component-notify': function(ename) {
-            if (this.question.ename == ename) {
-                this.isShowComponent = false;
-            }
-        }
+
     },
     methods: {
         faClick: function(e) {
             if (this.showPopover == false) {
-                this.$emit('edss-hide-popover');
+                Bus.$emit('edss-hide-popover');
                 var target = e.target;
                 var popover = $(e.target).siblings('div');
                 var height = popover.outerHeight();
@@ -146,7 +119,7 @@ export default {
                         break;
                     }
                 }
-                this.$emit('edss-moving-change', score)
+                Bus.$emit('edss-moving-change', score)
             }
             for (var i = 0; i < this.question.options.length; i++) {
                 var option = this.question.options[i];
@@ -160,16 +133,52 @@ export default {
             if (option.showenames != '') {
                 var enameArr = option.showenames.split(',');
                 $.each(enameArr, function(index, ename) {
-                    that.$emit('show-component', ename);
+                    Bus.$emit('show-component', ename);
                 })
             }
             if (option.hideenames != '') {
                 var enameArr = option.hideenames.split(',');
                 $.each(enameArr, function(index, ename) {
-                    that.$emit('hide-component', ename);
+                    Bus.$emit('hide-component', ename);
                 })
             }
+        },
+        'modifyData': function() {
+            if ($.isEmptyObject(this.answer)) {
+                return true;
+            }
+            if (this.answer.options.length > 0) {
+                var option = this.answer.options[0];
+                this.selected = option.id;
+                this.showHide(option);
+            }
+            return true;
+        },
+        'modifyDone': function() {
+            this.selected = '';
+            this.isShowComponent = !this.question.isdefaulthide;
+            return true;
+        },
+        'edssHidePopoverChild': function() {
+            this.showPopover = false;
+        },
+        'showComponentNotify': function(ename) {
+            if (this.question.ename == ename) {
+                this.isShowComponent = true;
+            }
+        },
+        'hideComponentNotify': function(ename) {
+            if (this.question.ename == ename) {
+                this.isShowComponent = false;
+            }
         }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
+        Bus.$on('edss-hide-popover-child', this.edssHidePopoverChild)
     },
     mounted: function() {
         this.$nextTick(function() {

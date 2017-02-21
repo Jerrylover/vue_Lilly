@@ -23,6 +23,7 @@
 </style>
 <script>
 import util from '../../lib/util.js';
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -34,7 +35,7 @@ export default {
             isShowComponent: true
         }
     },
-    props: ['checkuptpl', 'questionsheet', 'question', 'checkuptpl', 'questionsheet', 'answer', action],
+    props: ['checkuptpl', 'questionsheet', 'question', 'checkuptpl', 'questionsheet', 'answer'],
     computed: {
         'name': function() {
             return 'sheets[XQuestionSheet][' + this.questionsheet.id + '][' + this.question.id + '][options][]';
@@ -43,11 +44,15 @@ export default {
             return 'sheets[XQuestionSheet][' + this.questionsheet.id + '][' + this.question.id + '][content]';
         },
         content: function() {
-            return this.question.content + this.action
+            return this.question.content
         }
     },
-    events: {
-        'modify-data': function() {
+    methods: {
+        isLastOption: function(option) { //判断点击的是最后一个
+            var len = this.question.options.length;
+            return this.question.options[len - 1].id == option.id;
+        },
+        'modifyData': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -65,28 +70,22 @@ export default {
             this.checked = checked;
             return true;
         },
-        'modify-done': function() {
+        'modifDone': function() {
             this.checked = [];
             this.showOther = false;
             this.otherContent = '';
             this.isShowComponent = !this.question.isdefaulthide;
             return true;
         },
-        'show-component-notify': function(ename) {
+        'showComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = true;
             }
         },
-        'hide-component-notify': function(ename) {
+        'hideComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = false;
             }
-        }
-    },
-    methods: {
-        isLastOption: function(option) { //判断点击的是最后一个
-            var len = this.question.options.length;
-            return this.question.options[len - 1].id == option.id;
         }
     },
     watch: {
@@ -110,11 +109,11 @@ export default {
                 }
             }
             if (newVal == '') {
-                this.$set('isshow', true);
-                this.$set('dvalue', -1);
+                this.isshow = true
+                this.dvalue = -1
             } else {
-                this.$set('isshow', false);
-                this.$set('dvalue', '');
+                this.isshow = false
+                this.dvalue = ''
             }
 
             //显示与隐藏
@@ -126,13 +125,13 @@ export default {
                     if ($.inArray(option.id, newVal) > -1) {
                         $.each(enameArr, function(index, ename) {
                             if (ename) {
-                                that.$emit('show-component', ename);
+                                Bus.$emit('show-component', ename);
                             }
                         });
                     } else {
                         $.each(enameArr, function(index, ename) {
                             if (ename) {
-                                that.$emit('hide-component', ename);
+                                Bus.$emit('hide-component', ename);
                             }
                         });
                     }
@@ -140,6 +139,12 @@ export default {
 
             }
         }
+    },
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
     },
     mounted: function() {
         this.$nextTick(function() {

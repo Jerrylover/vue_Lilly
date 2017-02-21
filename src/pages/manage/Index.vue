@@ -18,6 +18,7 @@
         </div>
         <div class="row mg-t-20">
             <table class="table table-bordered">
+                <tbody>
                 <tr class="light-tr">
                     <th>名称</th>
                     <th>创建时间</th>
@@ -48,6 +49,7 @@
                 <tr v-if="assistants.length < 1">
                     <td colspan="6" class='text-center'>暂无数据</td>
                 </tr>
+            </tbody>
             </table>
         </div>
         <div class="row">
@@ -95,13 +97,6 @@ export default {
     computed: {
 
     },
-    route: {
-        data: function(transition) {
-            var queryStrings = transition.to.query;
-            this.fetchAssistantData(queryStrings);
-            transition.next();
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
@@ -133,22 +128,38 @@ export default {
             });
         },
         clickLock: function(assistant) {
-            var that = this;
-            this.$emit('show-prompt', "确定要锁定 "+assistant.name+" 吗？", function(){
-                that.lock(assistant);
-            })
+            this.$confirm("确定要锁定 "+assistant.name+" 吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                this.lock(assistant);
+            }).catch(() => {
+
+            });
         },
         clickUnlock: function(assistant) {
             var that = this;
-            this.$emit('show-prompt', "确定要解除对 "+assistant.name+" 的锁定吗？", function(){
-                that.unlock(assistant);
-            })
+            this.$confirm("确定要解除对 "+assistant.name+" 的锁定吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                this.unlock(assistant);
+            }).catch(() => {
+
+            });
         },
         clickDelete: function(assistant) {
-            var that = this;
-            this.$emit('show-prompt', "确定要删除 "+assistant.name+" 吗？", function(){
-                that.doDelete(assistant);
-            })
+            this.$confirm("确定要删除 "+assistant.name+" 吗？", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                this.doDelete(assistant);
+            }).catch(() => {
+
+            });
         },
         lock: function(assistant) {
             var that = this;
@@ -164,10 +175,11 @@ export default {
                     that.$emit('show-alert', d.errmsg);
                 } else {
                     var query = that.$route.query;
-                    that.fetchAssistantData(query);
-                    that.$emit('show-popup', '锁定成功', function() {
-
+                    that.$message({
+                        type: 'success',
+                        message: '锁定成功!'
                     });
+                    that.fetchAssistantData(query);
                 }
             })
         },
@@ -185,9 +197,11 @@ export default {
                     that.$emit('show-alert', d.errmsg);
                 } else {
                     var query = that.$route.query;
-                    that.fetchAssistantData(query);
-                    that.$emit('show-popup', '解锁成功', function() {
+                    that.$message({
+                        type: 'success',
+                        message: '解锁成功!'
                     });
+                    that.fetchAssistantData(query);
                 }
             })
         },
@@ -206,7 +220,9 @@ export default {
                 } else {
                     var query = that.$route.query;
                     that.fetchAssistantData(query);
-                    that.$emit('show-popup', '删除成功', function() {
+                    that.$message({
+                        type: 'success',
+                        message: '删除成功'
                     });
                 }
             })
@@ -220,12 +236,12 @@ export default {
                 data: querys,
             }).done(function(d) {
                 if (d.data) {
-                    that.pagenum = d.data.pagenum;
-                    that.total = d.data.total;
+                    that.pagenum = d.data.pagenum - '';
+                    that.total = d.data.total - '';
                     that.assistants = d.data.list;
                     that.name = d.data.name;
-                    that.pagesize = d.data.pagesize;
-                    that.pagenum = d.data.pagenum;
+                    that.pagesize = d.data.pagesize - '';
+                    that.pagenum = d.data.pagenum - '';
                 }
             })
         },
@@ -235,6 +251,16 @@ export default {
     },
     mounted: function() {
 
+    },
+    created: function() {
+        var queryStrings = this.$route.query
+        this.fetchAssistantData(queryStrings)
+    },
+    watch: {
+        '$route': function(to, from) {
+            var queryStrings =to.query;
+            this.fetchAssistantData(queryStrings);
+        }
     }
 }
 </script>

@@ -7,7 +7,7 @@
         <page-header :pagetitle="pageTitle"></page-header>
     </div>
     <div class="row mg-t-20">
-        <div class="col-sm-6">
+        <div class="col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">名称</label>
                 <input type="text" class="form-control" v-model="name" placeholder="张三"/>
@@ -75,18 +75,6 @@ export default {
             return str;
         }
     },
-    route: {
-        data: function(transition) {
-            if (this.$route.name == 'assistant-modify') {
-                this.ismodify = true;
-            }
-            this.assistantid = transition.to.query.assistantid;
-            if (this.assistantid != undefined && this.assistantid != '' && this.ismodify) {
-                this.fetchAssistant();
-            }
-            transition.next();
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
@@ -112,28 +100,53 @@ export default {
         },
         clickSave: function() {
             if ($.trim(this.name) == '') {
-                this.$emit('show-alert', '名称不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '名称不能为空'
+                })
                 return false;
             }
             if ($.trim(this.username) == '') {
-                this.$emit('show-alert', '登录名不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '登录名不能为空'
+                })
                 return false;
             }
             if (this.mobile == '') {
-                this.$emit('show-alert', '手机号不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '手机号不能为空'
+                })
                 return false;
             }
             if (!rule.checkPhone(this.mobile)) {
                 this.$emit('show-alert', '请输入正确的手机号');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '手机号不能为空'
+                })
                 return false;
             }
             if (!this.ismodify) {
                 if ($.trim(this.password1) == '') {
-                    this.$emit('show-alert', '密码不能为空');
+                    this.$message({
+                        showClose: true,
+                        type: 'error',
+                        message: '密码不能为空'
+                    })
                     return false;
                 }
                 if (this.password1 != this.password2) {
-                    this.$emit('show-alert', '两次输入的密码不一致');
+                    this.$message({
+                        showClose: true,
+                        type: 'error',
+                        message: '两次输入的密码不一致'
+                    })
                     return false;
                 }
             }
@@ -157,15 +170,44 @@ export default {
                 data: data
             }).done(function(d) {
                 if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
+                    that.$message({
+                        showClose: true,
+                        type: 'error',
+                        message: d.errmsg
+                    })
                 } else {
-                    that.$emit('show-popup', '保存成功', function() {
-                        that.$router.push({
-                            name: 'manager'
-                        })
-                    });
+                    that.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: '保存成功',
+                        onClose: function() {
+                            that.$router.push({
+                                name: 'manager'
+                            })
+                        }
+                    })
                 }
             })
+        }
+    },
+    created: function() {
+        if (this.$route.name == 'assistant-modify') {
+            this.ismodify = true;
+        }
+        this.assistantid = this.$route.query.assistantid;
+        if (this.assistantid != undefined && this.assistantid != '' && this.ismodify) {
+            this.fetchAssistant();
+        }
+    },
+    watch: {
+        '$route': function(to, from) {
+            if (to.name == 'assistant-modify') {
+                this.ismodify = true;
+            }
+            this.assistantid = to.query.assistantid;
+            if (this.assistantid != undefined && this.assistantid != '' && this.ismodify) {
+                this.fetchAssistant();
+            }
         }
     }
 }

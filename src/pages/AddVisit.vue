@@ -13,14 +13,14 @@
             <!-- <i class="fa fa-calendar-check-o fa-lg"></i> -->
             <!-- <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
             <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
-            <el-date-picker v-model="value" type="date" placeholder=""></el-date-picker>
+            <el-date-picker v-model="value" type="date" placeholder="选择日期"></el-date-picker>
           </div>
           <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
-              <el-select v-model="typestr" placeholder="">
-                  <el-option label="门诊" value="门诊"></el-option>
-                  <el-option label="住院" value="住院"></el-option>
-                  <el-option label="出院" value="出院"></el-option>
-              </el-select>
+            <el-select v-model="typestr" placeholder="">
+              <el-option label="门诊" value="门诊"></el-option>
+              <el-option label="住院" value="住院"></el-option>
+              <el-option label="出院" value="出院"></el-option>
+            </el-select>
           </div>
           <div class="form-group">
             <button class="btn btn-primary" @click="addVisit($event)">添加</button>
@@ -147,9 +147,6 @@ export default {
     'appHeader': require('../components/Header.vue'), //头组件
     'visitHeader': require('../components/VisitHeader.vue'),
     'appFooter': require('../components/Footer.vue'), //尾组件
-    'calendar': function(resolve) {
-      require(['../components/calendar.vue'], resolve);
-    }
   },
   computed: {
     patientid: function() {
@@ -159,40 +156,32 @@ export default {
       return this.diseaseid != 3;
     }
   },
-  route: {
-    data: function(transition) {
-      this.fetchPatient();
-      this.fetchData();
-      this.diseaseid = common.getDiseaseId();
-      transition.next();
-    }
-  },
   methods: {
     addVisit: function(e) {
       e.preventDefault();
-      var self = this;
+      var that = this;
       $.ajax({
         url: api.get('revisitrecord.add'),
         type: 'post',
         dataType: 'json',
         data: {
           date: this.value,
-          patientid: self.patientid,
-          typestr: self.typestr
+          patientid: that.patientid,
+          typestr: that.typestr
         },
       }).done(function(d) {
         if (d.errno != 0 && d.errno != -10) {
-          self.$emit('show-alert', d.errmsg);
+          that.$emit('show-alert', d.errmsg);
         } else {
-          var path = '/checkuptpl/' + self.patientid + '/child/zhusu/主诉';
-          var diseaseid = libpatient.getDiseaseId(self.patientid);
+          var path = '/checkuptpl/' + that.patientid + '/child/zhusu/主诉';
+          var diseaseid = libpatient.getDiseaseId(that.patientid);
           if (common.isGastricCancer(diseaseid)) {
-            path = '/checkuptpl/' + self.patientid + '/child/zhusu1/主诉';
+            path = '/checkuptpl/' + that.patientid + '/child/zhusu1/主诉';
           }
-          self.$router.push({
+          that.$router.push({
             path: path,
             query: {
-              date: self.value
+              date: that.value
             }
           })
         }
@@ -200,17 +189,17 @@ export default {
 
     },
     fetchData: function() {
-      var self = this;
+      var that = this;
       //获取
       $.ajax({
         url: api.get('revisitrecord.list'),
         type: 'post',
         dataType: 'json',
         data: {
-          patientid: self.patientid
+          patientid: that.patientid
         },
       }).done(function(d) {
-        self.revisitRecords = d.data;
+        that.revisitRecords = d.data;
       })
     },
     fetchPatient: function() {
@@ -218,24 +207,28 @@ export default {
       if (patientname) {
         this.patientname = patientname
       } else {
-        var self = this;
+        var that = this;
         $.ajax({
           url: api.get('patient.baseinfo'),
           type: 'post',
           dataType: 'json',
           data: {
-            patientid: self.patientid
+            patientid: that.patientid
           },
         }).done(function(d) {
-          self.patientname = d.data.name;
-          libpatient.setPatientName(self.patientid, self.patientname);
+          that.patientname = d.data.name;
+          libpatient.setPatientName(that.patientid, that.patientname);
         })
       }
     },
     doDelete: function(revisitrecord, e) {
       e.preventDefault();
-      var self = this;
-      this.$emit('show-prompt', '确定要删除吗？', function() {
+      var that = this;
+      this.$confirm("确定要删除吗？", '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         $.ajax({
           url: api.get('revisitrecord.delete'),
           type: 'post',
@@ -244,10 +237,15 @@ export default {
             revisitrecordid: revisitrecord.revisitrecordid
           },
         }).done(function(d) {
-          self.$emit('show-popup', '删除成功');
-          self.fetchData();
+          that.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          that.fetchData();
         })
-      })
+      }).catch(() => {
+
+      });
     }
   },
   filters: {
@@ -259,19 +257,20 @@ export default {
     }
   },
   mounted: function() {
-      this.value = util.getFormatDate();
+
   },
   created: function() {
+    this.fetchPatient();
+    this.fetchData();
+    this.diseaseid = common.getDiseaseId();
+    this.value = util.getFormatDate();
+  },
+  watch: {
+    '$route': function(to, from) {
       this.fetchPatient();
       this.fetchData();
       this.diseaseid = common.getDiseaseId();
-  },
-  watch: {
-      '$route': (to, from) => {
-          this.fetchPatient();
-          this.fetchData();
-          this.diseaseid = common.getDiseaseId();
-      }
+    }
   }
 }
 </script>

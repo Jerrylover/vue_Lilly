@@ -39,6 +39,7 @@ span.input-group-addon {
 }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -84,8 +85,8 @@ export default {
             return this.number;
         }
     },
-    events: {
-        'modify-data': function() {
+    methods: {
+        'modifyData': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -95,38 +96,46 @@ export default {
             console.log('input number modify-data', this.answer)
             return true;
         },
-        'modify-done': function() {
+        'modifyDone': function() {
             this.number = '';
             this.selectedUnit = '';
             this.selectedQualitative = '';
             this.isShowComponent = !this.question.isdefaulthide;
             return true;
         },
-        'edss-notify': function(edss) {
+        'edssNotify': function(edss) {
             if (this.checkuptpl.ename == 'edss' && this.question.content == '得分') {
                 this.number = edss;
             }
         },
-        'bsa-notify': function(bsa) {
+        'bsaNotify': function(bsa) {
             if (this.checkuptpl.ename == 'bsa' && this.question.content == 'BSA') {
                 this.number = bsa;
             }
         },
-        'show-component-notify': function(ename) {
+        'showComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = true;
             }
         },
-        'hide-component-notify': function(ename) {
+        'hideComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = false;
             }
         }
     },
+    created: function() {
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('edss-notify', this.edssNotify)
+        Bus.$on('bsa-notify', this.bsaNotify)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
+    },
     watch: {
         'number': function(newval, oldval) {
             if (this.checkuptpl.ename == 'bsa' && (this.question.content == '身高' || this.question.content == '体重')) {
-                this.$emit('bsa-wh-change', this.question.content, this.number);
+                Bus.$emit('bsa-wh-change', this.question.content, this.number);
                 console.log('dispath bsa-wh-change', this.question.content, this.number);
             }
         }

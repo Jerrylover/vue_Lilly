@@ -19,6 +19,7 @@
 }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -28,17 +29,17 @@ export default {
             isShowComponent: true
         }
     },
-    props: ['checkuptpl', 'questionsheet', 'question', 'checkuptpl', 'questionsheet', 'answer', 'action'],
+    props: ['checkuptpl', 'questionsheet', 'question', 'checkuptpl', 'questionsheet', 'answer'],
     computed: {
         'name': function() {
             return 'sheets[XQuestionSheet][' + this.questionsheet.id + '][' + this.question.id + '][options][]';
         },
         content: function() {
-            return this.question.content + this.action
+            return this.question.content
         }
     },
-    events: {
-        'modify-data': function() {
+    methods: {
+        'modifyData': function() {
             if ($.isEmptyObject(this.answer)) {
                 return true;
             }
@@ -49,17 +50,17 @@ export default {
             this.checked = checked;
             return true;
         },
-        'modify-done': function() {
+        'modifyDone': function() {
             this.checked = [];
             this.isShowComponent = !this.question.isdefaulthide;
             return true;
         },
-        'show-component-notify': function(ename) {
+        'showComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = true;
             }
         },
-        'hide-component-notify': function(ename) {
+        'hideComponentNotify': function(ename) {
             if (this.question.ename == ename) {
                 this.isShowComponent = false;
             }
@@ -68,11 +69,11 @@ export default {
     watch: {
         checked: function(newVal, oldVal) {
             if (newVal == '') {
-                this.$set('isshow', true);
-                this.$set('dvalue', -1);
+                this.isshow = true;
+                this.dvalue = -1;
             } else {
-                this.$set('isshow', false);
-                this.$set('dvalue', '');
+                this.isshow = false;
+                this.dvalue = -1;
             }
             var len = this.question.options.length;
             //显示与隐藏
@@ -84,13 +85,13 @@ export default {
                     if ($.inArray(option.id, newVal) > -1) {
                         $.each(enameArr, function(index, ename) {
                             if (ename) {
-                                that.$emit('show-component', ename);
+                                Bus.$emit('show-component', ename);
                             }
                         });
                     } else {
                         $.each(enameArr, function(index, ename) {
                             if (ename) {
-                                that.$emit('hide-component', ename);
+                                Bus.$emit('hide-component', ename);
                             }
                         });
                     }
@@ -99,8 +100,11 @@ export default {
             }
         }
     },
-    methods: {
-
+    created: function() {
+        Bus.$on('modify-done', this.modifyDone)
+        Bus.$on('modify-data', this.modifyData)
+        Bus.$on('show-component-notify', this.showComponentNotify)
+        Bus.$on('hide-component-notify', this.hideComponentNotify)
     },
     mounted: function() {
         this.$nextTick(function() {

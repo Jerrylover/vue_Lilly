@@ -7,7 +7,7 @@
         <page-header pagetitle="重置密码"></page-header>
     </div>
     <div class="row mg-t-20">
-        <div class="col-sm-6">
+        <div class="col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">名称</label>
                 <input type="text" disabled="disabled" class="form-control" v-model="name" />
@@ -53,15 +53,6 @@ export default {
     },
     computed: {
     },
-    route: {
-        data: function(transition) {
-            this.assistantid = transition.to.query.assistantid;
-            if (this.assistantid != undefined && this.assistantid != '') {
-                this.fetchAssistant();
-            }
-            transition.next();
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
@@ -85,11 +76,19 @@ export default {
         },
         clickSave: function() {
             if ($.trim(this.password1) == '') {
-                this.$emit('show-alert', '密码不能为空');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '密码不能为空',
+                })
                 return false;
             }
             if (this.password1 != this.password2) {
-                this.$emit('show-alert', '两次输入的密码不一致');
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '两次输入的密码不一致',
+                })
                 return false;
             }
 
@@ -109,13 +108,32 @@ export default {
                 if (d.errno != 0 && d.errno != -10) {
                     that.$emit('show-alert', d.errmsg);
                 } else {
-                    that.$emit('show-popup', '保存成功', function() {
-                        that.$router.push({
-                            name: 'manager'
-                        })
-                    });
+                    that.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: '重置成功',
+                        onClose: function() {
+                            that.$router.push({
+                                name: 'manager'
+                            })
+                        }
+                    })
                 }
             })
+        }
+    },
+    created: function() {
+        this.assistantid = this.$route.query.assistantid;
+        if (this.assistantid != undefined && this.assistantid != '') {
+            this.fetchAssistant();
+        }
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.assistantid = to.query.assistantid;
+            if (this.assistantid != undefined && this.assistantid != '') {
+                this.fetchAssistant();
+            }
         }
     }
 }

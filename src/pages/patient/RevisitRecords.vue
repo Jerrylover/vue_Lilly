@@ -48,30 +48,31 @@
                                     <th width="15%">不良反应</th>
                                     <th>放疗</th>
                                 </tr>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <p>化疗医院：{{revisitrecord.hospital}}</p>
-                                            <p>开始时间：{{revisitrecord.startdate}}</p>
-                                            <p>化疗方案：{{revisitrecord.pkg_name}}</p>
-                                            <p>化疗性质：{{revisitrecord.type}}</p>
-                                            <p>化疗疗程：{{revisitrecord.stage}}</p>
-                                        </td>
-                                        <td>{{revisitrecord.progress_reason}}</td>
-                                        <td class="mytd" v-html="formatePkgItems(revisitrecord.pkg_items)"></td>
-                                        <td>{{revisitrecord.effect_name}}</td>
-                                        <td>{{revisitrecord.effect_content}}</td>
-                                        <td class="mytd" v-html="formteSideEffectItems(revisitrecord.sideeffect_items)"></td>
-                                        <td class="mytd" v-html="formateXContent(revisitrecord)"></td>
-                                    </tr>
-                                </tbody>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p>化疗医院：{{revisitrecord.hospital}}</p>
+                                        <p>开始时间：{{revisitrecord.startdate}}</p>
+                                        <p>化疗方案：{{revisitrecord.pkg_name}}</p>
+                                        <p>化疗性质：{{revisitrecord.type}}</p>
+                                        <p>化疗疗程：{{revisitrecord.stage}}</p>
+                                    </td>
+                                    <td>{{revisitrecord.progress_reason}}</td>
+                                    <td class="mytd" v-html="formatePkgItems(revisitrecord.pkg_items)"></td>
+                                    <td>{{revisitrecord.effect_name}}</td>
+                                    <td>{{revisitrecord.effect_content}}</td>
+                                    <td class="mytd" v-html="formteSideEffectItems(revisitrecord.sideeffect_items)"></td>
+                                    <td class="mytd" v-html="formateXContent(revisitrecord)"></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </transition>
                 </template>
                 <template v-else>
                     <div class="header header-1" @click="clickHeader(revisitrecord, $event)">
-                        <span class="fa" :class="{'fa-minus-square-o': dates[revisitrecord.thedate] == true, ' fa-plus-square-o': dates[revisitrecord.thedate] == false}" aria-hidden="true"></span><span v-html="getNewSpanContent1"></span>
+                        <span class="fa" :class="{'fa-minus-square-o': dates[revisitrecord.thedate] == true, ' fa-plus-square-o': dates[revisitrecord.thedate] == false}" aria-hidden="true"></span><span v-html="getNewSpanContent1(revisitrecord)"></span>
                         <span class="title" v-for="(title, index) in getCheckupTitles(revisitrecord)" :key="index">{{title}}</span>
                     </div>
                     <transition name="toggle">
@@ -90,14 +91,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </transition>
                         </template>
                     </div>
+                    </transition>
                 </template>
             </div>
         </div>
-
-        <div v-else class='row text-center'>
+        <div v-else class="row text-center">
             <div style="padding:20px;">{{msg}}</div>
         </div>
     </div>
@@ -193,22 +193,18 @@ span.title {
 
 /*动画*/
 
-.toggle-enter {
-    display: inline-block;
-    /* 否则 scale 动画不起作用 */
-    transform-origin: center top;
-}
-
 .toggle-enter-active {
-    animation: showAnimation .1s linear;
-    -moz-animation: showAnimation .1s linear;
-    -webkit-animation: showAnimation .1s linear;
+    transform-origin: center top;
+    animation: showAnimation .2s linear;
+    -moz-animation: showAnimation .2s linear;
+    -webkit-animation: showAnimation .2s linear;
 }
 
 .toggle-leave-active {
-    animation: hideAnimation .1s linear;
-    -moz-animation: hideAnimation .1s linear;
-    -webkit-animation: hideAnimation .1s linear;
+    transform-origin: center top;
+    animation: hideAnimation .2s linear;
+    -moz-animation: hideAnimation .2s linear;
+    -webkit-animation: hideAnimation .2s linear;
 }
 
 @keyframes showAnimation {
@@ -259,7 +255,7 @@ span.title {
                 msg: '',
                 filterTypes:['门诊', '住院', '治疗'],
                 all: [],
-        }
+            }
     },
     computed: {
         patientid: function() {
@@ -271,35 +267,33 @@ span.title {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
+        'appHeader': require('../../components/Header.vue'),
+        'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
-        'appFooter': require('../../components/Footer.vue')
     },
-    route: {
-        data: function(transition) {
+    methods: {
+        initPage: function() {
             this.routepath = this.$route.name;
+            var query = this.$route.query;
             if (this.routepath == 'doctorgroup-revisitinfo') {
-                this.projectid = transition.to.query.projectid;
-                this.centerid = transition.to.query.centerid;
+                this.projectid = query.projectid;
+                this.centerid = query.centerid;
                 this.dg_group = '1';
-                this.doctorid = transition.to.query.doctorid;
+                this.doctorid = query.doctorid;
             }
             this.fetchData();
             this.fetchPatient();
-            transition.next();
-        }
-    },
-    methods: {
+        },
         formatePkgItems: function(pkgitems) {
             if (pkgitems == '') {
                 return '';
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">药品名</td><td width="25%">实际用量</td><td width="20%">用药途径</td><td width="20%">用药时长</td><td>备注</td></tr>';
-            var html = '<table class="table mytable">'
+            var html = '<table class="table mytable"><tbody>'
             $.each(pkgitems, function(index, pkgitem) {
                 html += '<tr><td style="border-top:0;">' + pkgitem.name + '</td><td style="border-top:0;">' + pkgitem.method3 + '</td><td style="border-top:0;">' + pkgitem.pickedmethod4 + '</td><td style="border-top:0;">' + pkgitem.pickedtime + '</td><td style="border-top:0;">' + pkgitem.remark + '</td></tr>';
             })
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         formteSideEffectItems: function(sideeffect_items) {
@@ -307,22 +301,22 @@ span.title {
                 return '';
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">名称</td><td width="80%">程度</td></tr>';
-            var html = '<table class="table mytable">';
+            var html = '<table class="table mytable"><tbody>';
             $.each(sideeffect_items, function(index, sideeffect_item) {
                 html += '<tr><td style="border-top:0;">' + sideeffect_item[0] + '</td><td style="border-top:0;">' + sideeffect_item[1] + '</td></tr>';
             })
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         formateXContent: function(medicine) {
             if (medicine.x_yes == 0 || medicine == '') {
                 return '';
             }
-            var html = '<table class="table mytable">';
+            var html = '<table class="table mytable"><tbody>';
             html += '<tr><th style="font-weight:normal;border-top:0;">开始日期</th><td style="border-top:0;">' + medicine.x_startdate + '</td></tr><tr><th style="font-weight:normal;border-top:0;">部位</th><td style="border-top:0;">' + medicine.x_part + '</td></tr>';
             html += '<tr><th style="font-weight:normal;border-top:0;">模式</th><td style="border-top:0;">' + medicine.x_type + '</td></tr><tr><th style="font-weight:normal;border-top:0;">剂量</th><td style="border-top:0;">' + medicine.x_dose + '</td></tr>';
             html += '<tr><th style="font-weight:normal;border-top:0;">持续时间</th><td style="border-top:0;">' + medicine.x_timespan + '天</td></tr>';
-            html += '</table>';
+            html += '</tbody></table>';
             return html;
         },
         formateTypeStr: function(value) {
@@ -406,7 +400,7 @@ span.title {
             //删除小标题caption类型
             for (var i=0;i<answers.length;i++) {
                 if (answers[i].xquestiontype == 'Caption') {
-                    answers.$remove(answers[i]);
+                    answers.splice(i, 1);
                 }
             }
             var data = [];
@@ -527,6 +521,9 @@ span.title {
     filters: {
 
     },
+    created: function() {
+        this.initPage()
+    },
     watch: {
         filterTypes: function(newVal, oldVal) {
             var that = this;
@@ -537,7 +534,8 @@ span.title {
                 }
             })
             that.revisitrecords = arr;
-        }
+        },
+        '$route': 'initPage'
     },
     mounted: function() {
 
