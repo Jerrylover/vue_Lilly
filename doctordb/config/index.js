@@ -4,8 +4,8 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/doctordb/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/doctordb'),
+    index: path.resolve(__dirname, '../../../dist/doctor/db/index.html'),
+    assetsRoot: path.resolve(__dirname, '../../../dist/doctor/db'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: true,
