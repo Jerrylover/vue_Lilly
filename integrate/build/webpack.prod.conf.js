@@ -26,6 +26,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new webpack.ContextReplacementPlugin(/^\.\/locale$/, context => {
+      // check if the context was created inside the moment package
+      if (!/\/moment/.test(context.context)) {
+        return
+      }
+      // context needs to be modified in place
+      Object.assign(context, {
+        // include only japanese, korean and chinese variants
+        // all tests are prefixed with './' so this must be part of the regExp
+        // the default regExp includes everything; /^$/ could be used to include nothing
+        regExp: /^\.(zh-cn)/
+      })
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
@@ -56,7 +69,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module, count) {
+      minChunks: function(module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&

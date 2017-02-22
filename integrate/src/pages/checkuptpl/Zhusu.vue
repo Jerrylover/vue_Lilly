@@ -10,9 +10,9 @@
                             <!-- <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
                             <span class="help-block" v-show="iserror">日期已存在</span> -->
                             <!-- <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
-                            <el-moment v-model="value" format="YYYY-MM-DD">
+                            <fc-date v-model="value" format="YYYY-MM-DD">
                                 <el-date-picker type="date" placeholder="" :disabled="true"></el-date-picker>
-                            </el-moment>
+                            </fc-date>
                         </div>
                     </div>
                 </div>

@@ -13,9 +13,9 @@
             <!-- <i class="fa fa-calendar-check-o fa-lg"></i> -->
             <!-- <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
             <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
-            <el-moment v-model="value" format="YYYY-MM-DD">
+            <fc-date v-model="value" format="YYYY-MM-DD">
                 <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
-            </el-moment>
+            </fc-date>
           </div>
           <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
             <el-select v-model="typestr" placeholder="">

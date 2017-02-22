@@ -43,9 +43,9 @@
                         <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
                         <span class="help-block" v-show="iserror">日期已存在</span>
                         <calendar :show="show" :value="startdate" v-on:calendar-change-value="changeStartdate" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
-                        <el-moment v-model="startdate" format="YYYY-MM-DD">
+                        <fc-date v-model="startdate" format="YYYY-MM-DD">
                             <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
-                        </el-moment>
+                        </fc-date>
                     </div>
                 </div>
             </div>
@@ -300,9 +300,9 @@
                         <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">开始日期</label>
                         <div class="col-sm-3" style="">
                             <div class="block">
-                                <el-moment v-model="xstartdate" format="YYYY-MM-DD">
+                                <fc-date v-model="xstartdate" format="YYYY-MM-DD">
                                     <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
-                                </el-moment>
+                                </fc-date>
                             </div>
                         </div>
                         <label for="inputEmail3" class="col-lg-1 col-sm-1 control-label question-label" style="padding-right:0;margin-left:20px;">部位</label>

@@ -1,12 +1,23 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui'
+// import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import ElMoment from 'el-moment'
+// import ElMoment from 'el-moment'
+import FcDate from './modules/FcDate.js'
+Vue.use(FcDate)
+
+import {Select, Message, MessageBox, DatePicker, Option} from 'element-ui'
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(DatePicker)
+
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$message = Message;
+
 import App from './App.vue'
 import router from './router'
 
-Vue.use(ElementUI)
-Vue.use(ElMoment)
+// Vue.use(ElementUI)
+// Vue.use(ElMoment)
 
 // Vue.filter('timestampFormat', require('./filters/timestampFormatter'));
 

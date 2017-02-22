@@ -7,9 +7,9 @@
                 <label for="inputEmail3" class="col-lg-3 col-sm-4 control-label  question-label">{{dateTitle}}</label>
                 <div class="col-lg-9 col-sm-8">
                     <div :class="{'has-error has-feedback': iserror, 'has-feedback': !iserror}">
-                        <el-moment v-model="value" format="YYYY-MM-DD">
+                        <fc-date v-model="value" format="YYYY-MM-DD">
                             <el-date-picker type="date" placeholder="请选择日期"></el-date-picker>
-                        </el-moment>
+                        </fc-date>
                     </div>
                 </div>
             </div>
