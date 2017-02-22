@@ -13,6 +13,7 @@ var urls = {
         'binduserpost': '/bind/binduserpost',
     },
     'sickbed': {
+        'list': '/bedtkt/list',
         'refusejson': '/bedtkt/refusejson',
         'pass': '/bedtkt/pass',
         'passjson': '/bedtkt/passjson',
