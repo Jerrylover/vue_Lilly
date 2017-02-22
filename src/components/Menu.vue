@@ -150,7 +150,7 @@ export default {
         },
         changeType: function() {
             if (!this.isFolder) {
-                Vue.set(this.model, 'submenus', [])
+                this.$set(this.model, 'submenus', [])
                 this.addChild()
                 this.open = true
             }

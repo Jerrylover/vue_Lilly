@@ -41,12 +41,15 @@
         </div>
         <div class="row mg-t-10">
         <table class="table table-bordered table-striped">
+            <thead>
             <tr class="light-tr">
                 <th class="col-sm-1">选择</th>
                 <th>患者姓名</th>
                 <th>状态</th>
                 <!-- <th>操作</th> -->
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="(patient, index) in patientlist" @click="setselectstatus(patient, index)">
                 <td>
                     <div class="checkbox checkbox-inline checkbox-info">
@@ -60,6 +63,7 @@
             <tr v-if="patientlist.length == 0">
                 <td style="text-align: center" colspan="4">暂无数据</td>
             </tr>
+            </tbody>
         </table>
         </div>
         <div class="row">
@@ -102,14 +106,7 @@
         },
         route: {
             data: function(transition) {
-                var self = this;
-                self.diseaseid = transition.to.query.diseaseid;
-                self.projectid = transition.to.params.projectid;
-                self.centerid = transition.to.params.centerid;
-                self.currentdisease = self.diseaseid;
-                self.pagenum = transition.to.query.pagenum || 1;
-                self.path = '/doctorgroup/' + self.projectid + '/project/' + self.centerid + '/importpatients';
-                self.fetchData();
+
             }
         },
         components: {
@@ -123,7 +120,7 @@
                 for (var i = 0; i < this.patientlist.length; i++) {
                     this.patientlist[i].selectstatus = this.selectallstatus;
                     this.patientlist[i] = Object.assign({}, this.patientlist[i]);
-                    Vue.set(this.patientlist, i, this.patientlist[i])
+                    this.$set(this.patientlist, i, this.patientlist[i])
                 }
             },
             dosearch: function() {
@@ -135,8 +132,6 @@
                 }else {
                     self.type = 0;
                 }
-                console.log('1111111111111111');
-                console.log(self.currentdisease);
                 self.$router.push({
                     name: 'doctorgroup-importpatients',
                     query: {
@@ -161,12 +156,21 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        self.$emit('show-popup', "导入成功", function(){
-                            self.selectallstatus = false;
-                            self.fetchData();
+                        self.$message({
+                            type: 'success',
+                            message: '导入成功',
+                            duration: 1500,
+                            onClose: function() {
+                                self.selectallstatus = false;
+                                self.fetchData();
+                            }
                         })
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
                     }
                 })
             },
@@ -186,19 +190,32 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        self.$emit('show-popup', '导出成功', function(){
-                            self.selectallstatus = false;
-                            self.fetchData();
+                        self.$message({
+                            type: 'success',
+                            message: '导出成功',
+                            duration: 1500,
+                            onClose: function() {
+                                self.selectallstatus = false;
+                                self.fetchData();
+                            }
                         })
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
                     }
                 })
             },
             importall: function() {
                 var self = this;
                 this.patientids = [];
-                self.$emit('show-prompt',"确定将所选患者全部导入吗？", function(){
+                this.$confirm("确定将所选患者全部导入吗？", '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
                     for (var i = 0; i < self.patientlist.length; i++) {
                         if (self.patientlist[i].selectstatus == true) {
                             self.patientids.push(self.patientlist[i].id);
@@ -216,20 +233,35 @@
                     }).done(function(response){
                         if (response.errno == 0) {
                             var data = response.data;
-                            self.$emit('show-popup', '导入成功', function(){
-                                self.selectallstatus = false;
-                                self.fetchData();
+                            self.$message({
+                                type: 'success',
+                                message: '导入成功',
+                                duration: 1500,
+                                onClose: function() {
+                                    self.selectallstatus = false;
+                                    self.fetchData();
+                                }
                             })
                         }else {
-                            self.$emit('show-alert', response.errmsg);
+                            self.$message({
+                                type: 'error',
+                                message: response.errmsg,
+                                duration: 1500
+                            })
                         }
                     })
-                }, function(){ return ;});
+                }).catch(() => {
+
+                })
             },
             removeall: function() {
                 var self = this;
                 this.patientids = [];
-                self.$emit('show-prompt',"确定将所选患者全部导出吗？", function(){
+                this.$confirm("确定将所选患者全部导出吗？", '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
                     for (var i = 0; i < self.patientlist.length; i++) {
                         if(self.patientlist[i].selectstatus == true) {
                             self.patientids.push(self.patientlist[i].id);
@@ -247,15 +279,26 @@
                     }).done(function(response){
                         if (response.errno == 0) {
                             var data = response.data;
-                            self.$emit('show-popup', '导出成功', function(){
-                                self.selectallstatus = false;
-                                self.fetchData();
+                            self.$message({
+                                type: 'success',
+                                message: '导出成功',
+                                duration: 1500,
+                                onClose: function() {
+                                    self.selectallstatus = false;
+                                    self.fetchData();
+                                }
                             })
                         }else {
-                            self.$emit('show-alert', response.errmsg);
+                            self.$message({
+                                type: 'error',
+                                message: response.errmsg,
+                                duration: 1500
+                            })
                         }
                     })
-                }, function(){ return ;});
+                }).catch(() => {
+
+                })
             },
             fetchData: function() {
                 var self = this;
@@ -273,12 +316,16 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        self.total = data.total;
+                        self.total = data.total - '';
                         self.patientlist = data.patients;
                         self.diseases = data.diseases;
                         self.initselectattr();
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
                     }
                 })
             },
@@ -290,8 +337,20 @@
             setselectstatus: function(patient, index){
                 patient.selectstatus = !patient.selectstatus;
                 patient = Object.assign({}, patient);
-                Vue.set(this.patientlist, index, patient)
+                this.$set(this.patientlist, index, patient)
 
+            },
+            initPage: function() {
+                var self = this;
+                var query = this.$route.query
+                var params = this.$route.params
+                self.diseaseid = query.diseaseid;
+                self.projectid = params.projectid;
+                self.centerid = params.centerid;
+                self.currentdisease = self.diseaseid;
+                self.pagenum = query.pagenum || 1;
+                self.path = '/doctorgroup/' + self.projectid + '/project/' + self.centerid + '/importpatients';
+                self.fetchData();
             }
         },
         filters: {
@@ -301,6 +360,14 @@
                 } else if (value == 2) {
                     return '未导入';
                 }
+            }
+        },
+        created: function() {
+            this.initPage()
+        },
+        watch: {
+            '$route': function() {
+                this.initPage()
             }
         }
     }

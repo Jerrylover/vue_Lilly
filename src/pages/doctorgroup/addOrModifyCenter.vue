@@ -6,8 +6,8 @@
             <h4>{{dg_project.title}}项目&nbsp;&nbsp;&nbsp;{{pagetitle}}</h4>
             <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                 <li>返回</li>
-                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link  class="scale" :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link  class="scale" :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
             </ol>
         </div>
         <div class="row mg-t-20">
@@ -62,20 +62,153 @@
                 }
             }
         },
-        route: {
-            data: function(transition) {
+        components: {
+            'appHeader': require('../../components/Header.vue'),
+            'appFooter': require('../../components/Footer.vue'),
+        },
+        methods: {
+            addormodifycenter: function() {
+                var self = this;
+                if (self.routeFrom.trim() == 'doctorgroup-addcenter') {
+                    self.addcenter();
+                }
+                if (self.routeFrom.trim() == 'doctorgroup-modifycenter') {
+                    self.modifycenter();
+                }
+
+            },
+            addcenter: function() {
+                var self = this;
+                var url = api.get('doctorgroup.dg_centeradd');
+                if (self.dg_center.title.trim() == '') {
+                    self.$message({
+                        type: 'error',
+                        message: '中心名称不能为空',
+                        duration: 1500,
+                        onClose: function() {
+                            $("input[name='title']").focus();
+                        }
+                    })
+                    return ;
+                }
+                if (self.dg_center.content.trim() == '') {
+                    self.$message({
+                        type: 'error',
+                        message: '中心项目目标不能为空',
+                        duration: 1500,
+                        onClose: function() {
+                            $("textarea[name='content']").focus();
+                        }
+                    })
+                    return ;
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        dg_projectid: self.projectid,
+                        title: self.dg_center.title,
+                        content: self.dg_center.content,
+                    }
+                }).done(function(response){
+                    if (response.errno == 0) {
+                        self.$message({
+                            type: 'success',
+                            message: '添加成功',
+                            duration: 1500,
+                            onClose: function() {
+                                self.goCenterlist();
+                            }
+                        })
+                    } else {
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
+                    }
+                })
+            },
+            modifycenter: function() {
+                var self = this;
+                var url = api.get('doctorgroup.dg_centermodify');
+                if (self.dg_center.title.trim() == '') {
+                    self.$message({
+                        type: 'error',
+                        message: '中心名称不能为空',
+                        duration: 1500,
+                        onClose: function() {
+                            $("input[name='title']").focus();
+                        }
+                    })
+                    return ;
+                }
+                if (self.dg_center.content.trim() == '') {
+                    self.$message({
+                        type: 'error',
+                        message: '中心项目目标不能为空',
+                        duration: 1500,
+                        onClose: function() {
+                            $("textarea[name='content']").focus();
+                        }
+                    })
+                    return ;
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        dg_projectid: self.projectid,
+                        dg_centerid: self.centerid,
+                        title: self.dg_center.title,
+                        content: self.dg_center.content,
+                    }
+                }).done(function(response){
+                    if (response.errno == 0) {
+                        self.$message({
+                            type: 'success',
+                            message: '修改成功',
+                            duration: 1500,
+                            onClose: function() {
+                                self.goCenterlist();
+                            }
+                        })
+
+                    }else {
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
+                    }
+                })
+
+            },
+            goCenterlist: function() {
+                var self = this;
+                self.$router.push({
+                    name: 'doctorgroup-centerlist',
+                    params: {
+                        projectid: self.projectid,
+                    }
+                })
+            },
+            fetchData: function() {
                 var self = this;
                 var url = '';
                 self.routeFrom = this.$route.name;
+                var params = this.$route.params;
                 if (self.routeFrom == 'doctorgroup-addcenter') {
                     self.pagetitle = '添加中心';
                     self.pagepostbuttonname = "确认并添加中心";
-                    self.projectid = transition.to.params.projectid;
+                    self.projectid = params.projectid;
                 }
                 if (self.routeFrom == 'doctorgroup-modifycenter') {
                     url = api.get('doctorgroup.dg_centermodify');
-                    self.projectid = transition.to.params.projectid;
-                    self.centerid = transition.to.params.centerid;
+                    self.projectid = params.projectid;
+                    self.centerid = params.centerid;
                     self.pagetitle = '修改中心';
                     self.pagepostbuttonname = '确认并保存修改';
                 }
@@ -96,104 +229,21 @@
                         self.dg_center.title = data.dg_center.title;
                         self.dg_center.content = data.dg_center.content;
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg,
+                            duration: 1500
+                        })
                     }
                 })
             }
         },
-        components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+        created: function() {
+            this.fetchData()
         },
-        methods: {
-            addormodifycenter: function() {
-                var self = this;
-                if (self.routeFrom.trim() == 'doctorgroup-addcenter') {
-                    self.addcenter();
-                }
-                if (self.routeFrom.trim() == 'doctorgroup-modifycenter') {
-                    self.modifycenter();
-                }
-
-            },
-            addcenter: function() {
-                var self = this;
-                var url = api.get('doctorgroup.dg_centeradd');
-                if (self.dg_center.title.trim() == '') {
-                    self.$emit('show-alert', "中心名称不能为空", function(){
-                        $("input[name='title']").focus();
-                    })
-                    return ;
-                }
-                if (self.dg_center.content.trim() == '') {
-                    self.$emit('show-alert', '中心项目目标不能为空', function() {
-                        $("textarea[name='content']").focus();
-                    })
-                    return ;
-                }
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        title: self.dg_center.title,
-                        content: self.dg_center.content,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$emit('show-popup', '添加成功', function() {
-                            self.goCenterlist();
-                        })
-                    } else {
-                        self.$emit('show-alert', response.errmsg);
-                    }
-                })
-            },
-            modifycenter: function() {
-                var self = this;
-                var url = api.get('doctorgroup.dg_centermodify');
-                if (self.dg_center.title.trim() == '') {
-                    self.$emit('show-alert', "中心名称不能为空", function(){
-                        $("input[name='title']").focus();
-                    })
-                    return ;
-                }
-                if (self.dg_center.content.trim() == '') {
-                    self.$emit('show-alert', '中心项目目标不能为空', function() {
-                        $("textarea[name='content']").focus();
-                    })
-                    return ;
-                }
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.centerid,
-                        title: self.dg_center.title,
-                        content: self.dg_center.content,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$emit('show-popup', '修改成功', function() {
-                            self.goCenterlist();
-                        })
-                    }else {
-                        self.$emit('show-alert', response.errmsg);
-                    }
-                })
-
-            },
-            goCenterlist: function() {
-                var self = this;
-                self.$router.push({
-                    name: 'doctorgroup-centerlist',
-                    params: {
-                        projectid: self.projectid,
-                    }
-                })
+        watch: {
+            '$route': function() {
+                this.fetchData()
             }
         }
     }

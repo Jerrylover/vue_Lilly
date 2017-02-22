@@ -33,13 +33,14 @@
             </div>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': currentprojectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-centerlist', params:{'projectid': currentprojectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li>
             </ol>
         </div>
         <div class="row">
         <table class="table table-bordered mg-t-20">
+            <thead>
             <tr>
                 <th>姓名</th>
                 <th>病历号</th>
@@ -52,6 +53,8 @@
                 <th>疾病</th>
                 <th>操作</th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="(patient, index) in patients">
                 <td><a class="scale" href="javascript:" @click="goPatient(index, $event)">{{patient.name}}</a></td>
                 <td>{{patient.out_case_no}}</td>
@@ -69,6 +72,7 @@
             <tr v-if="patients.length == 0">
                 <td colspan="11" style="text-align: center">暂无数据</td>
             </tr>
+            </tbody>
         </table>
         </div>
         <div class="row">
@@ -117,14 +121,7 @@
         },
         route: {
             data: function(transition) {
-                var queryString = transition.to.query;
-                this.currentprojectid = queryString.projectid;
-                this.currentcenterid = queryString.centerid;
-                this.currentdoctorid = queryString.doctorid;
-                this.pagenum = queryString.pagenum;
-                this.keyword = queryString.keyword;
-                console.log(this.currentprojectid, this.currentcenterid, this.currentdoctorid);
-                this.fetchData();
+
             }
         },
         components: {
@@ -150,61 +147,84 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        console.log(data);
-                        self.pagenum = data.pagenum;
-                        self.pagesize = data.pagesize;
-                        self.total = data.total;
+                        self.pagenum = data.pagenum - '';
+                        self.pagesize = data.pagesize - '';
+                        self.total = data.total - '';
                         self.projectlist = data.projectlist;
                         self.centerlist = data.centerlist;
                         self.doctorlist = data.doctorlist;
                         self.patients = data.dg_patients;
                         self.currentcenterid = data.selected.dg_centerid;
                         self.currentdoctorid = data.selected.doctorid;
-                        console.log(self.currentprojectid, self.currentcenterid, self.currentdoctorid);
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg
+                        })
                     }
                 })
             },
             changeproject: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
+                if (index < 0) {
+                    index = 0
+                }
+                var projectid = ''
+                if (self.projectlist.length > 0) {
+                    projectid = self.projectlist[index].id || ''
+                }
                 this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
-                        projectid: self.projectlist[index].id,
+                        projectid: projectid,
                     }
                 })
             },
             changecenter: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
+                if (index < 0) {
+                    index = 0
+                }
+                var centerid = ''
+                if (self.centerlist.length > 0) {
+                    centerid = self.centerlist[index].id || ''
+                }
                 this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
                         projectid: self.currentprojectid,
-                        centerid: self.centerlist[index].id,
+                        centerid: centerid,
                     }
                 })
             },
             changedoctor: function(e) {
                 var self = this;
                 var index = e.target.selectedIndex;
+                if (index < 0) {
+                    index = 0
+                }
+                var doctorid = ''
+                if (self.doctorlist.length > 0) {
+                    doctorid = self.doctorlist[index].doctorid || ''
+                }
                 this.$router.push({
                     name: 'doctorgroup-patientlist',
                     query: {
                         projectid: self.currentprojectid,
                         centerid: self.currentcenterid,
-                        doctorid: self.doctorlist[index].doctorid,
+                        doctorid: doctorid,
                     }
                 })
             },
             dosearch: function(e) {
                 e.preventDefault();
-                this.$route.query.keyword = this.keyword;
+                var query = Object.assign({}, this.$route.query)
+                query.keyword = this.keyword
                 this.$router.push({
                     name: 'doctorgroup-patientlist',
-                    query: this.$route.query,
+                    query: query,
                 })
             },
             goRevisitRecords: function(index, e) {
@@ -233,7 +253,6 @@
                 libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
                 if (typeof patient != 'undefined') {
                     if (common.isCancerDisease(diseaseId)) {
-                        console.log('1111');
                         this.$router.push({
                             path: '/doctorgroup/' + patient.patient_id + '/patientbaseinfo-lungcancer/',
                             query: {
@@ -255,12 +274,24 @@
                     }
                 }
             },
+            initPage: function() {
+                var queryString = this.$route.query;
+                console.log('----queryString', queryString)
+                this.currentprojectid = queryString.projectid || '';
+                this.currentcenterid = queryString.centerid || '';
+                this.currentdoctorid = queryString.doctorid || '';
+                this.pagenum = queryString.pagenum || 1;
+                this.keyword = queryString.keyword || '';
+                this.fetchData();
+            }
         },
         created: function() {
-            this.fetchData()
+            this.initPage()
         },
         watch: {
-            '$route': 'fetchData'
+            '$route': function() {
+                this.initPage()
+            }
         }
 
     }

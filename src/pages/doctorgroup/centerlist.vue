@@ -8,7 +8,7 @@
                 <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
                 <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                     <li>返回</li>
-                    <li><router-link  href="#"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                    <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 </ol>
             </div>
         </div>
@@ -21,6 +21,7 @@
             </div>
         </div>
         <table class="table table-bordered" style="margin-top: 10px">
+            <thead>
             <tr class="light-tr">
                 <th>中心id</th>
                 <th>中心名称</th>
@@ -30,6 +31,8 @@
                 <th>创建时间</th>
                 <th>操作</th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="center in centerlist">
                 <td>{{center.dg_centerid}}</td>
                 <td>{{center.title}}</td>
@@ -45,6 +48,7 @@
             <tr v-if="centerlist.length == 0">
                 <td colspan="7" style="text-align: center">暂无数据</td>
             </tr>
+            </tbody>
         </table>
     </div>
     <app-footer></app-footer>
@@ -86,11 +90,22 @@
                 }]
             }
         },
-        route: {
-            data: function(transition) {
+        components: {
+            'appHeader': require('../../components/Header.vue'),
+            'appFooter': require('../../components/Footer.vue'),
+        },
+        filters: {
+            filterProjecter: function(val) {
+                if (val == undefined) {
+                    return '';
+                }
+                return val.join('、');
+            }
+        },
+        methods: {
+            fetchData: function() {
                 var self = this;
-                console.log(transition.to);
-                self.projectid = transition.to.params.projectid;
+                self.projectid = this.$route.params.projectid;
                 $.ajax({
                     url: api.get('doctorgroup.dg_centerlist'),
                     type: 'POST',
@@ -106,23 +121,22 @@
                         self.dg_project.content = data.dg_project_content;
                         self.project_role = data.project_role;
                         self.project_all = data.project_all;
-                        console.log(data);
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             }
         },
-        components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+        created: function() {
+            this.fetchData()
         },
-        filters: {
-            filterProjecter: function(val) {
-                if (val == undefined) {
-                    return '';
-                }
-                return val.join('、');
+        watch: {
+            '$route': function() {
+                this.fetchData()
             }
         }
     }

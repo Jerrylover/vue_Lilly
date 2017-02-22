@@ -33,13 +33,16 @@
         </div>
         <div class="row">
         <table class="table table-bordered">
-            <tr class="light-tr">
-                <th>医生Id</th>
-                <th>医生名称</th>
-                <th>所在中心</th>
-                <th>患者数</th>
-                <th>操作</th>
-            </tr>
+            <thead>
+                <tr class="light-tr">
+                    <th>医生Id</th>
+                    <th>医生名称</th>
+                    <th>所在中心</th>
+                    <th>患者数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
             <tr v-for="member in dg_center.members">
                 <td>{{member.doctorid}}</td>
                 <td>{{member.name}}</td>
@@ -62,6 +65,7 @@
                     <span>暂无数据</span>
                 </td>
             </tr>
+            </tbody>
         </table>
     </div>
         <modal :show="showModal" :showheader="false" width="500px">
@@ -182,15 +186,6 @@
 
             }
         },
-        route: {
-            data: function(transition) {
-                var self = this;
-                var centerid = transition.to.params.centerid;
-                self.currcenterid = centerid;
-                self.projectid = transition.to.params.projectid;
-                self.fetchData();
-            }
-        },
         components: {
             'appHeader': require('../../components/Header.vue'),
             'appFooter': require('../../components/Footer.vue'),
@@ -215,23 +210,6 @@
                         centerid: self.currcenterid,
                     }
                 })
-                // $.ajax({
-                //     url: api.get('doctorgroup.dg_memberlist'),
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: {
-                //         dg_projectid: self.projectid,
-                //         dg_centerid: self.currcenterid,
-                //     }
-                // }).done(function(response){
-                //     if (response.errno == 0) {
-                //         var data = response.data;
-                //         self.dg_center = data.dg_center;
-                //         self.dg_centers = data.dg_centers;
-                //     } else {
-                //         self.$emit('show-alert', response.errmsg);
-                //     }
-                // })
             },
             setprojectmaster: function(member) {
                 var self = this;
@@ -245,11 +223,20 @@
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
-                        self.$emit('show-popup', '设置成功', function() {
-                            self.fetchData();
-                        });
+                        self.$message({
+                            type: 'success',
+                            duration: 1500,
+                            message: '设置成功',
+                            onClose: function() {
+                                self.fetchData();
+                            }
+                        })
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg
+                        })
                     }
                 })
             },
@@ -266,12 +253,20 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        console.log(data);
-                        self.$emit('show-popup', "设置成功", function(){
-                            self.fetchData();
+                        self.$message({
+                            type: 'success',
+                            duration: 1500,
+                            message: '设置成功',
+                            onClose: function() {
+                                self.fetchData();
+                            }
                         })
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             },
@@ -287,11 +282,20 @@
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
-                        self.$emit('show-popup', "设置成功", function(){
-                            self.fetchData();
+                        self.$message({
+                            type: 'success',
+                            duration: 1500,
+                            message: '设置成功',
+                            onClose: function() {
+                                self.fetchData();
+                            }
                         })
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             },
@@ -308,12 +312,20 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        console.log(data);
-                        self.$emit('show-popup', "设置成功", function(){
-                            self.fetchData();
+                        self.$message({
+                            type: 'success',
+                            duration: 1500,
+                            message: '设置成功',
+                            onClose: function() {
+                                self.fetchData();
+                            }
                         })
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             },
@@ -359,7 +371,6 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        console.log(data);
                         self.searchresultdoctor = data.doctor;
                     } else if(response.errno == -5){
                         self.searchresult = "姓名或电话有误,请核查后输入。";
@@ -367,7 +378,11 @@
                         self.searchresultdoctor.mobile = '';
                         self.searchresultdoctor.hospital = '';
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             },
@@ -376,7 +391,8 @@
                 if (this.searchresultdoctor.name.trim() == '') {
                     this.$message({
                         type: 'error',
-                        message: '请先搜索医生'
+                        message: '请先搜索医生',
+                        duration: 1500
                     })
                     return ;
                 }
@@ -391,18 +407,27 @@
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
-                        self.$emit('show-popup', "添加成功", function(){
-                            self.doctornameForSearch = '';
-                            self.doctormobileForSearch = '';
-                            self.searchresult = '';
-                            self.searchresultdoctor.name = '';
-                            self.searchresultdoctor.mobile = '';
-                            self.searchresultdoctor.hospital = '';
-                        });
+                        self.$message({
+                            type: 'success',
+                            duration: 1500,
+                            message: '添加成功',
+                            onClose: function() {
+                                self.doctornameForSearch = '';
+                                self.doctormobileForSearch = '';
+                                self.searchresult = '';
+                                self.searchresultdoctor.name = '';
+                                self.searchresultdoctor.mobile = '';
+                                self.searchresultdoctor.hospital = '';
+                            }
+                        })
                         self.showModal = false;
                         self.dg_center.members.push(response.data.dg_member);
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
             },
@@ -433,9 +458,21 @@
                         self.is_create = data.is_create;
                         self.is_bat_input = data.is_bat_input;
                     } else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            duration: 1500,
+                            message: response.errmsg,
+                        })
                     }
                 })
+            },
+            initPage: function() {
+                var self = this;
+                var params = this.$route.params
+                var centerid = params.centerid;
+                self.currcenterid = centerid;
+                self.projectid = params.projectid;
+                self.fetchData();
             }
         },
         filters: {
@@ -448,6 +485,14 @@
                 })
                 str = str.substring(0,str.length-1);
                 return str;
+            }
+        },
+        created: function() {
+            this.initPage()
+        },
+        watch: {
+            '$route': function() {
+                this.initPage()
             }
         }
     }

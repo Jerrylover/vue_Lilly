@@ -20,7 +20,7 @@
                         <a href="javascript:">数据统计</a>
                     </li>
                     <li  v-privilege="'数据库-菜单-管理'" v-bind:class="{activeFix: active == 'manager'}">
-                        <router-link   :to="{name:'manager'}"><span class="badge pull-right" style="background:red;">new</span>管理</router-link>
+                        <router-link   :to="{name:'manager'}">管理</router-link>
                     </li>
                     <li  v-privilege="'数据库-菜单-操作日志'" v-bind:class="{activeFix: active == 'log'}">
                         <router-link   :to="{name:'log'}">操作日志</router-link>
@@ -212,6 +212,9 @@ tr.light-tr th {
 .el-input__inner {
     border-radius: 2px;
     border-color: #ccc;
+}
+.dg-header-a {
+    margin: 5px 0 10px 20px;
 }
 
 </style>

@@ -1024,11 +1024,11 @@ export default {
             $.each(data, function(index, obj) {
                 that.family_history_diseases.push(obj.disease);
                 if (obj.disease == '癌症') {
-                    Vue.set(that.family_history_contents, 0, obj.content)
+                    that.$set(that.family_history_contents, 0, obj.content)
                 } else if (obj.disease == '遗传病史') {
-                    Vue.set(that.family_history_contents, 1, obj.content)
+                    that.$set(that.family_history_contents, 1, obj.content)
                 } else if (obj.disease == '其他') {
-                    Vue.set(that.family_history_contents, 2, obj.content)
+                    that.$set(that.family_history_contents, 2, obj.content)
                 }
             })
         },
@@ -1062,14 +1062,23 @@ export default {
             var that = this;
             switch (true) {
                 case this.patientinfo.name.trim() == "":
-                    that.$emit('show-alert', "请输入患者姓名", function() {
-                        $("input[name='patient-name']").focus();
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者姓名',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-name']").focus();
+                      }
                     });
                     return;
                     break;
                 case this.patientinfo.sex == 0:
-                    that.$emit('show-alert', "请输入患者性别", function() {
-                        //
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者性别',
+                      type: 'error',
+                      onClose: () => {
+                      }
                     });
                     return;
                     break;
@@ -1080,14 +1089,24 @@ export default {
                 //     return;
                 //     break;
                 case this.patientinfo.birthday.trim() == "":
-                    that.$emit('show-alert', "请输入患者生日", function() {
-                        $("input[name='patient-birthday']").focus();
+                    this.$message({
+                      showClose: true,
+                      message: '请输入患者生日',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-birthday']").focus();
+                      }
                     });
                     return;
                     break;
                 case $.trim(this.patientinfo.prcrid) == "":
-                    that.$emit('show-alert', "请输入身份证号", function(){
-                        $("input[name='patient-prcrid']").focus();
+                    this.$message({
+                      showClose: true,
+                      message: '请输入身份证号',
+                      type: 'error',
+                      onClose: () => {
+                          $("input[name='patient-prcrid']").focus();
+                      }
                     });
                     return ;
                     break;
@@ -1096,29 +1115,49 @@ export default {
             }
             //校验手机号
             if ($.trim(this.patientinfo.mobile) != '' && !rule.checkPhone(this.patientinfo.mobile)) {
-                that.$emit('show-alert', "请输入正确的手机号", function() {
-                    $("input[name='patient-mobile']").focus();
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的手机号',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-mobile']").focus();
+                  }
                 });
                 return;
             }
             //校验邮箱号
             if ($.trim(this.patientinfo.email) != "" && !rule.checkEmail(this.patientinfo.email)) {
-                that.$emit('show-alert', "请输入正确的邮箱号", function() {
-                    $("input[name='patient-email']").focus();
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的邮箱',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-email']").focus();
+                  }
                 });
                 return;
             }
             //校验身份证号
             if ($.trim(this.patientinfo.prcrid) != "" && !rule.checkIDcard(this.patientinfo.prcrid)) {
-                that.$emit('show-alert', "请输入正确的身份证号", function() {
-                    $("input[name='patient-prcrid']").focus();
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的身份证号',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='patient-prcrid']").focus();
+                  }
                 });
                 return;
             }
             //校验备用联系人手机号
             if ($.trim(this.patientinfo.other_contacts[0].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[0].mobile)) {
-                that.$emit('show-alert', "请输入正确的备用联系人号码", function() {
-                    $("input[name='other_contacts_mobile']").focus();
+                this.$message({
+                  showClose: true,
+                  message: '请输入正确的备用联系人号码',
+                  type: 'error',
+                  onClose: () => {
+                      $("input[name='spare_contacts_mobile']").focus();
+                  }
                 });
                 return;
             }
@@ -1175,17 +1214,28 @@ export default {
                 .done(function(response) {
                     var data = response.data;
                     if (response.errno != 0 && response.errno != -10) {
-                        that.$emit("show-alert", response.errmsg, function() {
-                            $("input[name='out-case-no']").focus();
-                        })
+                        that.$message({
+                          showClose: true,
+                          message: response.errmsg,
+                          type: 'error',
+                          onClose: () => {
+                              $("input[name='out-case-no']").focus();
+                          }
+                        });
                     } else {
-                        that.$emit('show-popup', '保存成功', function() {
-                            if (typeof data.patientid != '') {
-                                that.$router.push({
-                                    path: '/patient/' + data.patientid + '/baseinfo-lungcancer'
-                                })
-                            }
-                        })
+                        that.$message({
+                          showClose: true,
+                          message: '保存成功',
+                          type: 'success',
+                          duration: 1500,
+                          onClose: () => {
+                              if (typeof data.patientid != ``) {
+                                  that.$router.push({
+                                      path: '/patient/' + data.patientid + '/baseinfo-lungcancer'
+                                  })
+                              }
+                          }
+                        });
                     }
                 })
         },

@@ -4,10 +4,11 @@
     <div class="container-fluid content">
         <div class="row table-header">
             <h4>项目列表</h4>
-            <router-link  class="header-a btn btn-default btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
+            <router-link  class="dg-header-a btn btn-default btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
         </div>
         <div class="row">
         <table class="table table-bordered">
+            <thead>
             <tr class="light-tr">
                 <th>项目名称</th>
                 <th>创建时间</th>
@@ -17,6 +18,8 @@
                 <th>医生人数</th>
                 <th>操作</th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="dg_project in dg_projectlist">
                 <td>{{dg_project.title}}</td>
                 <td>{{dg_project.createtime}}</td>
@@ -36,6 +39,7 @@
             <tr>
                 <td v-if="dg_projectlist.length == 0" colspan="7" style="text-align: center">暂无项目数据</td>
             </tr>
+            </tbody>
         </table>
     </div>
     </div>
@@ -62,8 +66,16 @@
                 dg_projectlist: [],
             }
         },
-        route: {
-            data: function() {
+        components: {
+            'appHeader': function(resolve){
+                require(['../../components/Header.vue'], resolve);
+            },
+            'appFooter': function(resolve){
+                require(['../../components/Footer.vue'], resolve);
+            }
+        },
+        methods: {
+            fetchData: function() {
                 var self = this;
                 $.ajax({
                     url: api.get('doctorgroup.dg_projectlist'),
@@ -75,30 +87,29 @@
                     if (response.errno == 0) {
                         var data = response.data;
                         self.dg_projectlist = data.dg_projectlist;
-                        console.log(self.dg_projectlist);
                         var roles = {};
                         $.each(self.dg_projectlist, function(index, one) {
                             roles[one.dg_projectid] = {};
                             roles[one.dg_projectid].project_role = one.project_role;
                             roles[one.dg_projectid].center_roles = one.center_roles;
                         })
-                        console.log(roles);
                         localStorage.setItem('_project_role_', JSON.stringify(roles));
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg
+                        })
                     }
                 })
             }
         },
-        components: {
-            'appHeader': function(resolve){
-                require(['../../components/Header.vue'], resolve);
-            },
-            'appFooter': function(resolve){
-                require(['../../components/Footer.vue'], resolve);
-            }
+        created: function() {
+            this.fetchData();
         },
-        methods: {
+        watch: {
+            '$route': function() {
+                this.fetchData()
+            }
         }
     }
 </script>

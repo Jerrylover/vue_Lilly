@@ -24,6 +24,10 @@
                     <label for="zhuyuan">住院</label>
                 </div>
                 <div class="checkbox checkbox-inline checkbox-success">
+                    <input type="checkbox" id="chuyuan" value="出院" v-model="filterTypes"/>
+                    <label for="chuyuan">出院</label>
+                </div>
+                <div class="checkbox checkbox-inline checkbox-success">
                     <input type="checkbox" id="zhiliao" value="治疗" v-model="filterTypes"/>
                     <label for="zhiliao">治疗</label>
                 </div>
@@ -253,7 +257,7 @@ span.title {
                 dates: {},
                 chemoMaps: {},
                 msg: '',
-                filterTypes:['门诊', '住院', '治疗'],
+                filterTypes:['门诊', '住院', '出院', '治疗'],
                 all: [],
             }
     },

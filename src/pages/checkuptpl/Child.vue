@@ -10,7 +10,7 @@
             <zhusu :patientid="patientid" :ename="ename" :action='action' v-on:change-action="changeAction"></zhusu>
         </template>
         <template v-if="fwzhiliao == true">
-            <zhiliao :patientid="patientid" :ename="ename" :action='action'></zhiliao>
+            <zhiliao :patientid="patientid" :ename="ename" :action='action' v-on:change-action="changeAction"></zhiliao>
         </template>
         <template v-if="iscommon">
           <checkuptpl :ename='ename' :patientid='patientid' :patientname='patientname' :checkuptpl='checkuptpl' :questionsheet="questionsheet" :questions="questions" :action='action' v-on:change-action="changeAction">

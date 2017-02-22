@@ -96,7 +96,6 @@
     export default {
         data: function() {
             return {
-                alertError: '',
                 routeFrom: '',
                 pagetitle: '',
                 pagepostbuttonname: '',
@@ -202,42 +201,6 @@
                 ]
             }
         },
-        route: {
-            data: function(transition) {
-                var self = this;
-                this.routeFrom = this.$route.name;
-                console.log(this.routeFrom);
-                console.log(transition.to);
-                if (this.routeFrom == 'doctorgroup-addproject') {
-                    console.log('11111');
-                    this.pagetitle = '添加团队项目';
-                    this.pagepostbuttonname = '确认并添加项目';
-                }else if(this.routeFrom == 'doctorgroup-modifyproject') {
-                    // this.pagetitle = '';
-                    // console.log('1111111');
-                    self.projectid = transition.to.params.projectid;
-                    // console.log('projectid', projectid);
-                    $.ajax({
-                        url: api.get('doctorgroup.dg_projectone'),
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            dg_projectid: self.projectid,
-                        }
-                    }).done(function(response){
-                        if (response.errno == 0) {
-                            var data = response.data;
-                            self.title = data.dg_project.title;
-                            self.content = data.dg_project.content;
-                            self.pagetitle = self.title + '项目-修改';
-                        }else {
-                            self.$emit('show-alert', response.errmsg);
-                        }
-                    })
-                    this.pagepostbuttonname = '保存修改';
-                }
-            }
-        },
         components: {
             'appHeader': function(resolve) {
                 require(['../../components/Header.vue'], resolve);
@@ -254,16 +217,24 @@
                 e.preventDefault();
                 var self = this;
                 if (self.title.trim() == '') {
-                    self.alertError = "项目名称不能为空,请重新填写";
-                    self.$emit('show-alert', self.alertError, function(){
-                        $("input[name='dg_project_title']").focus();
+                    self.$message({
+                        type: 'error',
+                        message: '项目名称不能为空,请重新填写',
+                        duration: 1500,
+                        onClose: function() {
+                            $("input[name='dg_project_title']").focus();
+                        }
                     })
                     return ;
                 }
                 if (self.content.trim() == '') {
-                    self.alertError = "项目目标不能为空,请重新填写";
-                    self.$emit('show-alert', self.alertError, function(){
-                        $("textarea[name='dg_project_content']").focus();
+                    self.$message({
+                        type: 'error',
+                        message: '项目目标不能为空,请重新填写',
+                        duration: 1500,
+                        onClose: function() {
+                            $("textarea[name='dg_project_content']").focus();
+                        }
                     })
                     return ;
                 }
@@ -272,7 +243,7 @@
                 if (self.routeFrom == 'doctorgroup-addproject') {
                     url = api.get('doctorgroup.dg_projectadd');
                     projectid = '';
-                }else if(self.routeFrom == 'doctorgroup-modifyproject') {
+                } else if(self.routeFrom == 'doctorgroup-modifyproject') {
                     url = api.get('doctorgroup.dg_projectmodify');
                     projectid = self.projectid;
                 }
@@ -287,9 +258,23 @@
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
-                        self.$emit('show-popup', '项目添加成功', function(){self.goProjectList();});
+                        var msg = '项目添加成功'
+                        if (self.routeFrom == 'doctorgroup-modifyproject') {
+                            msg = '项目修改成功';
+                        }
+                        self.$message({
+                            type: 'success',
+                            message: msg,
+                            duration: 1500,
+                            onClose: function() {
+                                self.goProjectList()
+                            }
+                        })
                     }else {
-                        self.$emit('show-alert', response.errmsg);
+                        self.$message({
+                            type: 'error',
+                            message: response.errmsg
+                        })
                     }
                 })
             },
@@ -319,14 +304,54 @@
                 this.currmembername = '';
             },
             changeCenter: function(e) {
-                console.log(e.target.selectedIndex);
                 var currcenterIndex = e.target.selectedIndex;
                 this.currmemberlist = this.centerlist[currcenterIndex].memberlist;
                 if (this.currmemberlist.length != 0) {
                     this.currmembername = this.currmemberlist[0].name;
-                    console.log(this.currcentertitle);
-                    console.log(this.currmembername);
                 }
+            },
+            fetchData: function() {
+                var self = this;
+                this.routeFrom = this.$route.name;
+                if (this.routeFrom == 'doctorgroup-addproject') {
+                    this.pagetitle = '添加团队项目';
+                    this.pagepostbuttonname = '确认并添加项目';
+                } else if(this.routeFrom == 'doctorgroup-modifyproject') {
+                    // this.pagetitle = '';
+                    // console.log('1111111');
+                    self.projectid = this.$route.params.projectid;
+                    // console.log('projectid', projectid);
+                    $.ajax({
+                        url: api.get('doctorgroup.dg_projectone'),
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            dg_projectid: self.projectid,
+                        }
+                    }).done(function(response){
+                        if (response.errno == 0) {
+                            var data = response.data;
+                            self.title = data.dg_project.title;
+                            self.content = data.dg_project.content;
+                            self.pagetitle = self.title + '项目-修改';
+                        }else {
+                            self.$message({
+                                type: 'error',
+                                message: response.errmsg,
+                                duration: 1500
+                            })
+                        }
+                    })
+                    this.pagepostbuttonname = '保存修改';
+                }
+            }
+        },
+        created: function() {
+            this.fetchData()
+        },
+        watch: {
+            '$route': function(to, from) {
+                this.fetchData()
             }
         }
     }

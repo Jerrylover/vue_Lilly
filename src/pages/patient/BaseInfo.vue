@@ -340,10 +340,6 @@ export default {
             }
         }
     },
-    route: {
-        data: function(transition) {
-        }
-    },
     components: {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
@@ -475,11 +471,12 @@ export default {
             var that = this;
             var patientname = libpatient.getPatientName(that.patientid)
             that.routepath= this.$route.name;
+            var query = this.$route.query;
             if ($.trim(that.routepath) == 'doctorgroup-baseinfo') {
                 that.headerselected = 'doctorgroup';
-                that.projectid = transition.to.query.projectid;
-                that.centerid = transition.to.query.centerid;
-                that.doctorid = transition.to.query.doctorid;
+                that.projectid = query.projectid;
+                that.centerid = query.centerid;
+                that.doctorid = query.doctorid;
                 that.dg_group = '1';
             }
             if (patientname) {

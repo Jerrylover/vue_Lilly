@@ -790,9 +790,6 @@ export default {
                     // return ;
                     // break;
                 case this.patientinfo.sex == 0:
-                    that.$emit('show-alert', "", function() {
-                        //
-                    });
                     this.$message({
                       showClose: true,
                       message: '请输入患者性别',

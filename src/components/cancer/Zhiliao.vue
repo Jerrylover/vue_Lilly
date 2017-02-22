@@ -501,7 +501,6 @@ import common from '../../lib/common.js'
 export default {
     data: function() {
         return {
-            mm: '',
             chemoid: '',
             chemos: [],
             searchCheckedList: [], //选中的搜索结果
@@ -794,6 +793,7 @@ export default {
                     that.$message({
                         type: 'success',
                         message: '保存成功',
+                        duration: 1500,
                         onClose: function() {
                             document.location.reload();
                         }
@@ -819,7 +819,6 @@ export default {
         },
         initSomeData: function() {
             console.log('----init some data----')
-            this.mm = '11111'
             this.pickedPkgname = '其他'
             console.log("I can't say anything")
             if (util.isArray(this.chemos) && this.chemos.length > 0) {
@@ -834,12 +833,7 @@ export default {
                 var str1 = chemo.type.split(' ');
                 this.pickedType = str1[0];
                 this.pickedOtherType = str1[1];
-                //化疗方案和用药继承上次
-                var str2 = chemo.pkg_name.split(' ');
 
-                this.pickedPkgname = str2[0];
-                console.log('+++++++++++pickedPkgname', this.pickedPkgname)
-                this.pickedOtherPkgname = str2[1];
                 ////这里的方法不是最好的，但是暂时没有想到更好的既考虑性能又兼顾逻辑的方法
                 var that = this;
                 var i = 0;
@@ -849,6 +843,11 @@ export default {
                         window.clearInterval(interval);
                     }
                     if (that.pkgnames.length > 0) {
+                        //化疗方案和用药继承上次
+                        var str2 = chemo.pkg_name.split(' ');
+
+                        that.pickedPkgname = str2[0];
+                        that.pickedOtherPkgname = str2[1] || '';
                         if (that.medicineMaps[that.pickedPkgname] != undefined) {
                             that.medicines = that.medicineMaps[that.pickedPkgname]; //方案对应的药品
                         }
@@ -895,7 +894,7 @@ export default {
         },
         clickRemoveBadReaction: function(e, arr) {
             e.preventDefault();
-            index = this.arr2.indexOf(arr);
+            var index = this.arr2.indexOf(arr);
             this.arr2.splice(index, 1)
         },
         clickAddMedicine: function() {
@@ -1022,7 +1021,8 @@ export default {
         initModifyData: function(chemo) {
             var that = this;
             that.ismodify = true;
-            that.action = '修改';
+            // that.action = '修改';
+            that.$emit('change-action', '修改')
             that.chemoid = chemo.id;
             var pickedMedicines = util.isArray(chemo.pkg_items) ? chemo.pkg_items : [];
             // if (chemo.pkg_items) {
@@ -1088,16 +1088,12 @@ export default {
     watch: {
         pickedPkgname: function(newval, oldval) {
             console.log('++pickedpkgname----new', newval, '----old', oldval)
-        },
-        mm: function(newval, oldval) {
-            console.log('++mm----new', newval, '----old', oldval)
         }
     },
     mounted: function() {
         this.$nextTick(function() {
             var that = this;
             var diseaseid = common.getDiseaseId();
-            that.fetchData();
             $.ajax({
                 url: api.get('chemo.medicineuse'),
                 type: 'post',
@@ -1116,6 +1112,7 @@ export default {
                     })
 
                 })
+                that.fetchData();
 
                 // if (that.pkgnames.length > 0) {
                 //     that.pickedPkgname = that.pkgnames[0]; //默认选中第一个方案
