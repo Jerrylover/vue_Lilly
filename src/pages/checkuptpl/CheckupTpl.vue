@@ -245,7 +245,7 @@ export default {
                 if (d.errno != 0 && d.errno != -10) {
                     self.$message({showClose: true, message: d.errmsg, type: 'error'});
                 } else {
-                    self.$message({showClose: true, message: '保存成功'});
+                    self.$message({showClose: true, type:'success', message: '保存成功'});
                     $(e.target).blur();
                     self.ismodify = false;
                     self.myaction = '添加';

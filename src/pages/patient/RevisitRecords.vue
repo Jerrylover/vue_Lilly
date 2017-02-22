@@ -401,6 +401,9 @@ span.title {
             return className;
         },
         getData4Row: function(answers) {
+            if (answers == '' || answers == undefined) {
+                return []
+            }
             //删除小标题caption类型
             for (var i=0;i<answers.length;i++) {
                 if (answers[i].xquestiontype == 'Caption') {
