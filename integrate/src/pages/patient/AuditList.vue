@@ -156,13 +156,6 @@ export default {
             return '未知';
         }
     },
-    route: {
-        data: function(transition) {
-            this.pathname = this.$route.name;
-            this.fetchData();
-            transition.next();
-        }
-    },
     methods: {
         isbindwxdesc: function(value) {
             var desc = '';
@@ -185,11 +178,11 @@ export default {
             }).done(function(d) {
                 var data = d.data;
                 self.patients = data.list;
-                self.pagenum = data.page;
-                self.pagesize = data.pagesize;
-                self.total = data.total;
+                self.pagenum = data.page - '';
+                self.pagesize = data.pagesize - '';
+                self.total = data.total - '';
                 self.patient_name = data.patient_name;
-                self.auditcnt = data.auditcnt;
+                self.auditcnt = data.auditcnt - '';
             })
         },
         doSearch: function(e) {
@@ -309,6 +302,16 @@ export default {
             }).catch(() => {
 
             })
+        }
+    },
+    created: function() {
+        this.pathname = this.$route.name;
+        this.fetchData();
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.pathname = to.name;
+            this.fetchData();
         }
     }
 }

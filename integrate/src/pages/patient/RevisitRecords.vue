@@ -199,16 +199,16 @@ span.title {
 
 .toggle-enter-active {
     transform-origin: center top;
-    animation: showAnimation .2s linear;
-    -moz-animation: showAnimation .2s linear;
-    -webkit-animation: showAnimation .2s linear;
+    animation: showAnimation .1s linear;
+    -moz-animation: showAnimation .1s linear;
+    -webkit-animation: showAnimation .1s linear;
 }
 
 .toggle-leave-active {
     transform-origin: center top;
-    animation: hideAnimation .2s linear;
-    -moz-animation: hideAnimation .2s linear;
-    -webkit-animation: hideAnimation .2s linear;
+    animation: hideAnimation .1s linear;
+    -moz-animation: hideAnimation .1s linear;
+    -webkit-animation: hideAnimation .1s linear;
 }
 
 @keyframes showAnimation {

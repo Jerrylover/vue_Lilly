@@ -963,10 +963,16 @@ export default {
         },
         selectChangeForBirthPlaceProvince: function(e) {
             this.currentBirthPlaceProvinceIndex = e.target.selectedIndex -1;
+            if (this.currentBirthPlaceProvinceIndex < 0) {
+                this.currentBirthPlaceProvinceIndex = 0;
+            }
             this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
         },
         selectChangeForCurrentAddress: function(e) {
             this.currentAddressProvinceIndex = e.target.selectedIndex -1;
+            if (this.currentAddressProvinceIndex < 0) {
+                this.currentAddressProvinceIndex = 0;
+            }
             this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
         },
         showAlertMsg: function(msg) {},

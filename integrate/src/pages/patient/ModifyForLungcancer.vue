@@ -1267,18 +1267,30 @@ export default {
         },
         selectChange: function(e) {
             this.currentProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentProvinceIndex < 0) {
+                this.currentProvinceIndex = 0;
+            }
             this.patientinfo.citystr = this.provinceAndCities[this.currentProvinceIndex].cities[0];
         },
         selectChangeAddress: function(e) {
             this.currentAddressProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentAddressProvinceIndex < 0) {
+                this.currentAddressProvinceIndex = 0;
+            }
             this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
         },
         selectChangeBirthPlace: function(e) {
             this.currentBirthPlaceProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentBirthPlaceProvinceIndex < 0) {
+                this.currentBirthPlaceProvinceIndex = 0;
+            }
             this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
         },
         selectChangeNativePlace: function(e) {
             this.currentNativePlaceProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentNativePlaceProvinceIndex < 0) {
+                this.currentNativePlaceProvinceIndex = 0;
+            }
             this.patientinfo.native_place.citystr = this.provinceAndCities[this.currentNativePlaceProvinceIndex].cities[0];
         },
         showAlertMsg: function(msg) {},
