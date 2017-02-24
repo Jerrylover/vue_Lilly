@@ -45,9 +45,9 @@
                             <div class="col-lg-8 col-sm-8 clearPadding">
                                 <!-- <input id="birthday" class="form-control" name="patient-birthday" type="text" @click="showCalendar" v-model="patientinfo.birthday"> -->
                                 <!-- <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
-                                <el-moment v-model="patientinfo.birthday" format="YYYY-MM-DD">
+                                <fc-date v-model="patientinfo.birthday" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
-                                </el-moment>
+                                </fc-date>
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -241,9 +241,9 @@
                             <div class="col-lg-8 col-sm-7 clearPadding">
                                 <!-- <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date"> -->
                                 <!-- <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
-                                <el-moment v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
+                                <fc-date v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
-                                </el-moment>
+                                </fc-date>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -1267,18 +1267,30 @@ export default {
         },
         selectChange: function(e) {
             this.currentProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentProvinceIndex < 0) {
+                this.currentProvinceIndex = 0;
+            }
             this.patientinfo.citystr = this.provinceAndCities[this.currentProvinceIndex].cities[0];
         },
         selectChangeAddress: function(e) {
             this.currentAddressProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentAddressProvinceIndex < 0) {
+                this.currentAddressProvinceIndex = 0;
+            }
             this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
         },
         selectChangeBirthPlace: function(e) {
             this.currentBirthPlaceProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentBirthPlaceProvinceIndex < 0) {
+                this.currentBirthPlaceProvinceIndex = 0;
+            }
             this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
         },
         selectChangeNativePlace: function(e) {
             this.currentNativePlaceProvinceIndex = e.target.selectedIndex-1;
+            if (this.currentNativePlaceProvinceIndex < 0) {
+                this.currentNativePlaceProvinceIndex = 0;
+            }
             this.patientinfo.native_place.citystr = this.provinceAndCities[this.currentNativePlaceProvinceIndex].cities[0];
         },
         showAlertMsg: function(msg) {},

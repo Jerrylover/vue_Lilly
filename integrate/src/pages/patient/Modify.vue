@@ -43,9 +43,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">生日</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <el-moment v-model="patientinfo.birthday" format="YYYY-MM-DD">
+                                <fc-date v-model="patientinfo.birthday" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
-                                </el-moment>
+                                </fc-date>
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -178,9 +178,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-5">建档日期</label>
                             <div class="col-lg-8 col-sm-7 clearPadding">
-                                <el-moment v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
+                                <fc-date v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
-                                </el-moment>
+                                </fc-date>
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -963,10 +963,16 @@ export default {
         },
         selectChangeForBirthPlaceProvince: function(e) {
             this.currentBirthPlaceProvinceIndex = e.target.selectedIndex -1;
+            if (this.currentBirthPlaceProvinceIndex < 0) {
+                this.currentBirthPlaceProvinceIndex = 0;
+            }
             this.patientinfo.birth_place.citystr = this.provinceAndCities[this.currentBirthPlaceProvinceIndex].cities[0];
         },
         selectChangeForCurrentAddress: function(e) {
             this.currentAddressProvinceIndex = e.target.selectedIndex -1;
+            if (this.currentAddressProvinceIndex < 0) {
+                this.currentAddressProvinceIndex = 0;
+            }
             this.patientinfo.address.citystr = this.provinceAndCities[this.currentAddressProvinceIndex].cities[0];
         },
         showAlertMsg: function(msg) {},

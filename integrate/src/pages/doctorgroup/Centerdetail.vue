@@ -202,7 +202,7 @@
             changeCenter: function(e) {
                 var self = this;
                 // console.log(e.target.selectedIndex);
-                var index = e.target.selectedIndex;
+                var index = e.target.selectedIndex > -1 ? e.target.selectedIndex : 0;
                 self.currcenterid = self.dg_centers[index].id;
                 self.$router.push({
                     name: 'doctorgroup-centerdetail',

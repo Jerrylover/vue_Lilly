@@ -304,7 +304,7 @@
                 this.currmembername = '';
             },
             changeCenter: function(e) {
-                var currcenterIndex = e.target.selectedIndex;
+                var currcenterIndex = e.target.selectedIndex > -1 ? e.target.selectedIndex : 0;
                 this.currmemberlist = this.centerlist[currcenterIndex].memberlist;
                 if (this.currmemberlist.length != 0) {
                     this.currmembername = this.currmemberlist[0].name;

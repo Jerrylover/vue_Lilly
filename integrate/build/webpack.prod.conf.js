@@ -6,7 +6,7 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var env = config.build.env
+var env = process.env.NODE_ENV === 'testing' ? require('../config/test.env') : config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -25,6 +25,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
+    }),
+    new webpack.ContextReplacementPlugin(/^\.\/locale$/, context => {
+      // check if the context was created inside the moment package
+      if (!/\/moment/.test(context.context)) {
+        return
+      }
+      // context needs to be modified in place
+      Object.assign(context, {
+        // include only japanese, korean and chinese variants
+        // all tests are prefixed with './' so this must be part of the regExp
+        // the default regExp includes everything; /^$/ could be used to include nothing
+        regExp: /^\.(zh-cn)/
+      })
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -56,7 +69,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module, count) {
+      minChunks: function(module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&
