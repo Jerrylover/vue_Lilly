@@ -1,7 +1,7 @@
 <template>
     <div class="refuse-enter">
         <mt-header fixed title="拒绝入院">
-            <router-link to="/" slot="left">
+            <router-link to="/booksickbed" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
         </mt-header>
@@ -40,20 +40,15 @@
         },
         methods: {
             'clickCancel': function() {
-                this.$route.go(-1);
+                this.$router.go(-1);
             },
             'clickConfirm': function() {
-                // $.ajax({
-                //     url: api.get('sickbed.refusejson'),
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: {
-                //         openid: this.openid,
-                //         content: this.content,
-                //         is_set_default: this.is_set_default,
-                //         bedtktid: this.bedtktid,
-                //     }
-                // }).done(function()
+                var self = this;
+                if (this.is_set_default == true) {
+                    this.is_set_default = 1;
+                }else {
+                    this.is_set_default = 0;
+                }
                 var url = api.get('sickbed.refusejson');
                 var params = {
                     openid: this.openid,
@@ -63,14 +58,33 @@
                 }
                 console.log(params);
                 common.post(url, params, function(response){
-                    console.log(response);
+                    if (response.errno == 0) {
+                        let instance = self.$toast('操作成功!');
+                        setTimeout(() => {
+                            instance.close();
+                            self.$router.go(-1);
+                        }, 2000);
+                    }
                 })
 
             }
         },
         created(){
+            var self = this;
             this.openid = localStorage.getItem('_openid_');
-            console.log(this.openid);
+            var queryString = this.$route.query;
+            this.bedtktid = queryString.bedtktid;
+            var url = api.get('sickbed.refuse');
+            var params = {
+                openid: this.openid,
+                bedtktid: this.bedtktid,
+            }
+            common.post(url, params, function(response){
+                if (response.errno == 0) {
+                    var data = response.data;
+                    self.content = data.bedtkt_refuse_content;
+                }
+            })
         },
         watch: {
             '$route': function(to, from) {

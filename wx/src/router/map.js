@@ -40,6 +40,34 @@ module.exports =
         }
     },
     {
+        path: '/confirmenter',
+        name: 'confirmenter',
+        component: resolve => require(['../pages/ConfirmEnter.vue'], resolve),
+    },
+    {
+        path: '/sendentermsg',
+        name: 'sendentermsg',
+        component: resolve => require(['../pages/SendEnterMsg.vue'], resolve),
+    },
+    {
+        path: '/waitpatientconfirm',
+        name: 'waitpatientconfirm',
+        component: resolve => require(['../pages/WaitPatientConfirm.vue'], resolve),
+        component: function(resolve){
+            require(['../pages/WaitPatientConfirm.vue'], resolve)
+        }
+    },
+    {
+        path: '/cannotenter',
+        name: 'cannotenter',
+        component: resolve => require(['../pages/PatientCannotEnter.vue'], resolve),
+    },
+    {
+        path: '/operationhistory',
+        name: 'operationhistory',
+        component: resolve => require(['../pages/OperationHistory.vue'], resolve),
+    },
+    {
         path: '/appointment',
         name: 'appointment',
         component: resolve => require(['../pages/Appointment.vue'], resolve),

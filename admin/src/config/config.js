@@ -8,8 +8,8 @@ if (process.env.NODE_ENV === 'development') {
     host = '//admin.fangcunhulian.cn';
     hostUCenter = '//www.fangcunhulian.cn';
 
-    dev = '?dev_user=chenshigang&display=json';
-    domain = 'localhost';
+    dev = '?dev_user=chenning&display=json';
+    domain = '192.168.1.108';
 } else if (process.env.NODE_ENV == 'testing') {
     host = '//admin.fangcunhulian.cn/api';
     hostUCenter = '//www.fangcunhulian.cn';

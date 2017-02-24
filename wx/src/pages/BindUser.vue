@@ -1,5 +1,6 @@
 <template>
     <div class="vertical-container">
+        <template v-if="isbind == 0">
         <div style="padding: 20px 0px 40px 0px">
             <img src="../assets/fcqx_icon.png" style="width: 100px; height: 100px">
         </div>
@@ -10,9 +11,15 @@
         <div>
             <span>{{path}}</span>
         </div>
+        </template>
+        <template v-if="isbind == 1">
+            <img src="../assets/bindsuccess.png" style="width: 100px; height: 100px; margin-top: 130px;"><br/>
+            <span style="color: #1996ea; margin-top: 20px; display: block; font-size: 22px">已绑定成功</span>
+        </template>
     </div>
 </template>
 <script>
+    import common from '../lib/common.js';
     import api from '../config/api.js';
     module.exports = {
         data: function() {
@@ -23,6 +30,7 @@
                 username: '',
                 password: '',
                 path: '',
+                isbind: '',
             }
         },
         methods: {
@@ -94,9 +102,19 @@
             var self = this;
             var openid = '';
             openid = localStorage.getItem('_openid_');
-            next(vm=>{
-                vm.openid = openid;
-            });
+            var url = api.get('user.isbind');
+            var params = {
+                openid: openid,
+            }
+            common.post(url, params, function(response){
+                if (response.errno == 0) {
+                    next(vm=>{
+                        vm.openid = openid;
+                        vm.isbind = response.data.isbind;
+                    });
+                }
+            })
+            
         }
     }
 </script>
