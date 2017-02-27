@@ -1,4 +1,4 @@
-import '../../config'
+// import '../../config'
 import config from './config.js'
 import util from '../lib/util.js'
 import cookie from '../lib/cookie.js'

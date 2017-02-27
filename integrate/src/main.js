@@ -19,7 +19,6 @@ import router from './router'
 // Vue.use(ElementUI)
 // Vue.use(ElMoment)
 
-// Vue.filter('timestampFormat', require('./filters/timestampFormatter'));
 
 import './lib/string.js'
 import './vendor/font-awesome/css/font-awesome.min.css'
@@ -54,23 +53,27 @@ Vue.directive('privilege', {
 })
 //医生集团权限指令
 Vue.directive('dg-privilege', {
-    bind: function() {
-        // 准备工作
-        // 例如，添加事件处理器或只需要运行一次的高耗任务
-    },
-    update: function(el, binding) {
-        var self = this;
+    // bind: function() {
+    //     // 准备工作
+    //     // 例如，添加事件处理器或只需要运行一次的高耗任务
+    // },
+    inserted: function(el, binding, vnode) {
+        var self = vnode.componentInstance;
         var newValue = binding.value
-        // console.log(self);
-        // console.log('newValue', newValue);
+        // console.log('newValue', newValue)
+
+
         function hhh(dotype){
-            // console.log(dotype);
             if ($.trim(dotype) == 'clearlink') {
                 // console.log(str);
-                self.vm.$nextTick(function() {
-                    var str = $(el).html();
-                    $(el).replaceWith("<span>" + str + "</span>");
-                })
+                // self.$nextTick(function() {
+                    setTimeout(function() {
+                        var str = $(self.$el).get(0).innerHTML
+                        // console.log('+++++++++++++++++str', str)
+                        $(el).replaceWith("<span>" + str + "</span>");
+                    }, 500)
+
+                // })
             } else {
                 $(el).remove();
             }
