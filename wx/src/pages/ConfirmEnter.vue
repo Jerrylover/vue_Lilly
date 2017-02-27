@@ -7,15 +7,15 @@
         </mt-header>
         <div class="patientinfo">
             <div>
-                <span>姓名:&nbsp;&nbsp;{{name}}</span>
+                <span class="left">姓名:&nbsp;&nbsp;{{name}}</span>
                 <span>应住院日期:&nbsp;&nbsp;{{plan_date}}</span>
             </div>
             <div>
-                <span>性别:&nbsp;&nbsp;{{sex}}</span>
+                <span class="left">性别:&nbsp;&nbsp;{{sex}}</span>
                 <span>手机号:&nbsp;&nbsp;{{mobile}}</span>
             </div>
             <div>
-                <span>年龄:&nbsp;&nbsp;{{age}}岁</span>
+                <span class="left">年龄:&nbsp;&nbsp;{{age}}岁</span>
                 <span>近期居住地:&nbsp;&nbsp;{{address}}</span>
             </div>
         </div>
@@ -61,7 +61,7 @@
             return {
                 openid: '',
                 content: '',
-                is_set_default: 0,
+                is_set_default: false,
                 bedtktid: '',
                 pickerValue: '',
                 time: '',
@@ -165,7 +165,9 @@
     }
     .patientinfo span {
         font-size: 16px;
-        width: 50%;
         display: inline-block;
+    }
+    .patientinfo span.left {
+        width: 45%;
     }
 </style>

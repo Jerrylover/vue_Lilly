@@ -15,7 +15,10 @@ router.push({
     '*': '/bind',
 })
 router.beforeEach((to, from, next) => {
-    
+    var openid = to.query.openid;
+    if (typeof openid != 'undefined' &&  openid != null && openid != '') {
+        localStorage.setItem('_openid_', openid);
+    }
     var queryString = window.location.search;
     queryString = encodeURIComponent(queryString);
     common.checkOpenid(queryString);
@@ -24,7 +27,8 @@ router.beforeEach((to, from, next) => {
         if (status === true) {
             next();
         }else {
-            next('/bind');
+            console.log('test');
+            next({name: 'bind'});
         }
     }else {
         next();

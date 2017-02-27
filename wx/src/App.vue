@@ -19,7 +19,6 @@ module.exports = {
           WeixinJSBridge.call('closeWindow');
         }, 2000);
       }else if(xhr.responseJSON.errno == '1001') {
-        localStorage.setItem('_openid_', '');
         localStorage.setItem('_isbind_', '');
         let instance = self.$toast('用户未绑定,请前往绑定页面进行绑定');
         setTimeout(() => {

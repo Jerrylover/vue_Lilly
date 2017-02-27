@@ -105,7 +105,6 @@
         },
         watch: {
             'pickerValue': function(newValue, oldValue){
-                // console.log('33333');
                 this.thedate = newValue.getFullYear() + '-' + (newValue.getMonth() + 1) + '-' + newValue.getDate();
             }
         }

@@ -6,26 +6,31 @@
             <a href="javascript:" :class="{'selected': active == 'refuse'}" @click="clickRefuse">已拒绝</a>
         </div>
         <div class="body-container" style="">
-            <template v-for="bedtkt in bedtktlist">
-                <div class="patientinfo">
-                    <div class="title">
-                        <span v-if="bedtkt.status == '5'" class="pass">已入院</span>
-                        <span v-if="bedtkt.status == '6'" class="refuse">已拒绝</span>
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" style="list-style-type: none; padding:0px">
+                <li v-for="bedtkt in bedtktlist">
+                    <div class="patientinfo">
+                        <div class="title">
+                            <span v-if="bedtkt.status == '5'" class="pass">已入院</span>
+                            <span v-if="bedtkt.status == '6'" class="refuse">已拒绝</span>
+                        </div>
+                        <div>
+                            <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
+                            <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
+                        </div>
+                        <div>
+                            <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
+                        <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
+                        </div>
+                        <div>
+                            <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
+                            <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
-                        <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
-                    </div>
-                    <div>
-                        <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
-                    <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
-                    </div>
-                    <div>
-                        <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
-                        <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
-                    </div>
-                </div>
-            </template>
+                </li>
+            </ul>
+        </div>
+        <div style="position: none;margin-top: 200px; background-color: #fff">
+            <span v-if="bedtktlist.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
         </div>
     </div>
 </template>
@@ -37,6 +42,7 @@
             return {
                 active: 'all',
                 bedtktlist: [],
+                loadtimes: 0,
             }
         },
         methods: {
@@ -68,11 +74,37 @@
                     openid: this.openid,
                     filter: this.active,
                 }
+                self.bedtktlist = [];
                 common.post(url, params, function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        console.log(data);
                         self.bedtktlist = data.bedtktlist;
+                    }
+                })
+            },
+            loadMore: function(){
+                this.loadtimes++;
+                this.loadMoreData();
+            },
+            loadMoreData: function() {
+                var self = this;
+                var url = api.get('sickbed.historylist');
+                var last_notify_time = this.bedtktlist.length != 0 ? this.bedtktlist[this.bedtktlist.length-1].notify_time : '';
+                console.log(last_notify_time);
+                var params = {
+                    openid: this.openid,
+                    filter: this.active,
+                    last_notify_time: last_notify_time,
+                }
+                common.post(url, params, function(response){
+                    if (response.errno == 0) {
+                        var data = response.data;
+                        console.log("--------");
+                        if (self.loadtimes == 1) {
+                            self.bedtktlist = data.bedtktlist;
+                        }else{
+                            self.bedtktlist = self.bedtktlist.concat(data.bedtktlist);
+                        }
                     }
                 })
             }

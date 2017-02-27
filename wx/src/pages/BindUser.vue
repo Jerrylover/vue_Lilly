@@ -35,6 +35,7 @@
         },
         methods: {
             bindUser: function() {
+                this.openid = localStorage.getItem('_openid_');
                 var self = this;
                 if(!this.checkPostParams()){
                     return ;
@@ -96,6 +97,9 @@
                 if (val != '') {
                     this.errmsg = '';
                 }
+            },
+            '$router': function(newValue, old) {
+                console.log('hahaha');
             }
         },
         beforeRouteEnter(to, from, next) {

@@ -33,6 +33,9 @@
             --><a v-if="tkt.patient_status == 1" href="javascript:" style="background-color: #99cc00" @click="clickWaitPatientConfirm(tkt)">患者待确认</a>
             </div>
         </div>
+        <div style="position: none;margin-top: 200px; background-color: #fff">
+            <span v-if="tktlist.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
+        </div>
         </div>
     </div>
 </template>
