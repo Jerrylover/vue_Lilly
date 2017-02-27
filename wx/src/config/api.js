@@ -14,10 +14,12 @@ var urls = {
     },
     'sickbed': {
         'list': '/bedtkt/list',
+        'refuse': '/bedtkt/refuse',
         'refusejson': '/bedtkt/refusejson',
         'pass': '/bedtkt/pass',
         'passjson': '/bedtkt/passjson',
         'senddate': '/bedtkt/sendjson',
+        'historylist': '/bedtkt/historylist',
         // ''
     },
     'appointment': {
