@@ -144,68 +144,49 @@
                 var self = this;
                 self.patientids = [],
                 self.patientids.push(patient.id);
-                $.ajax({
-                    url: api.get('doctorgroup.dg_patientimportpost'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.centerid,
-                        patientids: self.patientids,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.$message({
-                            type: 'success',
-                            message: '导入成功',
-                            duration: 1500,
-                            onClose: function() {
-                                self.selectallstatus = false;
-                                self.fetchData();
-                            }
-                        })
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_patientimportpost',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_centerid: self.centerid,
+                      patientids: self.patientids,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.$message({
+                          type: 'success',
+                          message: '导入成功',
+                          duration: 1500,
+                          onClose: function() {
+                              self.selectallstatus = false;
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
             },
             removeone: function(patient) {
                 var self = this;
                 self.patientids = [],
                 self.patientids.push(patient.id);
-                $.ajax({
-                    url: api.get('doctorgroup.dg_patientremovepost'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.centerid,
-                        patientids: self.patientids,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.$message({
-                            type: 'success',
-                            message: '导出成功',
-                            duration: 1500,
-                            onClose: function() {
-                                self.selectallstatus = false;
-                                self.fetchData();
-                            }
-                        })
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_patientremovepost',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_centerid: self.centerid,
+                      patientids: self.patientids,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          message: '导出成功',
+                          duration: 1500,
+                          onClose: function() {
+                              self.selectallstatus = false;
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
             },
             importall: function() {
@@ -221,34 +202,24 @@
                             self.patientids.push(self.patientlist[i].id);
                         }
                     }
-                    $.ajax({
-                        url: api.get('doctorgroup.dg_patientimportpost'),
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            dg_projectid: self.projectid,
-                            dg_centerid: self.centerid,
-                            patientids: self.patientids,
-                        }
-                    }).done(function(response){
-                        if (response.errno == 0) {
-                            var data = response.data;
-                            self.$message({
-                                type: 'success',
-                                message: '导入成功',
-                                duration: 1500,
-                                onClose: function() {
-                                    self.selectallstatus = false;
-                                    self.fetchData();
-                                }
-                            })
-                        }else {
-                            self.$message({
-                                type: 'error',
-                                message: response.errmsg,
-                                duration: 1500
-                            })
-                        }
+                    api.http({
+                      url: 'doctorgroup.dg_patientimportpost',
+                      data: {
+                          dg_projectid: self.projectid,
+                          dg_centerid: self.centerid,
+                          patientids: self.patientids,
+                      },
+                      successCallback: function(d) {
+                          self.$message({
+                              type: 'success',
+                              message: '导入成功',
+                              duration: 1500,
+                              onClose: function() {
+                                  self.selectallstatus = false;
+                                  self.fetchData();
+                              }
+                          })
+                      }
                     })
                 }).catch(() => {
 
@@ -267,34 +238,24 @@
                             self.patientids.push(self.patientlist[i].id);
                         }
                     }
-                    $.ajax({
-                        url: api.get('doctorgroup.dg_patientremovepost'),
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            dg_projectid: self.projectid,
-                            dg_centerid: self.centerid,
-                            patientids: self.patientids,
-                        }
-                    }).done(function(response){
-                        if (response.errno == 0) {
-                            var data = response.data;
-                            self.$message({
-                                type: 'success',
-                                message: '导出成功',
-                                duration: 1500,
-                                onClose: function() {
-                                    self.selectallstatus = false;
-                                    self.fetchData();
-                                }
-                            })
-                        }else {
-                            self.$message({
-                                type: 'error',
-                                message: response.errmsg,
-                                duration: 1500
-                            })
-                        }
+                    api.http({
+                      url: 'doctorgroup.dg_patientremovepost',
+                      data: {
+                          dg_projectid: self.projectid,
+                          dg_centerid: self.centerid,
+                          patientids: self.patientids,
+                      },
+                      successCallback: function(d) {
+                          self.$message({
+                              type: 'success',
+                              message: '导出成功',
+                              duration: 1500,
+                              onClose: function() {
+                                  self.selectallstatus = false;
+                                  self.fetchData();
+                              }
+                          })
+                      }
                     })
                 }).catch(() => {
 
@@ -302,31 +263,22 @@
             },
             fetchData: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_patientimportpatients'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        diseaseid: self.diseaseid,
-                        type: self.type,
-                        pagenum: self.pagenum,
-                        pagesize: self.pagesize,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.total = data.total - '';
-                        self.patientlist = data.patients;
-                        self.diseases = data.diseases;
-                        self.initselectattr();
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_patientimportpatients',
+                  data: {
+                      dg_projectid: self.projectid,
+                      diseaseid: self.diseaseid,
+                      type: self.type,
+                      pagenum: self.pagenum,
+                      pagesize: self.pagesize,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.total = data.total - '';
+                      self.patientlist = data.patients;
+                      self.diseases = data.diseases;
+                      self.initselectattr();
+                  }
                 })
             },
             initselectattr: function() {

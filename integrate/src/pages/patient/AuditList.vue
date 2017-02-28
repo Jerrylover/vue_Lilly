@@ -170,19 +170,18 @@ export default {
             var self = this;
             var queryStrings = this.$route.query;
             queryStrings.type = 'audit';
-            $.ajax({
-                url: api.get('patient.list'),
-                type: 'post',
-                dataType: 'json',
-                data: queryStrings,
-            }).done(function(d) {
-                var data = d.data;
-                self.patients = data.list;
-                self.pagenum = data.page - '';
-                self.pagesize = data.pagesize - '';
-                self.total = data.total - '';
-                self.patient_name = data.patient_name;
-                self.auditcnt = data.auditcnt - '';
+            api.http({
+              url: 'patient.list',
+              data: queryStrings,
+              successCallback: function(d) {
+                  var data = d.data;
+                  self.patients = data.list;
+                  self.pagenum = data.page - '';
+                  self.pagesize = data.pagesize - '';
+                  self.total = data.total - '';
+                  self.patient_name = data.patient_name;
+                  self.auditcnt = data.auditcnt - '';
+              }
             })
         },
         doSearch: function(e) {
@@ -260,19 +259,20 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-                $.ajax({
-                    url: api.get('patient.auditpass'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        patientid: patient.patient_id
-                    }
-                }).done(function(d) {
-                    that.$message({
-                        type: 'success',
-                        message: '操作成功'
-                    })
-                    that.fetchData();
+                api.http({
+                  url: 'patient.auditpass',
+                  data: {
+                      patientid: patient.patient_id
+                  },
+                  successCallback: function(d) {
+                      that.$message({
+                          type: 'success',
+                          showClose: true,
+                          duration: 1500,
+                          message: '操作成功'
+                      })
+                      that.fetchData();
+                  }
                 })
             }).catch(() => {
 
@@ -285,19 +285,20 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-                $.ajax({
-                    url: api.get('patient.auditrefuse'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        patientid: patient.patient_id
-                    }
-                }).done(function(d) {
-                    that.$message({
-                        type: 'success',
-                        message: '审核成功'
-                    })
-                    that.fetchData();
+                api.http({
+                  url: 'patient.auditrefuse',
+                  data: {
+                      patientid: patient.patient_id
+                  },
+                  successCallback: function(d) {
+                      that.$message({
+                          type: 'success',
+                          showClose: true,
+                          duration: 1500,
+                          message: '审核成功'
+                      })
+                      that.fetchData();
+                  }
                 })
             }).catch(() => {
 

@@ -77,29 +77,21 @@
         methods: {
             fetchData: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_projectlist'),
-                    type: "POST",
-                    dataType: 'json',
-                    data: {
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.dg_projectlist = data.dg_projectlist;
-                        var roles = {};
-                        $.each(self.dg_projectlist, function(index, one) {
-                            roles[one.dg_projectid] = {};
-                            roles[one.dg_projectid].project_role = one.project_role;
-                            roles[one.dg_projectid].center_roles = one.center_roles;
-                        })
-                        localStorage.setItem('_project_role_', JSON.stringify(roles));
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_projectlist',
+                  data: {
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.dg_projectlist = data.dg_projectlist;
+                      var roles = {};
+                      $.each(self.dg_projectlist, function(index, one) {
+                          roles[one.dg_projectid] = {};
+                          roles[one.dg_projectid].project_role = one.project_role;
+                          roles[one.dg_projectid].center_roles = one.center_roles;
+                      })
+                      localStorage.setItem('_project_role_', JSON.stringify(roles));
+                  }
                 })
             }
         },

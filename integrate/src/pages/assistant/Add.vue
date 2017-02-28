@@ -83,19 +83,18 @@ export default {
     methods: {
         fetchAssistant: function() {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.one'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: that.assistantid
-                },
-            }).done(function(d) {
-                if (d.data) {
-                    that.name = d.data.name;
-                    that.username = d.data.username;
-                    that.mobile = d.data.mobile;
-                }
+            api.http({
+              url: 'assistant.one',
+              data: {
+                assistantid: that.assistantid
+              },
+              successCallback: function(d) {
+                  if (d.data) {
+                      that.name = d.data.name;
+                      that.username = d.data.username;
+                      that.mobile = d.data.mobile;
+                  }
+              }
             })
         },
         clickSave: function() {
@@ -127,7 +126,7 @@ export default {
                 this.$message({
                     showClose: true,
                     type: 'error',
-                    message: '手机号不能为空'
+                    message: '手机号格式不正确'
                 })
                 return false;
             }
@@ -161,31 +160,22 @@ export default {
             }
 
             var that = this;
-            var url = this.ismodify ? api.get('assistant.modify') : api.get('assistant.add')
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                data: data
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$message({
-                        showClose: true,
-                        type: 'error',
-                        message: d.errmsg
-                    })
-                } else {
-                    that.$message({
-                        showClose: true,
-                        type: 'success',
-                        message: '保存成功',
-                        onClose: function() {
-                            that.$router.push({
-                                name: 'manager'
-                            })
-                        }
-                    })
-                }
+            var url = this.ismodify ? 'assistant.modify' : 'assistant.add'
+            api.http({
+              url: url,
+              data: data,
+              successCallback: function(d) {
+                  that.$message({
+                      showClose: true,
+                      type: 'success',
+                      message: '保存成功',
+                      onClose: function() {
+                          that.$router.push({
+                              name: 'manager'
+                          })
+                      }
+                  })
+              }
             })
         }
     },

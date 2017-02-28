@@ -3,6 +3,7 @@ import config from './config.js'
 import util from '../lib/util.js'
 import cookie from '../lib/cookie.js'
 import common from '../lib/common.js'
+import Bus from '../lib/bus.js'
 
 var urls = {
     'user': {
@@ -126,5 +127,70 @@ export default {
         url = util.appendUrl(url, 'issimple', issimple);
 
         return url;
+    },
+    http: function(obj) {
+        if (typeof obj != 'object') {
+            return false
+        }
+        var url = obj.url || ''
+        var data = obj.data || {}
+        var successCallback = obj.successCallback || ''
+        var errorCallback = obj.errorCallback || ''
+        var type =  obj.type || 'POST'
+        var dataType = obj.dataType || 'json'
+        var fasync = obj.async || true
+        var contentType = obj.contentType || 'application/x-www-form-urlencoded; charset=UTF-8'
+        var processData = obj.processData || true
+        var failCallback = obj.failCallback || ''
+        var alwaysCallback = obj.alwaysCallback || ''
+
+        if (url == '') {
+            return false
+        }
+        var urlString = this.get(url)
+
+        $.ajax({
+            url: urlString,
+            type: type,
+            dataType: dataType,
+            async: fasync,
+            data: data,
+            contentType: contentType,
+            processData: processData,
+            beforeSend: function() {
+                Bus.$emit('show-loading-modal', true)
+            }
+        }).fail(function(){
+            if (typeof failCallback == 'function') {
+                failCallback(d)
+            }
+            Bus.$emit('show-loading-modal', false)
+        }).always(function() {
+            if (typeof alwaysCallback == 'function') {
+                alwaysCallback(d)
+            }
+            Bus.$emit('show-loading-modal', false)
+        }).done(function(d) {
+            if (d.errno == 0) {
+                if (d.hasOwnProperty('privileges')) {
+                    localStorage.setItem('_privileges_', JSON.stringify(d.privileges));
+                }
+                if (typeof successCallback == 'function') {
+                    successCallback(d)
+                }
+            } else if (d.errno == -10) {//登录过期
+                Bus.$emit('login-expire', d.errmsg)
+            } else if (d.errno == -11 && url != 'user.login') {//账号锁定
+                Bus.$emit('account-lock', d.errmsg)
+            } else if (d.errno == -12 && url != 'user.login') {//只有医生和助理才能登录
+                Bus.$emit('doctor-limited', d.errmsg)
+            } else {
+                if (typeof errorCallback == 'function') {
+                    errorCallback(d)
+                } else {
+                    Bus.$emit('ajax-error', d.errmsg)
+                }
+            }
+        });
     }
 };

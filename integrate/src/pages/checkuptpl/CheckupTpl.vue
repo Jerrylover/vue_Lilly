@@ -230,33 +230,28 @@ export default {
             data.checkuptplid = this.checkuptpl.id;
             var url = '';
             if (this.ismodify) {
-                url = api.get('checkup.modify');
+                url = 'checkup.modify'
                 data.checkupid = this.checkupid;
             } else {
-                url = api.get('checkup.add');
+                url = 'checkup.add'
             }
             var self = this;
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: data
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    self.$message({showClose: true, message: d.errmsg, type: 'error'});
-                } else {
-                    self.$message({showClose: true, type:'success', message: '保存成功'});
-                    $(e.target).blur();
-                    self.ismodify = false;
-                    self.myaction = '添加';
-                    self.hospital = '本院';
-                    self.hospitalother = '';
-                    self.fetchData();
-                    self.value = util.getFormatDate();
-                    self.$nextTick(function() {
-                        Bus.$emit('modify-done');
-                    })
-                }
+            api.http({
+              url: url,
+              data: data,
+              successCallback: function(d) {
+                  self.$message({showClose: true, type:'success', message: '保存成功'});
+                  $(e.target).blur();
+                  self.ismodify = false;
+                  self.myaction = '添加';
+                  self.hospital = '本院';
+                  self.hospitalother = '';
+                  self.fetchData();
+                  self.value = util.getFormatDate();
+                  self.$nextTick(function() {
+                      Bus.$emit('modify-done');
+                  })
+              }
             })
         },
         save: function(e) {
@@ -319,66 +314,65 @@ export default {
         },
         fetchData: function(append) {
             var self = this;
-            $.ajax({
-                url: api.get('checkup.list'),
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    patientid: self.patientid,
-                    checkuptplid: self.checkuptpl.id,
-                    pagenum: self.page,
-                    pagesize: self.pagesize
-                }
-            }).done(function(d) {
-                self.total = d.data.total;
-                if (append === true) {
-                    for (var i = 0; i < d.data.checkups.length; i++) {
-                        self.data.checkups.push(d.data.checkups[i]);
-                    }
-                } else {
-                    self.data = d.data;
-                }
-                //由于answers的数量可能小于questions数量
-                //构建answers questionid的哈希数组
-                var checkupAnswers = {}
-                if (self.data.hasOwnProperty('checkups')) {
-                    for (var j = 0; j < self.data.checkups.length; j++) {
-                        var answers = {};
-                        var checkup = self.data.checkups[j];
+            api.http({
+              url: 'checkup.list',
+              data: {
+                  patientid: self.patientid,
+                  checkuptplid: self.checkuptpl.id,
+                  pagenum: self.page,
+                  pagesize: self.pagesize
+              },
+              successCallback: function(d) {
+                  self.total = d.data.total;
+                  if (append === true) {
+                      for (var i = 0; i < d.data.checkups.length; i++) {
+                          self.data.checkups.push(d.data.checkups[i]);
+                      }
+                  } else {
+                      self.data = d.data;
+                  }
+                  //由于answers的数量可能小于questions数量
+                  //构建answers questionid的哈希数组
+                  var checkupAnswers = {}
+                  if (self.data.hasOwnProperty('checkups')) {
+                      for (var j = 0; j < self.data.checkups.length; j++) {
+                          var answers = {};
+                          var checkup = self.data.checkups[j];
 
-                        if (!checkup.answersheet.hasOwnProperty('answers')) {
-                            continue;
-                        }
-                        for (var i = 0; i < checkup.answersheet.answers.length; i++) {
-                            var answer = checkup.answersheet.answers[i];
-                            answers[answer.xquestionid] = answer;
-                        }
-                        for (var i = 0; i < self.data.xquestions.length; i++) {
-                            var questionid = self.data.xquestions[i].xquestionid;
-                            if (!(questionid in answers)) {
-                                answers[questionid] = {};
-                            }
-                        }
-                        checkupAnswers[checkup.id] = answers;
-                    }
-                    //过滤列表的列（问题）
-                    if (self.data.xquestions.length > 0) {
-                        var tmpquestions = [];
-                        var diseaseid = common.getDiseaseId();
-                        for (var i = 0; i < self.data.xquestions.length; i++) {
-                            var xquestion = self.data.xquestions[i];
-                            if (diseaseid == 19 && self.checkuptpl.ename == 'fenqi7') {
-                                if (xquestion.content == '疾病') {
-                                    tmpquestions.push(xquestion);
-                                }
-                            } else {
-                                tmpquestions.push(xquestion);
-                            }
-                        }
-                        self.data.xquestions = tmpquestions;
-                    }
-                }
-                self.checkupAnswers = checkupAnswers;
+                          if (!checkup.answersheet.hasOwnProperty('answers')) {
+                              continue;
+                          }
+                          for (var i = 0; i < checkup.answersheet.answers.length; i++) {
+                              var answer = checkup.answersheet.answers[i];
+                              answers[answer.xquestionid] = answer;
+                          }
+                          for (var i = 0; i < self.data.xquestions.length; i++) {
+                              var questionid = self.data.xquestions[i].xquestionid;
+                              if (!(questionid in answers)) {
+                                  answers[questionid] = {};
+                              }
+                          }
+                          checkupAnswers[checkup.id] = answers;
+                      }
+                      //过滤列表的列（问题）
+                      if (self.data.xquestions.length > 0) {
+                          var tmpquestions = [];
+                          var diseaseid = common.getDiseaseId();
+                          for (var i = 0; i < self.data.xquestions.length; i++) {
+                              var xquestion = self.data.xquestions[i];
+                              if (diseaseid == 19 && self.checkuptpl.ename == 'fenqi7') {
+                                  if (xquestion.content == '疾病') {
+                                      tmpquestions.push(xquestion);
+                                  }
+                              } else {
+                                  tmpquestions.push(xquestion);
+                              }
+                          }
+                          self.data.xquestions = tmpquestions;
+                      }
+                  }
+                  self.checkupAnswers = checkupAnswers;
+              }
             })
         },
         getContent: function(xquestion, checkup) {
@@ -466,27 +460,19 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-                $.ajax({
-                    url: api.get('checkup.delete'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        checkupid: checkup.id
-                    }
-                }).done(function(d) {
-                    if (d.errno != 0 && d.errno != -10) {
-                        that.$message({
-                            type: 'error',
-                            message: d.errmsg
-                        });
-                    } else {
-                        that.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                    }
-                    that.fetchData();
-                });
+                api.http({
+                  url: 'checkup.delete',
+                  data: {
+                      checkupid: checkup.id
+                  },
+                  successCallback: function(d) {
+                      that.$message({
+                          type: 'success',
+                          message: '删除成功!'
+                      });
+                      that.fetchData();
+                  }
+                })
             }).catch(() => {
 
             });

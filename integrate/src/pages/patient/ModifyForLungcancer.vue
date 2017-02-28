@@ -43,8 +43,6 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">生日</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <!-- <input id="birthday" class="form-control" name="patient-birthday" type="text" @click="showCalendar" v-model="patientinfo.birthday"> -->
-                                <!-- <calendar :defaultdate="isShowDefaultDate(patientinfo.birthday, 'birthday')" :show="showForBirthday" :value="patientinfo.birthday" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
                                 <fc-date v-model="patientinfo.birthday" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.birthday, 'birthday')"></el-date-picker>
                                 </fc-date>
@@ -239,8 +237,6 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-5">建档日期</label>
                             <div class="col-lg-8 col-sm-7 clearPadding">
-                                <!-- <input id="createDocDate" class="form-control" type="text" @click="showCalendar" v-model="patientinfo.create_doc_date"> -->
-                                <!-- <calendar :show="showForCreateDocDate" :defaultdate="isShowDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"  :value="patientinfo.create_doc_date" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar> -->
                                 <fc-date v-model="patientinfo.create_doc_date" format="YYYY-MM-DD">
                                     <el-date-picker type="date" :placeholder="getDefaultDate(patientinfo.create_doc_date, 'create_doc_date')"></el-date-picker>
                                 </fc-date>
@@ -997,9 +993,6 @@ export default {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
-        'calendar': function(resolve) {
-            require(['../../components/calendar.vue'], resolve);
-        }
     },
     methods: {
         getFamilyDiseases: function() {
@@ -1173,97 +1166,68 @@ export default {
             var family_history = this.getFamilyDiseases();
 
             // return ;
-            $.ajax({
-                    url: api.get(httpurl),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: this.patientid,
-                        name: this.patientinfo.name,
-                        out_case_no: this.patientinfo.out_case_no,
-                        sex: this.patientinfo.sex,
-                        birthday: this.patientinfo.birthday,
-                        nation: this.patientinfo.nation,
-                        career: this.patientinfo.career,
-                        prcrid: this.patientinfo.prcrid,
-                        marry_status: this.patientinfo.marry_status,
-                        mobile: this.patientinfo.mobile,
-                        email: this.patientinfo.email,
-                        create_doc_date: this.patientinfo.create_doc_date,
-                        past_other_history: this.patientinfo.past_other_history,
-                        family_history: family_history,
-                        allergy_history: this.patientinfo.allergy_history,
+            api.http({
+              url: httpurl,
+              data: {
+                  patientid: this.patientid,
+                  name: this.patientinfo.name,
+                  out_case_no: this.patientinfo.out_case_no,
+                  sex: this.patientinfo.sex,
+                  birthday: this.patientinfo.birthday,
+                  nation: this.patientinfo.nation,
+                  career: this.patientinfo.career,
+                  prcrid: this.patientinfo.prcrid,
+                  marry_status: this.patientinfo.marry_status,
+                  mobile: this.patientinfo.mobile,
+                  email: this.patientinfo.email,
+                  create_doc_date: this.patientinfo.create_doc_date,
+                  past_other_history: this.patientinfo.past_other_history,
+                  family_history: family_history,
+                  allergy_history: this.patientinfo.allergy_history,
 
-                        //计算属性
-                        past_main_history: this.past_main_history,
-                        menstruation_history: this.menstruation_history,
-                        childbearing_history: this.childbearing_history,
-                        other_contacts: this.patientinfo.other_contacts,
-                        blood_type: this.patientinfo.blood_type,
-                        birth_place: this.patientinfo.birth_place,
-                        native_place: this.patientinfo.native_place,
-                        address: this.patientinfo.address,
-                        self_history: this.patientinfo.self_history,
-                        smoke_history: this.patientinfo.smoke_history,
-                        remark_doctor: this.patientinfo.remark_doctor,
-                        patientcardno: this.patientinfo.patientcardno,
-                        patientcard_id: this.patientinfo.patientcard_id,
-                        fee_type: this.patientinfo.fee_type,
-                    },
-                })
-                .done(function(response) {
-                    var data = response.data;
-                    if (response.errno != 0 && response.errno != -10) {
-                        that.$message({
-                          showClose: true,
-                          message: response.errmsg,
-                          type: 'error',
-                          onClose: () => {
-                              $("input[name='out-case-no']").focus();
-                          }
-                        });
-                    } else {
-                        that.$message({
-                          showClose: true,
-                          message: '保存成功',
-                          type: 'success',
-                          duration: 1500,
-                          onClose: () => {
-                              if (typeof data.patientid != ``) {
-                                  that.$router.push({
-                                      path: '/patient/' + data.patientid + '/baseinfo-lungcancer'
-                                  })
-                              }
-                          }
-                        });
+                  //计算属性
+                  past_main_history: this.past_main_history,
+                  menstruation_history: this.menstruation_history,
+                  childbearing_history: this.childbearing_history,
+                  other_contacts: this.patientinfo.other_contacts,
+                  blood_type: this.patientinfo.blood_type,
+                  birth_place: this.patientinfo.birth_place,
+                  native_place: this.patientinfo.native_place,
+                  address: this.patientinfo.address,
+                  self_history: this.patientinfo.self_history,
+                  smoke_history: this.patientinfo.smoke_history,
+                  remark_doctor: this.patientinfo.remark_doctor,
+                  patientcardno: this.patientinfo.patientcardno,
+                  patientcard_id: this.patientinfo.patientcard_id,
+                  fee_type: this.patientinfo.fee_type,
+              },
+              successCallback: function(d) {
+                  var data = d.data;
+                  that.$message({
+                    showClose: true,
+                    message: '保存成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                        if (typeof data.patientid != ``) {
+                            that.$router.push({
+                                path: '/patient/' + data.patientid + '/baseinfo-lungcancer'
+                            })
+                        }
                     }
-                })
-        },
-        showCalendar: function(e) {
-            e.stopPropagation();
-            var that = this;
-            if (e.target.id == "birthday") {
-                that.showForBirthday = true;
-            } else if (e.target.id == "menstruationHistory") {
-                that.showForMenstruationHistory = true;
-            } else if (e.target.id == "createDocDate") {
-                that.showForCreateDocDate = true;
-            }
-
-            that.xN = e.target.offsetLeft;
-            that.y = e.target.offsetTop + e.target.offsetHeight + 8;
-            var bindHide = function(e) {
-                e.stopPropagation();
-                that.showForBirthday = false;
-                that.showForMenstruationHistory = false;
-                that.showForCreateDocDate = false;
-                document.removeEventListener('click', bindHide, false);
-                document.removeEventListener('touchstart', bindHide, false);
-            };
-            setTimeout(function() {
-                document.addEventListener('click', bindHide, false);
-                document.addEventListener('touchstart', bindHide, false);
-            }, 500);
+                  });
+              },
+              errorCallback: function(d) {
+                  that.$message({
+                    showClose: true,
+                    message: d.errmsg,
+                    type: 'error',
+                    onClose: () => {
+                        $("input[name='out-case-no']").focus();
+                    }
+                  });
+              }
+            })
         },
         selectChange: function(e) {
             this.currentProvinceIndex = e.target.selectedIndex-1;
@@ -1448,17 +1412,14 @@ export default {
                 }
             }
             if (this.isModify()) {
-                $.ajax({
-                    url: api.get('patient.baseinfo'),
-                    type: "post",
-                    dataType: 'json',
-                    data: {
-                        patientid: that.patientid,
-                    }
-                }).done(function(response) {
-                    if (response.errno == 0) {
-                        that.handleSuccessData(that, response);
-                    }
+                api.http({
+                  url: 'patient.baseinfo',
+                  data: {
+                      patientid: that.patientid,
+                  },
+                  successCallback: function(d) {
+                      that.handleSuccessData(that, d);
+                  }
                 })
             }
 

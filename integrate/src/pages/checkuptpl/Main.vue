@@ -106,32 +106,31 @@ export default {
         this.$nextTick(function() {
             this.fetchPatient();
             var self = this;
-            $.ajax({
-                url: api.get('doctor.menu'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    patientid: self.patientid
-                },
-            }).done(function(d) {
-                if (d.data == '') {
-                    self.showModal = true;
-                    return;
-                }
-                self.treeData = d.data;
-                if (!self.ename) {
-                    if (d.data[0].link != "") {
-                        self.ename = d.data[0].link;
-                        self.name = d.data[0].name;
-                    } else if (d.data[0].submenus[0].link != "") {
-                        self.ename = d.data[0].submenus[0].link;
-                        self.name = d.data[0].submenus[0].name;
-                    } else {
-                        self.ename = d.data[0].submenus[0].submenus[0].link;
-                        self.name = d.data[0].submenus[0].submenus[0].name;
-                    }
-                }
-            });
+            api.http({
+              url: 'doctor.menu',
+              data: {
+                  patientid: self.patientid
+              },
+              successCallback: function(d) {
+                  if (d.data == '') {
+                      self.showModal = true;
+                      return;
+                  }
+                  self.treeData = d.data;
+                  if (!self.ename) {
+                      if (d.data[0].link != "") {
+                          self.ename = d.data[0].link;
+                          self.name = d.data[0].name;
+                      } else if (d.data[0].submenus[0].link != "") {
+                          self.ename = d.data[0].submenus[0].link;
+                          self.name = d.data[0].submenus[0].name;
+                      } else {
+                          self.ename = d.data[0].submenus[0].submenus[0].link;
+                          self.name = d.data[0].submenus[0].submenus[0].name;
+                      }
+                  }
+              }
+            })
         })
     },
     methods: {
@@ -146,16 +145,15 @@ export default {
                 // }
             } else {
                 var self = this;
-                $.ajax({
-                    url: api.get('patient.baseinfo'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid
-                    },
-                }).done(function(d) {
-                    self.patientname = d.data.name;
-                    libpatient.setPatientName(self.patientid, self.patientname);
+                api.http({
+                  url: 'patient.baseinfo',
+                  data: {
+                      patientid: self.patientid
+                  },
+                  successCallback: function(d) {
+                      self.patientname = d.data.name;
+                      libpatient.setPatientName(self.patientid, self.patientname);
+                  }
                 })
             }
         }

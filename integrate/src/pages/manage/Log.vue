@@ -116,21 +116,20 @@ export default {
         },
         fetchLogData: function(querys) {
             var that = this;
-            $.ajax({
-                url: api.get('doctordboplog.list'),
-                type: 'POST',
-                dataType: 'json',
-                data: querys,
-            }).done(function(d) {
-                if (d.data) {
-                    that.total = d.data.total - '';
-                    that.oplogs = d.data.list;
-                    that.pagesize = d.data.pagesize - '';
-                    that.pagenum = d.data.pagenum - '';
-                    that.patientname = d.data.patientname;//患者名称
-                    that.assistantname = d.data.assistantname;//助理账号
-                    that.assistants = d.data.assistants;
-                }
+            api.http({
+              url: 'doctordboplog.list',
+              data: querys,
+              successCallback: function(d) {
+                  if (d.data) {
+                      that.total = d.data.total - '';
+                      that.oplogs = d.data.list;
+                      that.pagesize = d.data.pagesize - '';
+                      that.pagenum = d.data.pagenum - '';
+                      that.patientname = d.data.patientname;//患者名称
+                      that.assistantname = d.data.assistantname;//助理账号
+                      that.assistants = d.data.assistants;
+                  }
+              }
             })
         },
     },

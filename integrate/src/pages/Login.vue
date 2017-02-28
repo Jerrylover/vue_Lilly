@@ -176,42 +176,29 @@ export default {
         }
     },
     mounted: function() {
-        this.$nextTick(function() {
-            $(".inputtext").on("mousemove", function() {
-                var me = $(this);
-                me.addClass('borderbule');
-            });
-            $(".inputtext").on("mouseleave", function() {
-                var me = $(this);
-                me.removeClass('borderbule');
-            });
-        })
+
     },
     methods: {
         'login': function(e) {
             e.preventDefault();
             var self = this;
-            $.ajax({
-                    url: api.get('user.login'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        username: this.username,
-                        password: this.password
-                    },
-                }).done(function(d) {
-                    if (d.errno != 0 && d.errno != -10) {
-                        // alert(d.errmsg);
-                        self.loginFailure = false;
-                        self.errmsg = d.errmsg;
-                    } else {
-                        common.login(d.data);
-                        self.$router.push({
-                            path: '/'
-                        })
-                    }
-                })
-
+            api.http({
+                url: 'user.login',
+                data: {
+                    username: this.username,
+                    password: this.password
+                },
+                successCallback: function(d) {
+                    common.login(d.data);
+                    self.$router.push({
+                        path: '/'
+                    })
+                },
+                errorCallback: function(d) {
+                    self.loginFailure = false;
+                    self.errmsg = d.errmsg;
+                }
+            })
         },
         'inputClick': function() {
             this.loginFailure = true;

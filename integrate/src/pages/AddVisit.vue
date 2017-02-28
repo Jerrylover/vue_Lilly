@@ -14,7 +14,7 @@
             <!-- <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
             <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
             <fc-date v-model="value" format="YYYY-MM-DD">
-                <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
             </fc-date>
           </div>
           <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
@@ -162,19 +162,14 @@ export default {
     addVisit: function(e) {
       e.preventDefault();
       var that = this;
-      $.ajax({
-        url: api.get('revisitrecord.add'),
-        type: 'post',
-        dataType: 'json',
+      api.http({
+        url: 'revisitrecord.add',
         data: {
           date: this.value,
           patientid: that.patientid,
           typestr: that.typestr
         },
-      }).done(function(d) {
-        if (d.errno != 0 && d.errno != -10) {
-          that.$emit('show-alert', d.errmsg);
-        } else {
+        successCallback: function(d) {
           var path = '/checkuptpl/' + that.patientid + '/child/zhusu/主诉';
           var diseaseid = libpatient.getDiseaseId(that.patientid);
           if (common.isGastricCancer(diseaseid)) {
@@ -193,15 +188,14 @@ export default {
     fetchData: function() {
       var that = this;
       //获取
-      $.ajax({
-        url: api.get('revisitrecord.list'),
-        type: 'post',
-        dataType: 'json',
+      api.http({
+        url: 'revisitrecord.list',
         data: {
           patientid: that.patientid
         },
-      }).done(function(d) {
-        that.revisitRecords = d.data;
+        successCallback: function(d) {
+          that.revisitRecords = d.data;
+        }
       })
     },
     fetchPatient: function() {
@@ -210,16 +204,15 @@ export default {
         this.patientname = patientname
       } else {
         var that = this;
-        $.ajax({
-          url: api.get('patient.baseinfo'),
-          type: 'post',
-          dataType: 'json',
+        api.http({
+          url: 'patient.baseinfo',
           data: {
             patientid: that.patientid
           },
-        }).done(function(d) {
-          that.patientname = d.data.name;
-          libpatient.setPatientName(that.patientid, that.patientname);
+          successCallback: function(d) {
+            that.patientname = d.data.name;
+            libpatient.setPatientName(that.patientid, that.patientname);
+          }
         })
       }
     },
@@ -231,20 +224,19 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        $.ajax({
-          url: api.get('revisitrecord.delete'),
-          type: 'post',
-          dataType: 'json',
-          data: {
-            revisitrecordid: revisitrecord.revisitrecordid
-          },
-        }).done(function(d) {
-          that.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          that.fetchData();
-        })
+          api.http({
+            url: 'revisitrecord.delete',
+            data: {
+              revisitrecordid: revisitrecord.revisitrecordid
+            },
+            successCallback: function(d) {
+                that.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                that.fetchData();
+            }
+          })
       }).catch(() => {
 
       });
@@ -272,6 +264,7 @@ export default {
       this.fetchPatient();
       this.fetchData();
       this.diseaseid = common.getDiseaseId();
+      this.value = util.getFormatDate();
     }
   }
 }

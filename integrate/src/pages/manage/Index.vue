@@ -163,86 +163,70 @@ export default {
         },
         lock: function(assistant) {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.lock'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: assistant.id,
-                },
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
-                } else {
-                    var query = that.$route.query;
-                    that.$message({
-                        type: 'success',
-                        message: '锁定成功!'
-                    });
-                    that.fetchAssistantData(query);
-                }
+            api.http({
+              url: 'assistant.lock',
+              data: {
+                  assistantid: assistant.id,
+              },
+              successCallback: function(d) {
+                  var query = that.$route.query;
+                  that.$message({
+                      type: 'success',
+                      message: '锁定成功!'
+                  });
+                  that.fetchAssistantData(query);
+              }
             })
         },
         unlock: function(assistant) {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.unlock'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: assistant.id,
-                },
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
-                } else {
-                    var query = that.$route.query;
-                    that.$message({
-                        type: 'success',
-                        message: '解锁成功!'
-                    });
-                    that.fetchAssistantData(query);
-                }
+            api.http({
+              url: 'assistant.unlock',
+              data: {
+                  assistantid: assistant.id,
+              },
+              successCallback: function(d) {
+                  var query = that.$route.query;
+                  that.$message({
+                      type: 'success',
+                      message: '解锁成功!'
+                  });
+                  that.fetchAssistantData(query);
+              }
             })
         },
         doDelete: function(assistant) {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.delete'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: assistant.id,
-                },
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
-                } else {
-                    var query = that.$route.query;
-                    that.fetchAssistantData(query);
-                    that.$message({
-                        type: 'success',
-                        message: '删除成功'
-                    });
-                }
+            api.http({
+              url: 'assistant.delete',
+              data: {
+                  assistantid: assistant.id,
+              },
+              successCallback: function(d) {
+                  var query = that.$route.query;
+                  that.fetchAssistantData(query);
+                  that.$message({
+                      type: 'success',
+                      message: '删除成功'
+                  });
+              }
             })
         },
         fetchAssistantData: function(querys) {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.list'),
-                type: 'POST',
-                dataType: 'json',
-                data: querys,
-            }).done(function(d) {
-                if (d.data) {
-                    that.pagenum = d.data.pagenum - '';
-                    that.total = d.data.total - '';
-                    that.assistants = d.data.list;
-                    that.name = d.data.name;
-                    that.pagesize = d.data.pagesize - '';
-                    that.pagenum = d.data.pagenum - '';
-                }
+            api.http({
+              url: 'assistant.list',
+              data: querys,
+              successCallback: function(d) {
+                  if (d.data) {
+                      that.pagenum = d.data.pagenum - '';
+                      that.total = d.data.total - '';
+                      that.assistants = d.data.list;
+                      that.name = d.data.name;
+                      that.pagesize = d.data.pagesize - '';
+                      that.pagenum = d.data.pagenum - '';
+                  }
+              }
             })
         },
     },

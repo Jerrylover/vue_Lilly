@@ -74,20 +74,12 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-                $.ajax({
-                    url: api.get('patient.delete'),
-                    type: "post",
-                    dataType: "json",
+                api.http({
+                    url: 'patient.delete',
                     data: {
                         patientid: that.patientid,
-                    }
-                }).done(function(d) {
-                    if (d.errno != 0 && d.errno != -10) {
-                        that.$message({
-                            type: 'error',
-                            message: d.errmsg
-                        });
-                    } else {
+                    },
+                    successCallback: function(d) {
                         that.$message({
                             type: 'success',
                             message: '删除成功!',
@@ -98,7 +90,7 @@ export default {
                             }
                         });
                     }
-                });
+                })
             }).catch(() => {
 
             });

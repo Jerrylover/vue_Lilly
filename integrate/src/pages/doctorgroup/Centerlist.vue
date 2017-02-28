@@ -106,28 +106,19 @@
             fetchData: function() {
                 var self = this;
                 self.projectid = this.$route.params.projectid;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_centerlist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.centerlist = data.dg_centers;
-                        self.dg_project.title = data.dg_project_title;
-                        self.dg_project.content = data.dg_project_content;
-                        self.project_role = data.project_role;
-                        self.project_all = data.project_all;
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_centerlist',
+                  data: {
+                      dg_projectid: self.projectid,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.centerlist = data.dg_centers;
+                      self.dg_project.title = data.dg_project_title;
+                      self.dg_project.content = data.dg_project_content;
+                      self.project_role = data.project_role;
+                      self.project_all = data.project_all;
+                  }
                 })
             }
         },

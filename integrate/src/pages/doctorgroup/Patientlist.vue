@@ -133,35 +133,27 @@
         methods: {
             fetchData: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_patientlist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.currentprojectid,
-                        dg_centerid: self.currentcenterid,
-                        doctorid: self.currentdoctorid,
-                        pagenum: self.pagenum,
-                        keyword: self.keyword,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.pagenum = data.pagenum - '';
-                        self.pagesize = data.pagesize - '';
-                        self.total = data.total - '';
-                        self.projectlist = data.projectlist;
-                        self.centerlist = data.centerlist;
-                        self.doctorlist = data.doctorlist;
-                        self.patients = data.dg_patients;
-                        self.currentcenterid = data.selected.dg_centerid;
-                        self.currentdoctorid = data.selected.doctorid;
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_patientlist',
+                  data: {
+                      dg_projectid: self.currentprojectid,
+                      dg_centerid: self.currentcenterid,
+                      doctorid: self.currentdoctorid,
+                      pagenum: self.pagenum,
+                      keyword: self.keyword,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.pagenum = data.pagenum - '';
+                      self.pagesize = data.pagesize - '';
+                      self.total = data.total - '';
+                      self.projectlist = data.projectlist;
+                      self.centerlist = data.centerlist;
+                      self.doctorlist = data.doctorlist;
+                      self.patients = data.dg_patients;
+                      self.currentcenterid = data.selected.dg_centerid;
+                      self.currentdoctorid = data.selected.doctorid;
+                  }
                 })
             },
             changeproject: function(e) {
@@ -276,7 +268,6 @@
             },
             initPage: function() {
                 var queryString = this.$route.query;
-                console.log('----queryString', queryString)
                 this.currentprojectid = queryString.projectid || '';
                 this.currentcenterid = queryString.centerid || '';
                 this.currentdoctorid = queryString.doctorid || '';

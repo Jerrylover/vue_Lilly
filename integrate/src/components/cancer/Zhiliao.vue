@@ -774,22 +774,14 @@ export default {
             var that = this;
             var url = '';
             if (that.ismodify) {
-                url = api.get('chemo.modify');
+                url = 'chemo.modify'
             } else {
-                url = api.get('chemo.add');
+                url = 'chemo.add'
             }
-            $.ajax({
+            api.http({
                 url: url,
-                type: 'post',
-                dataType: 'json',
                 data: data,
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$message({
-                        type: 'error',
-                        message: d.errmsg
-                    })
-                } else {
+                successCallback: function(d) {
                     that.$message({
                         type: 'success',
                         message: '保存成功',
@@ -804,17 +796,15 @@ export default {
         fetchData: function(newdate) {
             var that = this;
             //获取
-            $.ajax({
-                url: api.get('chemo.list'),
-                type: 'post',
-                dataType: 'json',
+            api.http({
+                url: 'chemo.list',
                 data: {
                     patientid: that.patientid,
-                    // zhusu: 1
+                },
+                successCallback: function(d) {
+                    that.chemos = d.data;
+                    that.initSomeData();
                 }
-            }).done(function(d) {
-                that.chemos = d.data;
-                that.initSomeData();
             })
         },
         initSomeData: function() {
@@ -921,25 +911,20 @@ export default {
             if (this.keyword == '') {
                 return false;
             }
-            $.ajax({
-                url: api.get('chemo.search'),
-                type: 'post',
-                dataType: 'json',
+            api.http({
+                url: 'chemo.search',
                 data: {
                     keyword: that.keyword,
-                    patientid: that.patientid,
-                }
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-
-                } else {
+                    patientid: that.patientid
+                },
+                successCallback: function(d) {
                     that.searchlist = [];
                     that.searchlist = d.data.list;
                     that.searchCheckedList = [];
                     that.isShowSearchMedicineDiv = true;
                     that.bsa = d.data.bsa;
                 }
-            });
+            })
         },
         clickRadioLabel: function(effect) {
             if (this.pickedEffect == effect) {
@@ -976,27 +961,19 @@ export default {
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-                $.ajax({
-                    url: api.get('chemo.delete'),
-                    type: 'post',
-                    dataType: 'json',
+                api.http({
+                    url: 'chemo.delete',
                     data: {
                         chemoid: chemo.id
-                    }
-                }).done(function(d) {
-                    if (d.errno != 0 && d.errno != -10) {
-                        that.$message({
-                            type: 'error',
-                            message: d.errmsg
-                        })
-                    } else {
+                    },
+                    successCallback: function(d) {
                         that.$message({
                             type: 'success',
                             message: '删除成功'
                         })
+                        that.fetchData();
                     }
-                    that.fetchData();
-                });
+                })
             }).catch(() => {
 
             });
@@ -1004,17 +981,16 @@ export default {
         },
         chemoModify: function(chemo1) { //修改
             var that = this;
-            $.ajax({
-                url: api.get('chemo.one'),
-                type: 'post',
-                dataType: 'json',
+            api.http({
+                url: 'chemo.one',
                 data: {
-                    chemoid: chemo1.id,
+                    chemoid: chemo1.id
                 },
-            }).done(function(d) {
-                var chemo = d.data;
-                that.initModifyData(chemo);
-                that.bsa = chemo.bsa;
+                successCallback: function(d) {
+                    var chemo = d.data;
+                    that.initModifyData(chemo);
+                    that.bsa = chemo.bsa;
+                }
             })
             window.scrollTo(0, 0);
         },
@@ -1094,31 +1070,25 @@ export default {
         this.$nextTick(function() {
             var that = this;
             var diseaseid = common.getDiseaseId();
-            $.ajax({
-                url: api.get('chemo.medicineuse'),
-                type: 'post',
-                dataType: 'json',
+            api.http({
+                url: 'chemo.medicineuse',
                 data: {
                     patientid: that.patientid,
                     diseaseid: diseaseid,
                 },
-            }).done(function(d) {
-                that.medicineMaps = d.data.list;
-                that.pkgnames = d.data.methods;
-                $.each(that.medicineMaps, function(index, list) {
-                    $.each(list, function(index1, one){
-                        one._id = Math.round(Math.random() * 100000000);
-                        // console.log('one-id-----', one._id)
+                successCallback: function(d) {
+                    that.medicineMaps = d.data.list;
+                    that.pkgnames = d.data.methods;
+                    $.each(that.medicineMaps, function(index, list) {
+                        $.each(list, function(index1, one){
+                            one._id = Math.round(Math.random() * 100000000);
+                            // console.log('one-id-----', one._id)
+                        })
+
                     })
-
-                })
-                that.fetchData();
-
-                // if (that.pkgnames.length > 0) {
-                //     that.pickedPkgname = that.pkgnames[0]; //默认选中第一个方案
-                //     that.medicines = that.medicineMaps[that.pickedPkgname]; //方案对应的药品
-                // }
-                that.bsa = d.data.bsa;
+                    that.fetchData();
+                    that.bsa = d.data.bsa;
+                }
             })
         })
     }

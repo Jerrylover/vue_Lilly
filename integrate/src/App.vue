@@ -15,9 +15,12 @@
                 <div>如果您的浏览器没有自动跳转，请<a href="javascript:" @click.stop.prevent="goLogin">点击这里</a>
             </div>
         </modal>
-        <div class="modal-mask" id="modal-loading" style="display:none;">
-            <i class="fa fa-spinner fa-pulse fa-3x fa-fw modal-wrapper"></i>
-            <span class="sr-only">Loading...</span>
+        <div class="modal-mask" id="modal-loading" v-show="showLoadingModal">
+            <div class='modal-wrapper' style="text-align:center">
+                <i class="fa fa-spinner  fa-spin fa-3x fa-fw"></i>
+                <!-- <span class="">Loading...</span> -->
+            </div>
+
         </div>
     </div>
 </template>
@@ -48,6 +51,7 @@
 </style>
 <script>
 import common from './lib/common.js'
+import Bus from './lib/bus.js'
 export default {
     data: function() {
         return {
@@ -65,85 +69,11 @@ export default {
             msg: '',
             alertType: 'error',
             timer: '',
+            showLoadingModal: false
         }
     },
     mounted: function() {
-        this.$nextTick(function() {
 
-            var self = this;
-            $(document).ajaxSuccess(function(event, xhr, settings) {
-                if (xhr.responseJSON.errno == 0) {
-                    if (xhr.responseJSON.hasOwnProperty('privileges')) {
-                        localStorage.setItem('_privileges_', JSON.stringify(xhr.responseJSON.privileges));
-                    }
-                } else if (xhr.responseJSON.errno == -10) {
-                    self.showModal = true;
-                    self.msg = '您的会话已过期，请重新登录';
-                    self.timer = window.setInterval(function() {
-                        if (self.sec == 0) {
-                            clearInterval(self.timer);
-                            window.setTimeout(function() {
-                                self.sec = 5;
-                            }, 3000)
-                            self.$router.push({
-                                path: '/login'
-                            })
-                            self.showModal = false;
-                        } else {
-                            self.sec -= 1;
-                        }
-                    }, 1000)
-                } else if (xhr.responseJSON.errno == -11 && self.$route.name != 'login') {
-                    self.showModal = true;
-                    self.msg = '账号被锁定，请联系所属医生';
-                    var timer = window.setInterval(function() {
-                        if (self.sec == 0) {
-                            clearInterval(timer);
-                            window.setTimeout(function() {
-                                self.sec = 5;
-                            }, 3000)
-                            self.$router.push({
-                                path: '/login'
-                            })
-                            self.showModal = false;
-                        } else {
-                            self.sec -= 1;
-                        }
-                    }, 1000)
-                } else if (xhr.responseJSON.errno == -12 && self.$route.name != 'login') {
-                    self.showModal = true;
-                    self.msg = xhr.responseJSON.errmsg;
-                    var timer = window.setInterval(function() {
-                        if (self.sec == 0) {
-                            clearInterval(timer);
-                            window.setTimeout(function() {
-                                self.sec = 5;
-                            }, 3000)
-                            self.$router.push({
-                                path: '/login'
-                            })
-                            self.showModal = false;
-                        } else {
-                            self.sec -= 1;
-                        }
-                    }, 1000)
-                }
-            });
-            $.ajaxSetup({
-                beforeSend: function() {
-                    $('#modal-loading').show();
-                    // $('body').addClass('no-scroll');
-                },
-                complete: function() {
-                    $('#modal-loading').hide();
-                    // $('body').removeClass('no-scroll');
-                },
-                error: function() {
-                    $('#modal-loading').hide();
-                    // $('body').removeClass('no-scroll');
-                }
-            });
-        })
     },
     components: {
         'modal': function(resolve) {
@@ -151,6 +81,75 @@ export default {
         },
     },
     methods: {
+        loginExpire: function(msg) {
+            this.showModal = true;
+            this.msg = '您的会话已过期，请重新登录';
+            var that = this
+            this.timer = window.setInterval(function() {
+                if (that.sec == 0) {
+                    clearInterval(that.timer);
+                    window.setTimeout(function() {
+                        that.sec = 5;
+                    }, 3000)
+                    that.$router.push({
+                        path: '/login'
+                    })
+                    that.showModal = false;
+                } else {
+                    that.sec -= 1;
+                }
+            }, 1000)
+        },
+        accountLock: function(msg) {
+            var that = this
+            that.showModal = true;
+            that.msg = '账号被锁定，请联系所属医生';
+            var timer = window.setInterval(function() {
+                if (that.sec == 0) {
+                    clearInterval(timer);
+                    window.setTimeout(function() {
+                        that.sec = 5;
+                    }, 3000)
+                    that.$router.push({
+                        path: '/login'
+                    })
+                    that.showModal = false;
+                } else {
+                    that.sec -= 1;
+                }
+            }, 1000)
+        },
+        doctorLimited: function(msg) {
+            var that = this
+            that.showModal = true
+            that.msg = msg
+            var timer = window.setInterval(function() {
+                if (that.sec == 0) {
+                    clearInterval(timer);
+                    window.setTimeout(function() {
+                        that.sec = 5;
+                    }, 3000)
+                    that.$router.push({
+                        path: '/login'
+                    })
+                    that.showModal = false;
+                } else {
+                    that.sec -= 1;
+                }
+            }, 1000)
+        },
+        showHideLoadingModal: function(data) {
+            this.showLoadingModal = data
+        },
+        showErrorMsg: function(errmsg) {
+            if (errmsg == '量表模板不存在') {
+                return 
+            }
+            this.$message({
+                type: 'error',
+                message: errmsg
+            })
+        },
         goLogin: function() {
             clearInterval(this.timer);
             this.showModal = false
@@ -159,6 +158,13 @@ export default {
             })
 
         }
+    },
+    created: function() {
+        Bus.$on('login-expire', this.loginExpire)
+        Bus.$on('account-lock', this.accountLock)
+        Bus.$on('doctor-limited', this.doctorLimited)
+        Bus.$on('show-loading-modal', this.showHideLoadingModal)
+        Bus.$on('ajax-error', this.showErrorMsg)
     }
 }
 </script>

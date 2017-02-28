@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
 // import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 // import ElMoment from 'el-moment'
@@ -13,8 +15,6 @@ Vue.use(DatePicker)
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$message = Message;
 
-import App from './App.vue'
-import router from './router'
 
 // Vue.use(ElementUI)
 // Vue.use(ElMoment)
@@ -121,7 +121,7 @@ Vue.directive('dg-privilege', {
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.auth === true) {
+    if (to.meta.auth === true) {
         if (common.isLogin() === false) {
             next({
                 path: '/login'

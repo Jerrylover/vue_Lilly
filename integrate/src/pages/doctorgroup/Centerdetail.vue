@@ -213,120 +213,83 @@
             },
             setprojectmaster: function(member) {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_membersetprojectmaster'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_memberid: member.id,
-                        dg_projectid: self.projectid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$message({
-                            type: 'success',
-                            duration: 1500,
-                            message: '设置成功',
-                            onClose: function() {
-                                self.fetchData();
-                            }
-                        })
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_membersetprojectmaster',
+                  data: {
+                      dg_memberid: member.id,
+                      dg_projectid: self.projectid,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          duration: 1500,
+                          message: '设置成功',
+                          onClose: function() {
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
+
             },
             removeprojectmaster: function(member) {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_memberremoveprojectmaster'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_memberid: member.id,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.$message({
-                            type: 'success',
-                            duration: 1500,
-                            message: '设置成功',
-                            onClose: function() {
-                                self.fetchData();
-                            }
-                        })
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_memberremoveprojectmaster',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_memberid: member.id,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          duration: 1500,
+                          message: '设置成功',
+                          onClose: function() {
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
             },
             setcentermaster: function(member) {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_membersetcentermaster'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_memberid: member.id,
-                        dg_projectid: self.projectid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$message({
-                            type: 'success',
-                            duration: 1500,
-                            message: '设置成功',
-                            onClose: function() {
-                                self.fetchData();
-                            }
-                        })
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_membersetcentermaster',
+                  data: {
+                      dg_memberid: member.id,
+                      dg_projectid: self.projectid,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          duration: 1500,
+                          message: '设置成功',
+                          onClose: function() {
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
             },
             removecentermaster: function(member) {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_memberremovecentermaster'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_memberid: member.id,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.$message({
-                            type: 'success',
-                            duration: 1500,
-                            message: '设置成功',
-                            onClose: function() {
-                                self.fetchData();
-                            }
-                        })
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_memberremovecentermaster',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_memberid: member.id,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          duration: 1500,
+                          message: '设置成功',
+                          onClose: function() {
+                              self.fetchData();
+                          }
+                      })
+                  }
                 })
             },
             addmember: function() {
@@ -360,30 +323,23 @@
                     $("input[name='doctormobile']").focus();
                     return ;
                 }
-                $.ajax({
-                    url: api.get('doctorgroup.dg_membersearch'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        doctorname: self.doctornameForSearch,
-                        doctormobile: self.doctormobileForSearch,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.searchresultdoctor = data.doctor;
-                    } else if(response.errno == -5){
-                        self.searchresult = "姓名或电话有误,请核查后输入。";
-                        self.searchresultdoctor.name = '';
-                        self.searchresultdoctor.mobile = '';
-                        self.searchresultdoctor.hospital = '';
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_membersearch',
+                  data: {
+                      doctorname: self.doctornameForSearch,
+                      doctormobile: self.doctormobileForSearch,
+                  },
+                  successCallback: function(d) {
+                      self.searchresultdoctor = d.data.doctor;
+                  },
+                  errorCallback: function(d) {
+                      if(d.errno == -5){
+                         self.searchresult = "姓名或电话有误,请核查后输入。";
+                         self.searchresultdoctor.name = '';
+                         self.searchresultdoctor.mobile = '';
+                         self.searchresultdoctor.hospital = '';
+                     }
+                  }
                 })
             },
             addmemberpost: function() {
@@ -396,39 +352,30 @@
                     })
                     return ;
                 }
-                $.ajax({
-                    url: api.get('doctorgroup.dg_memberadd'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.currcenterid,
-                        doctorid: self.searchresultdoctor.doctorid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$message({
-                            type: 'success',
-                            duration: 1500,
-                            message: '添加成功',
-                            onClose: function() {
-                                self.doctornameForSearch = '';
-                                self.doctormobileForSearch = '';
-                                self.searchresult = '';
-                                self.searchresultdoctor.name = '';
-                                self.searchresultdoctor.mobile = '';
-                                self.searchresultdoctor.hospital = '';
-                            }
-                        })
-                        self.showModal = false;
-                        self.dg_center.members.push(response.data.dg_member);
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_memberadd',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_centerid: self.currcenterid,
+                      doctorid: self.searchresultdoctor.doctorid,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          duration: 1500,
+                          message: '添加成功',
+                          onClose: function() {
+                              self.doctornameForSearch = '';
+                              self.doctormobileForSearch = '';
+                              self.searchresult = '';
+                              self.searchresultdoctor.name = '';
+                              self.searchresultdoctor.mobile = '';
+                              self.searchresultdoctor.hospital = '';
+                          }
+                      })
+                      self.showModal = false;
+                      self.dg_center.members.push(response.data.dg_member);
+                  }
                 })
             },
             getDiseaseid: function() {
@@ -439,31 +386,21 @@
             },
             fetchData: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('doctorgroup.dg_memberlist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.currcenterid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        console.log(data);
-                        self.dg_project = data.dg_project;
-                        self.dg_center = data.dg_center;
-                        self.dg_centers = data.dg_centers;
-                        self.project_role = data.project_role;
-                        self.is_create = data.is_create;
-                        self.is_bat_input = data.is_bat_input;
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            duration: 1500,
-                            message: response.errmsg,
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_memberlist',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_centerid: self.currcenterid,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.dg_project = data.dg_project;
+                      self.dg_center = data.dg_center;
+                      self.dg_centers = data.dg_centers;
+                      self.project_role = data.project_role;
+                      self.is_create = data.is_create;
+                      self.is_bat_input = data.is_bat_input;
+                  }
                 })
             },
             initPage: function() {

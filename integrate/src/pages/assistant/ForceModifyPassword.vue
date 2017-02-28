@@ -61,17 +61,16 @@ export default {
     methods: {
         fetchAssistant: function() {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.one'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: that.assistantid
-                },
-            }).done(function(d) {
-                if (d.data) {
-                    that.name = d.data.name;
-                }
+            api.http({
+              url: 'assistant.one',
+              data: {
+                  assistantid: that.assistantid,
+              },
+              successCallback: function(d) {
+                  if (d.data) {
+                      that.name = d.data.name;
+                  }
+              }
             })
         },
         clickSave: function() {
@@ -98,27 +97,21 @@ export default {
             data.password2 = this.password2;
 
             var that = this;
-            var url = api.get('assistant.forcemodifypassword');
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                data: data
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
-                } else {
-                    that.$message({
-                        showClose: true,
-                        type: 'success',
-                        message: '重置成功',
-                        onClose: function() {
-                            that.$router.push({
-                                name: 'manager'
-                            })
-                        }
-                    })
-                }
+            api.http({
+              url: 'assistant.forcemodifypassword',
+              data: data,
+              successCallback: function(d) {
+                  that.$message({
+                      showClose: true,
+                      type: 'success',
+                      message: '重置成功',
+                      onClose: function() {
+                          that.$router.push({
+                              name: 'manager'
+                          })
+                      }
+                  })
+              }
             })
         }
     },

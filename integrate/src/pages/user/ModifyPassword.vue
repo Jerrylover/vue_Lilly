@@ -76,35 +76,26 @@ export default {
                 return false;
             }
             var that = this;
-            $.ajax({
-                url: api.get('user.modifypassword'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    password: that.password,
-                    newpassword: that.newpassword,
-                    newpasswordrepeat: that.newpasswordrepeat,
-                },
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$message({
-                        showClose: true,
-                        type: 'error',
-                        message: d.errmsg
-                    })
-                } else {
-                    that.$message({
-                        showClose: true,
-                        type: 'success',
-                        message: '修改成功',
-                        onClose: function() {
-                            that.password = '';
-                            that.newpassword = '';
-                            that.newpasswordrepeat = '';
-                        }
-                    })
-                }
-
+            api.http({
+              url: 'user.modifypassword',
+              data: {
+                  password: that.password,
+                  newpassword: that.newpassword,
+                  newpasswordrepeat: that.newpasswordrepeat,
+              },
+              successCallback: function(d) {
+                  that.$message({
+                      showClose: true,
+                      type: 'success',
+                      duration: 1500,
+                      message: '修改成功',
+                      onClose: function() {
+                          that.password = '';
+                          that.newpassword = '';
+                          that.newpasswordrepeat = '';
+                      }
+                  })
+              }
             })
         },
     }

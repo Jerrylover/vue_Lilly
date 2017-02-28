@@ -9,7 +9,7 @@ export default new Router({
     {
       path: '/',
       name: 'webindex',
-      auth: true,
+      meta: {auth: true},
       redirect: '/patient/list'
     },
     {
@@ -28,7 +28,7 @@ export default new Router({
         {
           path: 'auditlist',
           name: 'patient-auditlist',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/AuditList.vue'], resolve);
           }
@@ -36,7 +36,7 @@ export default new Router({
         {
           path: 'list',
           name: 'patient-list',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/List.vue'], resolve);
           }
@@ -44,7 +44,7 @@ export default new Router({
         {
           path: 'new',
           name: 'patient-new',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/Modify.vue'], resolve);
           }
@@ -52,7 +52,7 @@ export default new Router({
         {
           path: 'new-lungcancer',
           name: 'patient-new-lungcancer',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/ModifyForLungcancer.vue'], resolve);
           }
@@ -60,7 +60,7 @@ export default new Router({
         {
           path: ':patientid/baseinfo/',
           name: 'patient-baseinfo',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/BaseInfo.vue'], resolve);
           }
@@ -68,7 +68,7 @@ export default new Router({
         {
           path: ':patientid/baseinfo-lungcancer/',
           name: 'patient-baseinfo-lungcancer',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/BaseInfoForLungcancer.vue'], resolve);
           }
@@ -76,7 +76,7 @@ export default new Router({
         {
           path: ':patientid/revisitrecords',
           name: 'patient-revisitrecord',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/RevisitRecords.vue'], resolve);
           }
@@ -84,7 +84,7 @@ export default new Router({
         {
           path: ':patientid/modify',
           name: 'patient-modifybaseinfo',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/Modify.vue'], resolve);
           }
@@ -92,7 +92,7 @@ export default new Router({
         {
           path: ':patientid/modify-lungcancer',
           name: 'patient-modify-lungcancer-baseinfo',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/ModifyForLungcancer.vue'], resolve);
           }
@@ -100,7 +100,7 @@ export default new Router({
         {
           path: 'selectdisease',
           name: 'patient-selectdisease',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/SelectDisease.vue'], resolve);
           }
@@ -110,14 +110,14 @@ export default new Router({
     {
       path: '/addvisit/:patientid',
       name: 'add-visit',
-      auth: true,
+      meta: {auth: true},
       component: function(resolve) {
         require(['../pages/AddVisit.vue'], resolve);
       }
     },
     {
       path: '/checkuptpl/:patientid',
-      auth: true,
+      meta: {auth: true},
       component: function(resolve) {
         require(['../pages/checkuptpl/Main.vue'], resolve);
       },
@@ -125,7 +125,7 @@ export default new Router({
         {
           path: '',
           name: 'checkuptpl-zhusu',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/checkuptpl/Zhusu.vue'], resolve);
           }
@@ -133,7 +133,7 @@ export default new Router({
         {
           path: 'child/:ename/:name',
           name: 'checkuptpl-child',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/checkuptpl/Child.vue'], resolve);
           }
@@ -163,7 +163,7 @@ export default new Router({
         {
           path: 'add',
           name: 'assistant-add',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/assistant/Add.vue'], resolve);
           }
@@ -171,7 +171,7 @@ export default new Router({
         {
           path: 'modify',
           name: 'assistant-modify',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/assistant/Add.vue'], resolve);
           }
@@ -179,7 +179,7 @@ export default new Router({
         {
           path: 'forcemodifypassword',
           name: 'assistant-forcemodifypassword',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/assistant/ForceModifyPassword.vue'], resolve);
           }
@@ -187,7 +187,7 @@ export default new Router({
         {
           path: 'privilege',
           name: 'assistant-privilege',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/assistant/Privilege.vue'], resolve);
           }
@@ -203,7 +203,7 @@ export default new Router({
         {
           path: 'projectlist',
           name: 'doctorgroup-projectlist',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/projectlist.vue'], resolve);
           }
@@ -211,7 +211,7 @@ export default new Router({
         {
           path: 'addproject',
           name: 'doctorgroup-addproject',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/addOrModifyProject.vue'], resolve);
           }
@@ -219,7 +219,7 @@ export default new Router({
         {
           path: ':projectid/modifyproject',
           name: 'doctorgroup-modifyproject',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/addOrModifyProject.vue'], resolve);
           }
@@ -227,7 +227,7 @@ export default new Router({
         {
           path: ':projectid/centerlist',
           name: 'doctorgroup-centerlist',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/centerlist.vue'], resolve);
           }
@@ -235,7 +235,7 @@ export default new Router({
         {
           path: ':projectid/addcenter',
           name: 'doctorgroup-addcenter',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/addOrModifyCenter.vue'], resolve);
           }
@@ -243,7 +243,7 @@ export default new Router({
         {
           path: ':projectid/center/:centerid/modifycenter',
           name: 'doctorgroup-modifycenter',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/addOrModifyCenter.vue'], resolve);
           }
@@ -251,7 +251,7 @@ export default new Router({
         {
           path: 'patientlist',
           name: 'doctorgroup-patientlist',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/patientlist.vue'], resolve);
           }
@@ -259,7 +259,7 @@ export default new Router({
         {
           path: ':projectid/project/:centerid/centerdetail',
           name: 'doctorgroup-centerdetail',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/centerdetail.vue'], resolve);
           }
@@ -267,7 +267,7 @@ export default new Router({
         {
           path: ':projectid/project/:centerid/importpatients',
           name: 'doctorgroup-importpatients',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/doctorgroup/importpatients.vue'], resolve);
           }
@@ -275,7 +275,7 @@ export default new Router({
         {
           path: ':patientid/revisitinfo',
           name: 'doctorgroup-revisitinfo',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/RevisitRecords.vue'], resolve);
           }
@@ -283,7 +283,7 @@ export default new Router({
         {
           path: ':patientid/patientbaseinfo',
           name: 'doctorgroup-baseinfo',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/BaseInfo.vue'], resolve);
           }
@@ -291,7 +291,7 @@ export default new Router({
         {
           path: ':patientid/patientbaseinfo-lungcancer/',
           name: 'doctorgroup-baseinfo-lungcancer',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/patient/BaseInfoForLungcancer.vue'], resolve);
           }
@@ -307,7 +307,7 @@ export default new Router({
         {
           path: 'info',
           name: 'user-info',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/user/Info.vue'], resolve);
           }
@@ -315,7 +315,7 @@ export default new Router({
         {
           path: 'modifypassword',
           name: 'user-modifypassword',
-          auth: true,
+          meta: {auth: true},
           component: function(resolve) {
             require(['../pages/user/ModifyPassword.vue'], resolve);
           }

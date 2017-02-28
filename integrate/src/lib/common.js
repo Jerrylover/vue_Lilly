@@ -11,22 +11,18 @@ export default {
             return false;
         }
 
-        var self = this;
+        var that = this;
         if (!this.getUserName()) {
-            $.ajax({
-                url: api.get('user.islogin'),
-                type: 'POST',
-                dataType: 'json',
+            api.http({
+                url: 'user.islogin',
                 async: false,
                 data: {
                     code: code
                 },
-            }).done(function(d) {
-                if (d.errno == 0) {
-                    // isLogin = d.data.islogin;
-                    self.login(d.data);
+                successCallback: function(d) {
+                    that.login(d.data);
                 }
-            });
+            })
         }
         return true;
     },

@@ -455,54 +455,53 @@ span.title {
         },
         fetchData: function() { //获取量表数据
             var self = this;
-            $.ajax({
-                url: api.get('patient.checkuphistory'),
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    patientid: self.patientid,
-                    doctorid: self.doctorid,
-                    dg_group: self.dg_group,
-                },
-            }).done(function(d) {
-                if (d.data == '') {
-                    self.msg = '暂无数据';
-                }
-                self.revisitrecords = d.data.revisitrecords;
-                self.chemos = d.data.chemos;
-                for (var i = 0; i < self.revisitrecords.length; i++) {
-                    if (i == 0) {
-                        self.dates[self.revisitrecords[i].thedate] = true;
-                    } else {
-                        self.dates[self.revisitrecords[i].thedate] = false;
-                    }
-                }
-                for (var i = 0; i < self.chemos.length; i++) {
-                    var chemo = self.chemos[i];
-                    chemo.thedate = chemo.startdate;
-                    chemo.typestr = '治疗';
-                    if (self.revisitrecords.length == 0 && i == 0) {
-                        self.chemoMaps[chemo.id] = true;
-                    } else {
-                        self.chemoMaps[chemo.id] = false;
-                    }
-                    self.revisitrecords.push(chemo);
-                }
+            api.http({
+              url: 'patient.checkuphistory',
+              data: {
+                  patientid: self.patientid,
+                  doctorid: self.doctorid,
+                  dg_group: self.dg_group,
+              },
+              successCallback: function(d) {
+                  if (d.data == '') {
+                      self.msg = '暂无数据';
+                  }
+                  self.revisitrecords = d.data.revisitrecords;
+                  self.chemos = d.data.chemos;
+                  for (var i = 0; i < self.revisitrecords.length; i++) {
+                      if (i == 0) {
+                          self.dates[self.revisitrecords[i].thedate] = true;
+                      } else {
+                          self.dates[self.revisitrecords[i].thedate] = false;
+                      }
+                  }
+                  for (var i = 0; i < self.chemos.length; i++) {
+                      var chemo = self.chemos[i];
+                      chemo.thedate = chemo.startdate;
+                      chemo.typestr = '治疗';
+                      if (self.revisitrecords.length == 0 && i == 0) {
+                          self.chemoMaps[chemo.id] = true;
+                      } else {
+                          self.chemoMaps[chemo.id] = false;
+                      }
+                      self.revisitrecords.push(chemo);
+                  }
 
-                self.revisitrecords.sort(function(x, y){
-                    var dx = new Date(x.thedate);
-                    var dy = new Date(y.thedate);
-                    var tx = dx.getTime();
-                    var ty = dy.getTime()
-                    if (tx > ty) {
-                        return -1;
-                    } else if (tx < ty) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                })
-                self.all = self.revisitrecords;
+                  self.revisitrecords.sort(function(x, y){
+                      var dx = new Date(x.thedate);
+                      var dy = new Date(y.thedate);
+                      var tx = dx.getTime();
+                      var ty = dy.getTime()
+                      if (tx > ty) {
+                          return -1;
+                      } else if (tx < ty) {
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+                  })
+                  self.all = self.revisitrecords;
+              }
             })
         },
         fetchPatient: function() {
@@ -511,16 +510,15 @@ span.title {
                 this.patientname = patientname
             } else {
                 var self = this;
-                $.ajax({
-                    url: api.get('patient.baseinfo'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid
-                    },
-                }).done(function(d) {
-                    self.patientname = d.data.name;
-                    libpatient.setPatientName(self.patientid, self.patientname);
+                api.http({
+                  url: 'patient.baseinfo',
+                  data: {
+                      patientid: self.patientid,
+                  },
+                  successCallback: function(d) {
+                      self.patientname = d.data.name;
+                      libpatient.setPatientName(self.patientid, self.patientname);
+                  }
                 })
             }
         }

@@ -79,7 +79,6 @@
             },
             addcenter: function() {
                 var self = this;
-                var url = api.get('doctorgroup.dg_centeradd');
                 if (self.dg_center.title.trim() == '') {
                     self.$message({
                         type: 'error',
@@ -102,37 +101,27 @@
                     })
                     return ;
                 }
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        title: self.dg_center.title,
-                        content: self.dg_center.content,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$message({
-                            type: 'success',
-                            message: '添加成功',
-                            duration: 1500,
-                            onClose: function() {
-                                self.goCenterlist();
-                            }
-                        })
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_centeradd',
+                  data: {
+                      dg_projectid: self.projectid,
+                      title: self.dg_center.title,
+                      content: self.dg_center.content,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          message: '添加成功',
+                          duration: 1500,
+                          onClose: function() {
+                              self.goCenterlist();
+                          }
+                      })
+                  }
                 })
             },
             modifycenter: function() {
                 var self = this;
-                var url = api.get('doctorgroup.dg_centermodify');
                 if (self.dg_center.title.trim() == '') {
                     self.$message({
                         type: 'error',
@@ -155,36 +144,25 @@
                     })
                     return ;
                 }
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_projectid: self.projectid,
-                        dg_centerid: self.centerid,
-                        title: self.dg_center.title,
-                        content: self.dg_center.content,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$message({
-                            type: 'success',
-                            message: '修改成功',
-                            duration: 1500,
-                            onClose: function() {
-                                self.goCenterlist();
-                            }
-                        })
-
-                    }else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_centermodify',
+                  data: {
+                      dg_projectid: self.projectid,
+                      dg_centerid: self.centerid,
+                      title: self.dg_center.title,
+                      content: self.dg_center.content,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                          type: 'success',
+                          message: '修改成功',
+                          duration: 1500,
+                          onClose: function() {
+                              self.goCenterlist();
+                          }
+                      })
+                  }
                 })
-
             },
             goCenterlist: function() {
                 var self = this;
@@ -215,26 +193,17 @@
                 if (url.trim() == '') {
                     return ;
                 }
-                $.ajax({
-                    url: api.get('doctorgroup.dg_centerone'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        dg_centerid: self.centerid,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.dg_project.title = data.dg_project.title;
-                        self.dg_center.title = data.dg_center.title;
-                        self.dg_center.content = data.dg_center.content;
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: response.errmsg,
-                            duration: 1500
-                        })
-                    }
+                api.http({
+                  url: 'doctorgroup.dg_centerone',
+                  data: {
+                      dg_centerid: self.centerid,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.dg_project.title = data.dg_project.title;
+                      self.dg_center.title = data.dg_center.title;
+                      self.dg_center.content = data.dg_center.content;
+                  }
                 })
             }
         },

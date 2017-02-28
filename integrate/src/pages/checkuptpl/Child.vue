@@ -95,26 +95,21 @@ export default {
     methods: {
         fetchCheckTpl: function() {
             var self = this;
-            $.ajax({
-                url: api.get('checkuptpl.one'),
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    ename: self.ename
-                },
-            }).done(function(d) {
-                self.checkuptpl = d.data.checkuptpl;
-                self.questionsheet = d.data.questionsheet;
-                self.questions = d.data.questions;
+            api.http({
+              url: 'checkuptpl.one',
+              data: {
+                  ename: self.ename
+              },
+              successCallback: function(d) {
+                  self.checkuptpl = d.data.checkuptpl;
+                  self.questionsheet = d.data.questionsheet;
+                  self.questions = d.data.questions;
 
-                self.$nextTick(function() {
-                    console.log('emit e-checkuptpl-ready')
-                    Bus.$emit('e-checkuptpl-ready')
-                });
-                // self.$nextTick(function(){
-                //     self.$emit('e-checkuptpl-ready')
-                // })
-
+                  self.$nextTick(function() {
+                      console.log('emit e-checkuptpl-ready')
+                      Bus.$emit('e-checkuptpl-ready')
+                  });
+              }
             })
         },
         changeAction: function(action) {

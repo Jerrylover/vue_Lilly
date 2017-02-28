@@ -97,23 +97,22 @@ export default {
     methods: {
         fetchPrivileges: function() {
             var that = this;
-            $.ajax({
-                url: api.get('assistant.privileges'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: that.assistantid
-                },
-            }).done(function(d) {
-                if (d.data) {
-                    var data = d.data;
-                    that.name = data.assistant.name;
-                    that.allprivileges = data.allprivileges;
-                    that.privileges = data.privileges;
-                    $.each(that.privileges, function(index, privilege) {
-                        that.privilegeids.push(privilege.id);
-                    })
-                }
+            api.http({
+              url: 'assistant.privileges',
+              data: {
+                  assistantid: that.assistantid,
+              },
+              successCallback: function(d) {
+                  if (d.data) {
+                      var data = d.data;
+                      that.name = data.assistant.name;
+                      that.allprivileges = data.allprivileges;
+                      that.privileges = data.privileges;
+                      $.each(that.privileges, function(index, privilege) {
+                          that.privilegeids.push(privilege.id);
+                      })
+                  }
+              }
             })
         },
         clickSearch: function() {
@@ -132,32 +131,26 @@ export default {
         },
         clickSave: function() {
             var that = this;
-            var url = api.get('assistant.modifyprivilege');
             var privilegeids = [];
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    assistantid: that.assistantid,
-                    privilegeids: that.privilegeids,
-                }
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    that.$emit('show-alert', d.errmsg);
-                } else {
-                    that.$message({
-                        showClose: true,
-                        type: 'success',
-                        message: '保存成功',
-                        onClose: function() {
-                            that.$router.push({
-                                name: 'manager'
-                            })
-                        }
-                    })
-                }
+            api.http({
+              url: 'assistant.modifyprivilege',
+              data: {
+                  assistantid: that.assistantid,
+                  privilegeids: that.privilegeids,
+              },
+              successCallback: function(d) {
+                  that.$message({
+                      showClose: true,
+                      type: 'success',
+                      message: '保存成功',
+                      onClose: function() {
+                          that.$router.push({
+                              name: 'manager'
+                          })
+                      }
+                  })
+              }
             })
         }
     },

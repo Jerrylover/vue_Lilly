@@ -131,34 +131,29 @@ export default {
             var self = this;
             var url = '';
             if (self.ismodify) {
-                url = api.get('revisitrecord.modify');
+                url = 'revisitrecord.modify'
             } else {
-                url = api.get('revisitrecord.addzhusu');
+                url ='revisitrecord.addzhusu'
             }
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    date: self.value,
-                    content: self.content,
-                    patientid: self.patientid,
-                    revisitrecordid: self.revisitrecordid
-                }
-            }).done(function(d) {
-                if (d.errno != 0 && d.errno != -10) {
-                    self.$emit('show-alert', d.errmsg);
-                } else {
-                    self.$message({
-                        showClose: true,
-                        message: '保存成功',
-                        type: 'success',
-                        duration: 1000
-                    });
+            api.http({
+              url: url,
+              data: {
+                  date: self.value,
+                  content: self.content,
+                  patientid: self.patientid,
+                  revisitrecordid: self.revisitrecordid
+              },
+              successCallback: function(d) {
+                  self.$message({
+                      showClose: true,
+                      message: '保存成功',
+                      type: 'success',
+                      duration: 1000
+                  });
 
-                    self.fetchData(self.value);
-                    $(e.target).blur();
-                }
+                  self.fetchData(self.value);
+                  $(e.target).blur();
+              }
             })
         },
         modify: function(item, e) {
@@ -173,39 +168,37 @@ export default {
         fetchData: function(newdate) {
             var self = this;
             //获取
-            $.ajax({
-                url: api.get('revisitrecord.list'),
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    patientid: self.patientid,
-                    // zhusu: 1
-                }
-            }).done(function(d) {
-                var mydate = self.date;
-                if (newdate != undefined && newdate != '') {
-                    mydate = newdate;
-                }
-                self.revisitRecords = d.data;
-                var r = '';
-                if (mydate) {
-                    for (var i = 0; i < self.revisitRecords.length; i++) {
-                        var revisitrecord = self.revisitRecords[i];
-                        if (revisitrecord.date == mydate) {
-                            r = revisitrecord;
-                            break;
-                        }
-                    }
-                }
-                if (!r) {
-                    r = self.revisitRecords[0];
-                }
-                if (r != undefined && r != '') {
-                    self.ismodify = true;
-                    self.value = r.date;
-                    self.content = r.content;
-                    self.revisitrecordid = r.revisitrecordid;
-                }
+            api.http({
+              url: 'revisitrecord.list',
+              data: {
+                  patientid: self.patientid,
+              },
+              successCallback: function(d) {
+                  var mydate = self.date;
+                  if (newdate != undefined && newdate != '') {
+                      mydate = newdate;
+                  }
+                  self.revisitRecords = d.data;
+                  var r = '';
+                  if (mydate) {
+                      for (var i = 0; i < self.revisitRecords.length; i++) {
+                          var revisitrecord = self.revisitRecords[i];
+                          if (revisitrecord.date == mydate) {
+                              r = revisitrecord;
+                              break;
+                          }
+                      }
+                  }
+                  if (!r) {
+                      r = self.revisitRecords[0];
+                  }
+                  if (r != undefined && r != '') {
+                      self.ismodify = true;
+                      self.value = r.date;
+                      self.content = r.content;
+                      self.revisitrecordid = r.revisitrecordid;
+                  }
+              }
             })
         }
     },
