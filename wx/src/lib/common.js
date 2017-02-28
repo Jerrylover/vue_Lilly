@@ -75,6 +75,7 @@ module.exports = {
         return openid;
     },
     checkLoginFromServerSync: function(openid) {
+        console.log(openid, 'checkLoginFromServerSync');
         var result = false;
         $.ajax({
             url: api.get('user.isbind'),

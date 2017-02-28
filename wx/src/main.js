@@ -16,6 +16,7 @@ router.push({
 })
 router.beforeEach((to, from, next) => {
     var openid = to.query.openid;
+    console.log(openid);
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }

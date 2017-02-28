@@ -53,9 +53,14 @@ module.exports =
         path: '/waitpatientconfirm',
         name: 'waitpatientconfirm',
         component: resolve => require(['../pages/WaitPatientConfirm.vue'], resolve),
-        component: function(resolve){
-            require(['../pages/WaitPatientConfirm.vue'], resolve)
-        }
+        // component: function(resolve){
+        //     require(['../pages/WaitPatientConfirm.vue'], resolve)
+        // }
+    },
+    {
+        path: '/patientlist',
+        name: 'patientlist',
+        component: resolve => require(['../pages/PatientList.vue'], resolve),
     },
     {
         path: '/cannotenter',
@@ -79,5 +84,4 @@ module.exports =
         //     requireBind: true,
         // }
     },
-
 ]

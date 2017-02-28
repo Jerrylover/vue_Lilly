@@ -49,7 +49,7 @@
     import utils from '../lib/utils.js'
     import api from '../config/api.js'
     import common from '../lib/common.js'
-    import moment from 'moment'
+    // import moment from 'moment'
     module.exports = {
         data: function() {
             return {

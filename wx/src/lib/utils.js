@@ -1,5 +1,5 @@
 module.exports = {
-    'getDate': function(formatstring = 'YYYY-MM-DD') {
+    'getNoWDate': function(formatstring = 'YYYY-MM-DD') {
         Date.prototype.Format = function (fmt) {
             var o = {
                 "M+": this.getMonth() + 1,
