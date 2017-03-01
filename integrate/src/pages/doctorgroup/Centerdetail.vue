@@ -415,12 +415,12 @@
         filters: {
             filterCenterMaster: function(val) {
                 var str = '';
-                $.each(val, function(index, one){
+                val.forEach(function(one) {
                     if (one.is_center_master == 1) {
-                        str+=one.name + '、';
+                        str += one.name + '、';
                     }
                 })
-                str = str.substring(0,str.length-1);
+                str = str.substring(0, str.length-1);
                 return str;
             }
         },

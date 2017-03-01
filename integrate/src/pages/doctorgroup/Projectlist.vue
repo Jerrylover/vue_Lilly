@@ -85,7 +85,7 @@
                       var data = d.data;
                       self.dg_projectlist = data.dg_projectlist;
                       var roles = {};
-                      $.each(self.dg_projectlist, function(index, one) {
+                      self.dg_projectlist.forEach(function(one) {
                           roles[one.dg_projectid] = {};
                           roles[one.dg_projectid].project_role = one.project_role;
                           roles[one.dg_projectid].center_roles = one.center_roles;

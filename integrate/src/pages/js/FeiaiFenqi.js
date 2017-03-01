@@ -103,7 +103,7 @@ export default function(vm) {
                 }
             }
             if (!fq) {
-                $.each(vm.$children, function(index, one) {
+                vm.$children.forEach(function(one) {
                     if (one.hasOwnProperty('question') && one.question.ename == 'fenqi') {
                         one.picked = '';
                         return;
@@ -117,7 +117,7 @@ export default function(vm) {
             $('label[_class="fenqi-label"]').each(function() {
                 if ($(this).attr('_id') == labelId) {
                     var optionid = $(this).attr('optionid');
-                    $.each(vm.$children, function(index, one) {
+                    vm.$children.forEach(function(one) {
                         if (one.hasOwnProperty('question') && one.question.ename == 'fenqi') {
                             one.picked = optionid;
                         }
@@ -151,7 +151,7 @@ export default function(vm) {
                 }
             }
             if (!fq) {
-                $.each(vm.$children, function(index, one) {
+                vm.$children.forEach(function(one) {
                     if (one.hasOwnProperty('question') && one.question.ename == 'fenqi') {
                         one.picked = '';
                         return;
@@ -164,7 +164,7 @@ export default function(vm) {
             $('label[_class="fenqi-label"]').each(function() {
                 if ($(this).attr('_id') == labelId) {
                     var optionid = $(this).attr('optionid');
-                    $.each(vm.$children, function(index, one) {
+                    vm.$children.forEach(function(one) {
                         if (one.hasOwnProperty('question') && one.question.ename == 'fenqi') {
                             one.picked = optionid;
                         }

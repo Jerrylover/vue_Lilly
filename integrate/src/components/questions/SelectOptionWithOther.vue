@@ -74,13 +74,13 @@ export default {
             var that = this;
             if (option.showenames != '') {
                 var enameArr = option.showenames.split(',');
-                $.each(enameArr, function(index, ename) {
+                enameArr.forEach(function(ename) {
                     Bus.$emit('show-component', ename);
                 })
             }
             if (option.hideenames != '') {
                 var enameArr = option.hideenames.split(',');
-                $.each(enameArr, function(index, ename) {
+                enameArr.forEach(function(ename) {
                     Bus.$emit('hide-component', ename);
                 })
             }

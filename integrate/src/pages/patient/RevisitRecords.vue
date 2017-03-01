@@ -294,7 +294,7 @@ span.title {
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">药品名</td><td width="25%">实际用量</td><td width="20%">用药途径</td><td width="20%">用药时长</td><td>备注</td></tr>';
             var html = '<table class="table mytable"><tbody>'
-            $.each(pkgitems, function(index, pkgitem) {
+            pkgitems.forEach(function(pkgitem) {
                 html += '<tr><td style="border-top:0;">' + pkgitem.name + '</td><td style="border-top:0;">' + pkgitem.method3 + '</td><td style="border-top:0;">' + pkgitem.pickedmethod4 + '</td><td style="border-top:0;">' + pkgitem.pickedtime + '</td><td style="border-top:0;">' + pkgitem.remark + '</td></tr>';
             })
             html += '</tbody></table>';
@@ -306,7 +306,7 @@ span.title {
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">名称</td><td width="80%">程度</td></tr>';
             var html = '<table class="table mytable"><tbody>';
-            $.each(sideeffect_items, function(index, sideeffect_item) {
+            sideeffect_items.forEach(function(sideeffect_item) {
                 html += '<tr><td style="border-top:0;">' + sideeffect_item[0] + '</td><td style="border-top:0;">' + sideeffect_item[1] + '</td></tr>';
             })
             html += '</tbody></table>';
@@ -533,7 +533,7 @@ span.title {
         filterTypes: function(newVal, oldVal) {
             var that = this;
             var arr = [];
-            $.each(that.all, function(index, one) {
+            that.all.forEach(function(one) {
                 if (util.inArray(newVal, one.typestr)) {
                     arr.push(one)
                 }

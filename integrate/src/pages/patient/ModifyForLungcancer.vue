@@ -998,7 +998,7 @@ export default {
         getFamilyDiseases: function() {
             var family_history = [];
             var that = this;
-            $.each(this.family_history_diseases, function(index, val) {
+            this.family_history_diseases.forEach(function(val) {
                 var obj = {};
                 obj.disease = val;
                 if (val == '癌症') {
@@ -1014,7 +1014,7 @@ export default {
         },
         setFamilyDiseases: function(data) {
             var that = this;
-            $.each(data, function(index, obj) {
+            data.forEach(function(obj) {
                 that.family_history_diseases.push(obj.disease);
                 if (obj.disease == '癌症') {
                     that.$set(that.family_history_contents, 0, obj.content)
@@ -1278,7 +1278,7 @@ export default {
         isModify: function() {
             return !!this.patientid;
         },
-        handleSuccessData: function(that,response) {
+        handleSuccessData: function(that, response) {
                 that.patientinfo = response.data;
                 //既往病史处理
                 if ($.trim(that.patientinfo.past_main_history) != "") {
@@ -1403,7 +1403,7 @@ export default {
             var that = this;
             to = to || this.$route
             this.diseaseid = to.query.diseaseid != undefined ?to.query.diseaseid : '';
-            if (!that.isModify()) {
+            if (!this.isModify()) {
                 if (this.diseaseCount > 1 && !this.diseaseid) {
                     this.$router.replace({
                         path: '/patient/selectdisease',

@@ -623,7 +623,7 @@ export default {
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">药品名</td><td width="25%">实际用量</td><td width="20%">用药途径</td><td width="20%">用药时长</td><td>备注</td></tr>';
             var html = '<table class="table mytable"><tbody>'
-            $.each(pkgitems, function(index, pkgitem) {
+            pkgitems.forEach(function(pkgitem) {
                 html += '<tr><td style="border-top:0;">' + pkgitem.name + '</td><td style="border-top:0;">' + pkgitem.method3 + '</td><td style="border-top:0;">' + pkgitem.pickedmethod4 + '</td><td style="border-top:0;">' + pkgitem.pickedtime + '</td><td style="border-top:0;">' + pkgitem.remark + '</td></tr>';
             })
             html += '</tbody></table>';
@@ -635,7 +635,7 @@ export default {
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">名称</td><td width="80%">程度</td></tr>';
             var html = '<table class="table mytable"><tbody>';
-            $.each(sideeffect_items, function(index, sideeffect_item) {
+            sideeffect_items.forEach(function(sideeffect_item) {
                 html += '<tr><td style="border-top:0;">' + sideeffect_item[0] + '</td><td style="border-top:0;">' + sideeffect_item[1] + '</td></tr>';
             })
             html += '</tbody></table>';
@@ -662,7 +662,7 @@ export default {
         },
         addMedicine: function() {
             var that = this;
-            $.each(that.searchCheckedList, function(index, one) {
+            that.searchCheckedList.forEach(function(one) {
                 one._id= Math.round(Math.random() * 100000000)
                 var obj = Object.assign({}, one);
                 that.medicines.push(obj);
@@ -709,7 +709,7 @@ export default {
         },
         methodChange: function(medicine) { //标准用法变化
             var i = 0;
-            $.each(medicine.method, function(index, method) {
+            medicine.method.forEach(function(method, index) {
                 if (medicine.pickedmethod == method) {
                     i = index;
                 }
@@ -734,7 +734,7 @@ export default {
             }
             data.pkg_name = pickedPkgname; //化疗方案
             var pickedMedicines = [];
-            $.each(this.medicines, function(index, medicine) {
+            this.medicines.forEach(function(medicine) {
                 var obj = {};
                 obj.name = medicine.name;
                 obj.pickedmethod = medicine.pickedmethod;
@@ -1001,26 +1001,10 @@ export default {
             that.$emit('change-action', '修改')
             that.chemoid = chemo.id;
             var pickedMedicines = util.isArray(chemo.pkg_items) ? chemo.pkg_items : [];
-            // if (chemo.pkg_items) {
-            //     $.each(that.medicineMaps, function(index2, medicines) {
-            //         $.each(medicines, function(index3, medicine) {
-            //             $.each(pickedMedicines, function(index, pickedMedicine) {
-            //                 pickedMedicine._id = Math.round(Math.random() * 100000000);
-            //                 if (medicine.name == pickedMedicine.name) {
-            //                     pickedMedicine.method = medicine.method;
-            //                     pickedMedicine.method2 = medicine.method2;
-            //                     // pickedMedicine.method3 = medicine.method3;
-            //                     pickedMedicine.method4 = medicine.method4;
-            //                     pickedMedicine.time = medicine.time;
-            //                     // return false;
-            //                 }
-            //             });
-            //         })
-            //     })
-            // }
+            
 
             if (pickedMedicines.length > 1) {
-                $.each(pickedMedicines, function(index, pickedMedicine) {
+                pickedMedicines.forEach(function(pickedMedicine) {
                     pickedMedicine._id = Math.round(Math.random() * 100000000);
                 });
             }
@@ -1079,12 +1063,10 @@ export default {
                 successCallback: function(d) {
                     that.medicineMaps = d.data.list;
                     that.pkgnames = d.data.methods;
-                    $.each(that.medicineMaps, function(index, list) {
-                        $.each(list, function(index1, one){
+                    Object.keys(that.medicineMaps).forEach(function(key1) {
+                        var list = that.medicineMaps[key1].forEach(function(one) {
                             one._id = Math.round(Math.random() * 100000000);
-                            // console.log('one-id-----', one._id)
                         })
-
                     })
                     that.fetchData();
                     that.bsa = d.data.bsa;
