@@ -1,12 +1,10 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row table-header">
+        <div class="breadcrumbs">
             <h4>项目列表</h4>
             <router-link  class="dg-header-a btn btn-default btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
         </div>
-        <div class="row">
+        <div class="row page-content">
         <table class="table table-bordered">
             <thead>
             <tr class="light-tr">
@@ -42,17 +40,9 @@
             </tbody>
         </table>
     </div>
-    </div>
-    <app-footer></app-footer>
-    </div>
+</div>
 </template>
 <style scoped>
-    h4 {
-        float: left;
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-        display: inline-block;
-    }
     .table {
         margin-top: 15px;
     }

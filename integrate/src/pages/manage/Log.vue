@@ -1,12 +1,8 @@
 <template>
-    <div>
-    <app-header active='log'></app-header>
     <div class="container-fluid content">
-        <div class="row table-header">
-            <div class="col-sm-2" style="padding:0">
-                <h4>操作日志</h4>
-            </div>
-            <div class="col-sm-10" style="padding:0">
+        <div class="breadcrumbs">
+            <h4>操作日志</h4>
+            <div class="fr" style="padding-right:10px;">
                 <div class="form-inline text-right">
                     <div class="form-group">
                         <select class="form-control" style="" v-model="assistantname">
@@ -21,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mg-t-20">
+        <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
                 <tr class="light-tr">
@@ -48,15 +44,8 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
-    </div>
 </template>
 <style scoped>
-h4 {
-    /*float: left;*/
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
 .header-a {
     margin: 5px 0 10px 20px;
     float: left;

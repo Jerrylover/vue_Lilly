@@ -1,26 +1,9 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
+        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
             <h4>{{pagetitle}}</h4>
-            <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
-                <li>返回</li>
-                <li><router-link  href="#"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-            </ol>
         </div>
-        <div class="row mg-t-20">
-            <!-- <div class="row" style="margin: 15px 0px 0px -15px">
-                <div class="col-sm-12">
-                    <span style="float: left; font-size: 16px;"><strong>项目名称&nbsp;&nbsp;</strong></span>
-                    <span style="float: left; line-height: 2; color: red">*</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" name="dg_project_title" v-model='title'>
-                </div>
-            </div> -->
+        <div class="row page-content">
             <div class="col-sm-6" style="padding: 0">
                 <div class="form-group">
                     <label for="projecttitle" style="float: left">项目名称&nbsp;&nbsp;&nbsp;</label>
@@ -36,21 +19,6 @@
                     <a href="javascript:" class="btn btn-primary" style="margin: 10px 0px 0px 0px" @click="addOrModifyProject">{{pagepostbuttonname}}</a>
                 </div>
             </div>
-        <!-- <div v-if="routeFrom == 'doctorgroup-modifyproject'">
-            <div class="row" style="margin: 10px 0px 10px -15px">
-                <div class="col-sm-12">
-                    <span style="float: left; font-size: 16px;line-height: 2.2;margin-right: 15px"><strong>项目负责人</strong></span>
-                    <a href="javascript:" class="btn btn-default" @click="addprojectmaster">添加项目负责人</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div  style=" border: 1px solid #ccc; min-height: 30px">
-
-                    </div>
-                </div>
-            </div>
-        </div> -->
 
         </div>
         <modal :show="showModal" :showHeader='false' width="600px">
@@ -75,15 +43,8 @@
             </div>
         </modal>
     </div>
-    <app-footer></app-footer>
-    </div>
 </template>
 <style scoped>
-    h4 {
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-        display: inline-block;
-    }
     .form-control option {
         padding: 8px;
     }

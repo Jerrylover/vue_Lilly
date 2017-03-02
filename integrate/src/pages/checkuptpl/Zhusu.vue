@@ -6,10 +6,6 @@
                     <label for="inputEmail3" class="col-lg-1 col-sm-2 control-label question-label">就诊日期</label>
                     <div class="col-sm-6">
                         <div class="block">
-                            <!-- <input class="form-control controls" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期" :disabled='ismodify' name='_date' :value="value"> -->
-                            <!-- <span :class="{'no-error fa fa-calendar-check-o fa-lg form-control-feedback': !iserror, 'glyphicon glyphicon-remove form-control-feedback': iserror}" style="right:0"></span>
-                            <span class="help-block" v-show="iserror">日期已存在</span> -->
-                            <!-- <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
                             <fc-date v-model="value" format="YYYY-MM-DD">
                                 <el-date-picker type="date" placeholder="" :disabled="true"></el-date-picker>
                             </fc-date>

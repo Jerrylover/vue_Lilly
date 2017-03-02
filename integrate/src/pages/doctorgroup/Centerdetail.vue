@@ -1,11 +1,7 @@
 <template>
-    <div>
-    <app-header active='doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
-            <div style="padding-left: 0px; display: inline-block; margin-right: 20px">
-                <h4>{{dg_center.title}}</h4>
-            </div>
+        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
+                <h4 style="margin-right:20px">{{dg_center.title}}</h4>
             <div style="display: inline-block;">
                 <select class="form-control" v-model="currcenterid" @change="changeCenter">
                     <option v-for="center in dg_centers" :value="center.id">{{center.title}}</option>
@@ -15,12 +11,8 @@
                 <a v-dg-privilege="dg_project.id + '-1 |' + currcenterid +'-1'" href="javascript:" class="btn btn-info" style="margin-left: 15px; margin-right: 10px" @click="addmember"><i class="fa fa-plus fa">&nbsp;添加医生</i></a>
                 <router-link  v-dg-privilege="dg_project.id + '-2 |' + currcenterid + '-x'" href="javascript:" class="btn btn-warning"  :to="{name: 'doctorgroup-importpatients',query:{'diseaseid': getDiseaseid()}}" ><i class="fa fa-sign-in fa">&nbsp;批量导入患者</i></router-link>
             </div>
-            <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
-                <li>返回</li>
-                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link  class="scale" href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-            </ol>
         </div>
+        <div class="page-content">
         <div class="row" style="margin-top:10px">
             <div class="well">
                 <p>项目名称:&nbsp;&nbsp;&nbsp;{{dg_project.title}}</p>
@@ -68,6 +60,7 @@
             </tbody>
         </table>
     </div>
+</div>
         <modal :show="showModal" :showheader="false" width="500px">
             <div slot="body">
                 <div class="form-horizontal">
@@ -109,15 +102,8 @@
             </div>
         </modal>
     </div>
-    <app-footer></app-footer>
-    </div>
 </template>
 <style scoped>
-    h4 {
-        display: inline-block;
-        border-left: 3px solid #008db9;
-        padding-left: 10px;
-    }
     .linkstyle a {
         padding: 5px;
         margin-right: 10px;

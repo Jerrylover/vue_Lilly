@@ -1,9 +1,13 @@
 <template>
-    <div>
-    <app-header active='patient'></app-header>
     <div class="container-fluid content">
-        <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header>
-        <div class="row patientinfo">
+        <!-- <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header> -->
+        <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
+        <div name="other-content">
+        </div>
+        </breadcrumb>
+
+        <div class="page-content">
+        <div class="patientinfo">
             <div class="baseinfo">
                 <div class="bg-caption-padding">
                     基本信息
@@ -400,21 +404,15 @@
                 </div>
             </div>
         </div>
+    </div>
         <div class="text-center margin-20px">
             <button class="btn btn-md btn-primary" @click="save">保存</button>
         </div>
-    </div>
-    <app-footer></app-footer>
     </div>
 </template>
 <style scoped>
 .el-date-editor.el-input {
     width:100%
-}
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
 }
 
 .gray-line {
@@ -583,6 +581,12 @@ import provinceAndCityList from '../../config/provinceAndCityList.js';
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             picked1: '',
             menstruationStopReason:'',
             menstruationNormalStyle: false,
@@ -747,6 +751,7 @@ export default {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         calendar: function(resolve) {
             require(['../../components/calendar.vue'], resolve);
         }
@@ -997,6 +1002,7 @@ export default {
             return today;
         },
         initPage: function() {
+            this.goPatient()
             var that = this;
             if (!that.isModify()) {
                 if (this.diseaseCount > 1) {
@@ -1123,6 +1129,14 @@ export default {
             }
             if (!util.isArray(that.patientinfo.other_contacts)) {
                 that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+            }
+        },
+        goPatient: function() {
+            var diseaseId = common.getDiseaseId();
+            if (common.isCancerDisease(diseaseId)) {
+                this.$router.push({
+                    path: '/patient/' + this.patientid + '/baseinfo-lungcancer/',
+                })
             }
         }
     },

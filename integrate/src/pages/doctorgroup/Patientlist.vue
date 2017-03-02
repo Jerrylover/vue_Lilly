@@ -1,44 +1,43 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row" style="border-bottom: 1px solid #ccc">
-            <div class="row" style="margin: 0px">
+        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc">
             <div style="padding-left: 0px;float: left; margin-right: 30px">
                 <h4>患者列表</h4>
             </div>
-            <div class="input-group" style="padding-left: 0px; float: right; width: 30%;">
-                <input class="form-control" type="text" name="" placeholder="搜索患者姓名/手机号/病历号" v-model="keyword" @keyup.enter="dosearch">
-                <span class="input-group-btn" style="background-color: ">
-                    <button class="btn btn-primary" @click="dosearch">
-                        <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                    </button>
-                </span>
+        </div>
+        <div class="page-content">
+            <div class="row" style="margin:0">
+                <div class="input-group" style="padding-left: 0px; float: right; width: 30%;">
+                    <input class="form-control" type="text" name="" placeholder="搜索患者姓名/手机号/病历号" v-model="keyword" @keyup.enter="dosearch">
+                    <span class="input-group-btn" style="background-color: ">
+                        <button class="btn btn-primary" @click="dosearch">
+                            <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+                <div style="padding-left: 0px;float: right;margin-right: 10px">
+                     <select class="form-control" v-model='currentdoctorid' @change="changedoctor">
+                         <option v-for="doctor in doctorlist" :value="doctor.doctorid">{{doctor.doctorname}}</option>
+                     </select>
+                </div>
+                <div style="padding-left: 0px;float: right;margin-right: 10px">
+                     <select class="form-control" v-model="currentcenterid" @change='changecenter'>
+                         <option v-for="center in centerlist" :value="center.id">{{center.title}}</option>
+                     </select>
+                </div>
+                <div style="padding-left: 0px;float: right;margin-right: 10px">
+                     <select class="form-control" v-model="currentprojectid" @change="changeproject">
+                         <option v-for="project in projectlist" :value="project.id">{{project.title}}</option>
+                     </select>
+                </div>
             </div>
-            <div style="padding-left: 0px;float: right;margin-right: 10px">
-                 <select class="form-control" v-model='currentdoctorid' @change="changedoctor">
-                     <option v-for="doctor in doctorlist" :value="doctor.doctorid">{{doctor.doctorname}}</option>
-                 </select>
-            </div>
-            <div style="padding-left: 0px;float: right;margin-right: 10px">
-                 <select class="form-control" v-model="currentcenterid" @change='changecenter'>
-                     <option v-for="center in centerlist" :value="center.id">{{center.title}}</option>
-                 </select>
-            </div>
-            <div style="padding-left: 0px;float: right;margin-right: 10px">
-                 <select class="form-control" v-model="currentprojectid" @change="changeproject">
-                     <option v-for="project in projectlist" :value="project.id">{{project.title}}</option>
-                 </select>
-            </div>
-            </div>
-            <ol class="breadcrumb" style="margin: 0">
+            <!-- <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
                 <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link :to="{name: 'doctorgroup-centerlist', params:{'projectid': currentprojectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li>
-            </ol>
-        </div>
-        <div class="row">
+                <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li> -->
+            <!-- </ol> -->
+        <div class="">
         <table class="table table-bordered mg-t-20">
             <thead>
             <tr>
@@ -81,15 +80,9 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
-    </div>
+</div>
 </template>
 <style scoped>
-    h4 {
-        display: inline-block;
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-    }
     table tr th {
         font-weight: normal;
     }

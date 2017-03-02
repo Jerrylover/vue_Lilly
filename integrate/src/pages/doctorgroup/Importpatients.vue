@@ -1,11 +1,11 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row">
+        <div class="breadcrumbs">
             <div style="float: left; margin-right: 30px">
                 <h4><strong>批量患者导入</strong></h4>
             </div>
+        </div>
+        <div class="page-content">
             <div style="padding: 0px;float: left; margin-right: 30px">
                 <select class="form-control" v-model="currentdisease">
                     <option v-for="disease in diseases" :value="disease.id">{{disease.name}}</option>
@@ -22,16 +22,16 @@
                 </div>
                 <a href="javascript:" class="btn btn-primary btn-sm" @click="dosearch">搜索</a>
             </div>
-        </div>
-        <div class="row" style="border-bottom: 1px solid #ccc">
+            <div class="clearfix"></div>
+        <!-- <div class="row" style="border-bottom: 1px solid #ccc">
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
                 <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
                 <li><router-link  href="javascript:"  :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
             </ol>
-        </div>
-        <div class="row" style="margin-top: 20px">
+        </div> -->
+        <div class="" style="margin-top: 20px">
             <div class="checkbox checkbox-inline checkbox-info" style="display: inline-block; margin-right: 30px">
                 <input id="all" type="checkbox" name="" @change='selectallpatient' v-model="selectallstatus">
                 <label for="all">全选</label>
@@ -39,7 +39,7 @@
             <a href="javascript:" class="btn btn-info btn-sm" @click="importall">批量导入</a>
             <a href="javascript:" class="btn btn-danger btn-sm" @click="removeall">批量删除</a>
         </div>
-        <div class="row mg-t-10">
+        <div class=" mg-t-10">
         <table class="table table-bordered table-striped">
             <thead>
             <tr class="light-tr">
@@ -72,15 +72,9 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
-</div>
+    </div>
 </template>
 <style scoped>
-    h4 {
-        display: inline-block;
-        border-left: 3px solid #008db9;
-        padding-left: 10px;
-    }
 </style>
 <script>
     import api from '../../config/api.js';

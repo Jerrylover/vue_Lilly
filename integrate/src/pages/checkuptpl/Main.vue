@@ -1,10 +1,11 @@
 <template>
-    <div>
-    <app-header active='patient'></app-header>
     <div class="container-fluid content">
-        <visit-header :patientname='patientname' active='addcheck' visitdesc='录数据' :patientid="patientid"></visit-header>
-        <div class="row row-content">
-            <div class="container col-lg-2 col-sm-3 container-left">
+        <!-- <visit-header :patientname='patientname' active='addcheck' visitdesc='录数据' :patientid="patientid"></visit-header> -->
+        <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
+            <h4>录入数据</h4>
+        </div>
+        <div class="page-content">
+            <div class="container col-lg-2 col-sm-3 container-left" style="width:160px">
                 <div class="div1">
                     <ul class="list-unstyled">
                         <fcmenu v-for="model in treeData" :model="model" :patientid="patientid" :ename="ename"></fcmenu>
@@ -15,8 +16,7 @@
                 <router-view></router-view>
             </div>
         </div>
-    </div>
-    <app-footer></app-footer>
+
     <modal :show="showModal">
         <div slot="header">
             <span class="header-span">提示信息</span>
@@ -71,10 +71,10 @@ div.row-content {
 import api from '../../config/api.js'
 import libpatient from '../../lib/patient.js'
 import common from '../../lib/common.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
-            patientname: '',
             treeData: [],
             name: '',
             showModal: false
@@ -84,6 +84,12 @@ export default {
         patientid: function() {
             return this.$route.params.patientid;
         },
+        patientname: function() {
+            return libpatient.getPatientName(this.patientid)
+        },
+        diseaseid: function() {
+            return libpatient.getDiseaseId(this.patientid)
+        },
         ename: function() {
             return this.$route.params.ename;
         }
@@ -92,6 +98,7 @@ export default {
         'appHeader': require('../../components/Header.vue'), //头组件
         'visitHeader': require('../../components/VisitHeader.vue'),
         'appFooter': require('../../components/Footer.vue'), //尾组件
+        'navmenu': require('../../components/NavMenu.vue'),
         'calendar': function(resolve) {
             require(['../../components/calendar.vue'], resolve);
         },
@@ -135,15 +142,7 @@ export default {
     },
     methods: {
         fetchPatient: function() {
-            var patientname = libpatient.getPatientName(this.patientid)
-            var diseaseid = libpatient.getDiseaseId(this.patientid)
-            if (patientname && diseaseid) {
-                this.patientname = patientname
-                // if (diseaseid != common.getDiseaseId()) {
-                //     localStorage.setItem('_diseaseid_', diseaseid)
-                //     window.location.reload();
-                // }
-            } else {
+            if (!this.patientname) {
                 var self = this;
                 api.http({
                   url: 'patient.baseinfo',
@@ -151,11 +150,18 @@ export default {
                       patientid: self.patientid
                   },
                   successCallback: function(d) {
-                      self.patientname = d.data.name;
                       libpatient.setPatientName(self.patientid, self.patientname);
                   }
                 })
             }
+        }
+    },
+    created: function() {
+        Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '数据录入')
+    },
+    watch: {
+        '$route': function(to, from) {
+            Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '数据录入')
         }
     }
 }

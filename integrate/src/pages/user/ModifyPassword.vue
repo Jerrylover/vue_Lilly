@@ -1,10 +1,9 @@
 <template>
-    <div>
-<app-header active='info'>
-</app-header>
 <div class="container-fluid content">
-    <page-nav active="modifypassword"></page-nav>
-    <div class="row mg-t-20">
+    <div class="breadcrumbs">
+        <h4>修改密码</h4>
+    </div>
+    <div class="page-content">
         <div class="col-lg-6 col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">当前密码</label>
@@ -23,8 +22,6 @@
             </div>
         </div>
     </div>
-</div>
-<app-footer></app-footer>
 </div>
 </template>
 <style scoped>

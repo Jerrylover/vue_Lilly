@@ -1,17 +1,18 @@
 <template>
-    <nav class="navbar navbar-inverse navbar-xs">
+    <div class="app-header">
+    <nav class="navbar navbar-inverse navbar-xs fc-navbar">
         <div class="container-fluid container-nav">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">{{sitePreName}}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
+                <ul class="nav navbar-nav" style="margin-left:10px">
+                    <!-- <li class="dropdown">
                         <a href="javascript:" @click="clickDropMenu" class="dropdown-toggle a-dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{diseasename}}</a>
                         <ul class="dropdown-menu" v-show="showDropMenu">
                             <li v-for="disease in diseases"><a :class="{active: diseasename == disease.name}" href="javascript:" @click.stop="selectDisease(disease)">{{disease.name}}</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li v-bind:class="{activeFix: active == 'patient'}">
                         <router-link  :to="{path:'/patient/list'}">患者</router-link>
                     </li>
@@ -35,30 +36,35 @@
                         <a href="javascript:" @click="logout($event)">退出 [{{name}}]</a>
                     </li>
                     <li v-if="diseaseCount > 1">
-                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:4px;" @click="switchState">{{state | filterState}}</button>
+                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:10px;" @click="switchState">{{state | filterState}}</button>
                     </li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
         </div>
     </nav>
+    <div style="clear:both"></div>
+    </div>
 </template>
 <style scoped>
+.fc-navbar {
+    margin-bottom: 0
+}
 .navbar-xs {
-    min-height: 38px;
-    height: 38px;
+    min-height: 50px;
+    height: 50px;
 }
 
 .navbar-xs .navbar-brand {
     padding: 0px 1px;
     font-size: 16px;
-    line-height: 38px;
+    line-height: 50px;
 }
 
 .navbar-xs .navbar-nav > li > a {
     padding-top: 0px;
     padding-bottom: 0px;
-    line-height: 38px;
+    line-height: 50px;
 }
 
 .navbar-inverse {
@@ -123,7 +129,7 @@ li.dropdown {
 }
 
 .container-nav {
-    padding-left: 97px;
+    padding-left: 25px;
 }
 </style>
 <style>
@@ -160,9 +166,9 @@ table.fctable thead th {
     border-bottom-width: 0;
 }
 
-div.content {
+/*div.content {
     padding: 0 100px;
-}
+}*/
 
 .fl {
     float: left;
@@ -215,6 +221,39 @@ tr.light-tr th {
 }
 .dg-header-a {
     margin: 5px 0 10px 20px;
+}
+.content.container-fluid {
+    margin-left: 135px;
+    overflow: auto;
+    padding-left: 0;
+}
+.body-content {
+    margin-left: 135px;
+    overflow: auto;
+    padding-left: 0;
+}
+.menu-mini.body-content {
+    margin-left:25px;
+}
+.page-content {
+    background: #fff;
+    margin: 0;
+    padding: 8px 20px 24px;
+}
+.breadcrumbs {
+    position: relative;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+    min-height: 41px;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    display: block;
+}
+.breadcrumbs h4 {
+    margin: 0;
+    line-height: 40px;
+    padding-left: 10px;
+    float: left;
 }
 
 </style>

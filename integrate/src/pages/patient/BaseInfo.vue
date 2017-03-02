@@ -1,9 +1,8 @@
 <template>
-    <div>
-    <app-header :active='headerselected'></app-header>
     <div class="container-fluid content">
-        <visit-header v-if="routepath == 'patient-baseinfo'" :patientname="patientname" :patientid="patientid" active='basic' ></visit-header>
-        <div v-else class="row" style="border-bottom: 1px solid #ccc">
+        <breadcrumb :data="breadcrumbData" pagetitle="基本信息"></breadcrumb>
+        <visit-header v-if="routepath == 'patient-baseinfo'" :patientname="patientname" :patientid="patientid" active='basic' class="collapse"></visit-header>
+        <div v-else class="" style="border-bottom: 1px solid #ccc">
             <h4>{{patientname}}</h4>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
@@ -13,7 +12,7 @@
                 <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
             </ol>
         </div>
-        <div class="row">
+        <div class="page-content">
             <table class="table table-bordered margin-top-20px">
                 <tbody>
                 <tr>
@@ -149,7 +148,6 @@
             </tbody>
             </table>
         </div>
-    </div>
     <div id="modal">
     <modal :show="showModal" width="800px">
         <div slot="header">
@@ -204,14 +202,9 @@
         </div>
     </modal>
     </div>
-    <app-footer></app-footer>
-    </div>
+</div>
 </template>
 <style scoped>
-    h4 {
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-    }
 .modal-body {
     margin-top: 0;
 }
@@ -266,9 +259,16 @@ import common from '../../lib/common.js';
 import util from '../../lib/util.js';
 import api from '../../config/api.js';
 import libpatient from '../../lib/patient.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             headerselected: 'patient',
             projectid: '',
             centerid: '',
@@ -344,6 +344,7 @@ export default {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'modal': function(resolve) {
             require(['../../components/Modal.vue'], resolve);
         }
@@ -456,8 +457,10 @@ export default {
             this.showModal = false;
         },
         initPage: function() {
+            this.goPatient()
             var that = this;
             var patientname = libpatient.getPatientName(that.patientid)
+            Bus.$emit('show-patient-third-level-menu', this.patientid, patientname, '基本信息')
             that.routepath= this.$route.name;
             var query = this.$route.query;
             if ($.trim(that.routepath) == 'doctorgroup-baseinfo') {
@@ -561,6 +564,14 @@ export default {
             }
             if (!util.isArray(that.patientInfo.other_contacts)) {
                 that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+            }
+        },
+        goPatient: function() {
+            var diseaseId = common.getDiseaseId();
+            if (common.isCancerDisease(diseaseId)) {
+                this.$router.push({
+                    path: '/patient/' + this.patientid + '/baseinfo-lungcancer/',
+                })
             }
         }
     },

@@ -1,30 +1,22 @@
 <template>
-    <div>
-<app-header active='patient'>
-</app-header>
-<div class="container-fluid content">
-    <div class="row table-header" style="border-bottom:1px solid #ccc;">
-        <h4>患者列表</h4>
-        <div class="segmented-control a-new-patient col-sm-3" style="border:1px solid #ccc;padding:0">
-            <input type='radio' id="patient-list" />
-            <label for="patient-list" @click="clickLabel($event, 'list')">患者列表</label>
-            <input type='radio' id="patient-auditlist" />
-            <label for="patient-auditlist" :class="{active1: pathname == 'patient-auditlist'}" @click="clickLabel($event, 'auditlist')">待审列表 <span v-show="auditcnt > 0" class="badge" style="background-color:#DE5F5F">{{auditcnt}}</span></label>
-        </div>
-        <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-default btn-sm" href="javascript:" @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
-        <div class="form-group" v-if="0">
-            <div class="input-group">
-                <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.enter='doSearch($event)'>
-                <span class="input-group-btn" style="width: 1%;">
-                        <button class="btn btn-primary" type="submit" @click="doSearch($event)">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                </button>
-                </span>
-            </div>
-        </div>
-        <a class="a-today-visit btn btn-default btn-sm collapse" href="javascript:">今日就诊</a>
+<div class="container-fluid content body-content">
+    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
+        <h4>待审核患者列表</h4>
     </div>
-    <div class="row" style="margin-top:20px;">
+    <div class="page-content">
+        <div>
+            <div class="form-group" style="float:left;width:50%">
+                <div class="input-group">
+                    <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.enter='doSearch($event)'>
+                    <span class="input-group-btn" style="width: 1%;line-height:35px">
+                            <button class="btn btn-primary" type="submit" @click="doSearch($event)">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                    </span>
+                </div>
+            </div>
+            <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-primary btn-sm" href="javascript:"  @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
+        </div>
         <table class="table table-bordered table-hover fctable">
             <thead>
                 <tr>
@@ -65,37 +57,22 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="text-center">
             <pagination :cur='pagenum' :pagesize='pagesize' :total='total' path='/patient/auditlist'></pagination>
         </div>
-    </div>
 </div>
-<app-footer></app-footer>
 </div>
 </template>
 <style scoped>
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
 
 .a-new-patient {
-    margin: 5px 0 10px 20px;
+    margin: 2px 0 10px 20px;
     float: left;
 }
 
 .a-today-visit {
     margin: 5px 20px 10px 20px;
     float: right;
-}
-
-.input-group {
-    float: right;
-    width: 30%;
-    margin-top: 3px;
 }
 
 .form-group {

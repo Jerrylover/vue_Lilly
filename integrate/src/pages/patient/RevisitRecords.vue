@@ -1,9 +1,10 @@
 <template>
-    <div>
-    <app-header active='patient'></app-header>
     <div class="container-fluid content">
-        <visit-header v-if="routepath == 'patient-revisitrecord'" :patientname='patientname' active='revisitrecords' :patientid="patientid"></visit-header>
-        <div v-else class="row">
+        <div class="breadcrumbs">
+            <h4>历次就诊</h4>
+        </div>
+        <visit-header v-if="routepath == 'patient-revisitrecord'" :patientname='patientname' active='revisitrecords' :patientid="patientid" class="collapse"></visit-header>
+        <div v-else class="">
             <h4>{{patientname}}</h4>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
@@ -13,8 +14,10 @@
                 <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
             </ol>
         </div>
+
+        <div class="page-content">
         <div class="row" v-if="isCancer">
-            <div class="mg-t-20">
+            <div class="">
                 <div class="checkbox checkbox-inline checkbox-success">
                     <input type="checkbox" id="menzhen" value="门诊" v-model="filterTypes"/>
                     <label for="menzhen">门诊</label>
@@ -105,14 +108,9 @@
             <div style="padding:20px;">{{msg}}</div>
         </div>
     </div>
-    <app-footer></app-footer>
     </div>
 </template>
 <style scoped>
-    h4 {
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-    }
     .div-table {
         padding: 0;
     }

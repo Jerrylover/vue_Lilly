@@ -1,9 +1,11 @@
 <template>
-    <div>
-    <app-header active='patient'></app-header>
     <div class="container-fluid content">
-        <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header>
-        <div class="row patientinfo">
+        <!-- <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header> -->
+            <div class="breadcrumbs">
+                <h4>{{pagetitle}}</h4>
+            </div>
+            <div class="page-content">
+        <div class="patientinfo">
             <div class="baseinfo">
                 <div class="bg-caption-padding">
                     基本信息
@@ -572,21 +574,16 @@
                 </div>
             </div>
         </div>
-        <div class="text-center margin-20px">
-            <button class="btn btn-md btn-primary" @click="save">保存</button>
-        </div>
     </div>
-    <app-footer></app-footer>
+    <div class="text-center margin-20px">
+        <button class="btn btn-md btn-primary" @click="save">保存</button>
     </div>
+    </div>
+
 </template>
 <style scoped>
 .el-date-editor.el-input {
     width:100%
-}
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
 }
 
 .gray-line {
@@ -993,6 +990,7 @@ export default {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
+        'navmenu': require('../../components/NavMenu.vue'),
     },
     methods: {
         getFamilyDiseases: function() {

@@ -1,14 +1,11 @@
 <template>
-    <div>
-<app-header active='manager'>
-</app-header>
 <div class="container-fluid content">
-    <div class="row table-header" style="border-bottom:1px solid #ccc;">
-        <page-header :pagetitle="'权限管理 '+name"></page-header>
+    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
+        <h4>权限管理</h4>
     </div>
-    <div class="row mg-t-20">
-        <div class="col-lg-6 col-sm-12">
-            <div class="row">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
                 <div class="col-sm-6 text-left" style="padding:0">
                     <div class="input-group">
                         <input class="input-search form-inline form-control" type="text" placeholder="输入权限名称" v-model='word'>
@@ -26,27 +23,18 @@
                 </div>
             </div>
         </div>
-
-    </div>
-    <div class="row mg-t-10">
-        <div class="col-lg-6 col-sm-12 div-privilege">
-            <div v-for="privilege in filteredPrivileges" class="checkbox checkbox-inline checkbox-info">
-                <input type="checkbox" :id="'inlineCheckbox' + privilege.id" :value='privilege.id' v-model='privilegeids'>
-                <label :for="'inlineCheckbox' + privilege.id">{{privilege.name}}</label>
+        <div class="mg-t-10">
+            <div class="col-lg-6 col-sm-12 div-privilege">
+                <div v-for="privilege in filteredPrivileges" class="checkbox checkbox-inline checkbox-info">
+                    <input type="checkbox" :id="'inlineCheckbox' + privilege.id" :value='privilege.id' v-model='privilegeids'>
+                    <label :for="'inlineCheckbox' + privilege.id">{{privilege.name}}</label>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<app-footer></app-footer>
-</div>
 </template>
 <style scoped>
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
-
 .control-label {
     font-weight: normal;
 }
@@ -121,7 +109,7 @@ export default {
         clickSelectAll: function() {
             var ids = [];
             var that = this;
-            taht.allprivileges.forEach(function(privilege) {
+            that.allprivileges.forEach(function(privilege) {
                 ids.push(privilege.id);
             })
             that.privilegeids = ids;

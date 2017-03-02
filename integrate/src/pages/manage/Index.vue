@@ -1,22 +1,10 @@
 <template>
-    <div>
-    <app-header active='manager'></app-header>
     <div class="container-fluid content">
-        <div class="row table-header">
+        <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
             <h4>助理账号管理</h4>
             <router-link  class="header-a btn btn-primary btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
-            <div class="form-group">
-                <div class="input-group">
-                    <input class="input-search form-inline form-control" type="text" placeholder="输入名称" v-model='name' @keyup.enter='clickSearch'>
-                    <span class="input-group-btn" style="width: 1%;">
-                        <button class="btn btn-primary" type="submit" @click="clickSearch">
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    </button>
-                    </span>
-                </div>
-            </div>
         </div>
-        <div class="row mg-t-20">
+        <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
                 <tr class="light-tr">
@@ -52,21 +40,13 @@
             </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <pagination :cur='pagenum' :pagesize='pagesize' :total='total' path='/manager'></pagination>
-            </div>
+        <div class="text-center">
+            <pagination :cur='pagenum' :pagesize='pagesize' :total='total' path='/manager'></pagination>
         </div>
-    </div>
-    <app-footer></app-footer>
+        <app-footer></app-footer>
     </div>
 </template>
 <style scoped>
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
 .header-a {
     margin: 5px 0 10px 20px;
     float: left;
@@ -101,6 +81,7 @@ export default {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
         'pagination': require('../../components/Pagination.vue'), //翻页组件
+        'navmenu': require('../../components/NavMenu.vue'),
         'modal': function(resolve) {
             require(['../../components/Modal.vue'], resolve);
         },

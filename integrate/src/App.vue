@@ -1,6 +1,9 @@
 <template>
     <div class="row">
+        <app-header v-if="showHeader()"></app-header>
+        <navmenu v-if="showMenu()"></navmenu>
         <router-view></router-view>
+        <app-footer v-if="showFooter()"></app-footer>
         <modal :show="showModal" width="300px">
             <div slot="header">
                 <span class="header-span">提示信息</span>
@@ -72,15 +75,41 @@ export default {
             showLoadingModal: false
         }
     },
+    computed: {
+    },
     mounted: function() {
 
     },
     components: {
+        'navmenu': require('./components/NavMenu.vue'),
+        'appHeader': require('./components/Header.vue'),
+        'appFooter': require('./components/Footer.vue'), //尾组件
         'modal': function(resolve) {
             require(['./components/Modal.vue'], resolve);
         },
     },
     methods: {
+        showMenu: function() {
+            var routeName = this.$route.name
+            if (routeName == 'login') {
+                return false
+            }
+            return true
+        },
+        showHeader: function() {
+            var routeName = this.$route.name
+            if (routeName == 'login') {
+                return false
+            }
+            return true
+        },
+        showFooter: function() {
+            var routeName = this.$route.name
+            if (routeName == 'login') {
+                return false
+            }
+            return true
+        },
         loginExpire: function(msg) {
             this.showModal = true;
             this.msg = '您的会话已过期，请重新登录';
@@ -143,7 +172,7 @@ export default {
         },
         showErrorMsg: function(errmsg) {
             if (errmsg == '量表模板不存在') {
-                return 
+                return
             }
             this.$message({
                 type: 'error',
@@ -165,6 +194,13 @@ export default {
         Bus.$on('doctor-limited', this.doctorLimited)
         Bus.$on('show-loading-modal', this.showHideLoadingModal)
         Bus.$on('ajax-error', this.showErrorMsg)
+        Bus.$on('menu-mini', function(ismini) {
+            if (ismini) {
+                $('.body-content').addClass('menu-mini')
+            } else {
+                $('.body-content').removeClass('menu-mini')
+            }
+        })
     }
 }
 </script>

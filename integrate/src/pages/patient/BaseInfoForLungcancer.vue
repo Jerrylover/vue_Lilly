@@ -1,21 +1,23 @@
 <template>
-    <div>
-    <app-header :active='headerselected'></app-header>
     <div class="container-fluid content">
-
-        <visit-header v-if="routepath == 'patient-baseinfo-lungcancer'" :patientname="patientname" :patientid="patientid" active='basic'></visit-header>
-        <div v-else class="row">
+        <visit-header v-if="routepath == 'patient-baseinfo-lungcancer'" :patientname="patientname" :patientid="patientid" active='basic' class="collapse"></visit-header>
+        <div v-else class="">
             <h4>{{patientname}}</h4>
             <ol class="breadcrumb" style="margin: 0">
                 <li>返回</li>
-                <li><router-link   :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link   :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-                <li><router-link   :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
-                <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
+                <li><router-link :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
             </ol>
         </div>
+        <div class="breadcrumbs" id="breadcrumbs">
+            <h4>基本信息</h4>
+        </div>
         <div class="row">
-            <table class="table table-bordered margin-top-20px">
+            <!--面包屑-->
+            <div class="page-content">
+            <table class="table table-bordered">
                 <tbody>
                 <tr>
                     <tr id="baseinfohead" class="bg-F5F6FA">
@@ -199,8 +201,8 @@
                 </tr>
             </tbody>
             </table>
+            </div>
         </div>
-    </div>
     <div id="modal">
     <modal :show="showModal" width="800px">
         <div slot="header">
@@ -255,14 +257,10 @@
         </div>
     </modal>
     </div>
-    <app-footer></app-footer>
-    </div>
+</div>
 </template>
 <style scoped>
-    h4 {
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-    }
+
 .modal-body {
     margin-top: 0;
 }
@@ -317,6 +315,7 @@ import util from '../../lib/util.js';
 import common from '../../lib/common.js';
 import api from '../../config/api.js';
 import libpatient from '../../lib/patient.js'
+import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
@@ -413,7 +412,8 @@ export default {
         'visitHeader': require('../../components/VisitHeader.vue'),
         'modal': function(resolve) {
             require(['../../components/Modal.vue'], resolve);
-        }
+        },
+        'navmenu': require('../../components/NavMenu.vue'),
     },
     computed: {
         doctorname: function() {
@@ -638,6 +638,7 @@ export default {
             if (patientname) {
                 this.patientname = patientname;
             }
+            Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '基本信息')
             this.routepath = this.$route.name;
             var query = this.$route.query;
             if (this.routepath == 'doctorgroup-baseinfo-lungcancer') {

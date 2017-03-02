@@ -1,71 +1,70 @@
 <template>
-<div>
-  <app-header active='patient'></app-header>
   <div class="container-fluid content">
-    <visit-header :patientname='patientname' :patientid='patientid' active='addvist'></visit-header>
-    <div class="row">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">添加就诊记录</h3>
+    <!-- <visit-header :patientname='patientname' :patientid='patientid' active='addvist' class="collapse"></visit-header> -->
+        <breadcrumb :data="breadcrumbData" pagetitle="就诊记录">
+            <div name="other-content">
+            </div>
+        </breadcrumb>
+
+        <div class="page-content">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">添加就诊记录</h3>
+            </div>
+            <div class="panel-body">
+              <div class="inner-addon right-addon">
+                <fc-date v-model="value" format="YYYY-MM-DD">
+                  <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
+                </fc-date>
+              </div>
+              <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
+                <el-select v-model="typestr" placeholder="">
+                  <el-option label="门诊" value="门诊"></el-option>
+                  <el-option label="住院" value="住院"></el-option>
+                  <el-option label="出院" value="出院"></el-option>
+                </el-select>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" style="margin-left:10px;" @click="addVisit($event)">添加</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">就诊记录历史</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table table-hover table-bordered fctable">
+                <thead>
+                  <tr>
+                    <th>就诊日期</th>
+                    <th v-show="isShowTypeStr">类型</th>
+                    <th>主诉</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="revisitrecord in revisitRecords">
+                    <td class="col-lg-2 col-sm-2">{{revisitrecord.date}}</td>
+                    <td v-show="isShowTypeStr">{{revisitrecord.typestr | formateTypeStr}}</td>
+                    <td>{{revisitrecord.content}}</td>
+                    <td>
+                      <a v-show="!revisitrecord.content" href="javascript:" @click="doDelete(revisitrecord, $event)">删除</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
-        <div class="panel-body form">
-          <div class="inner-addon right-addon">
-            <!-- <i class="fa fa-calendar-check-o fa-lg"></i> -->
-            <!-- <input class="form-group form-control" type="text" @click="showCalendar" v-model="value" placeholder="请输入日期">
-            <calendar :show="show" :value="value" :x="x" :y="y" :begin="begin" :range="range"></calendar> -->
-            <fc-date v-model="value" format="YYYY-MM-DD">
-              <el-date-picker type="date" placeholder="选择日期"></el-date-picker>
-            </fc-date>
-          </div>
-          <div class="col-lg-2 col-sm-2 form-group" v-show="isShowTypeStr">
-            <el-select v-model="typestr" placeholder="">
-              <el-option label="门诊" value="门诊"></el-option>
-              <el-option label="住院" value="住院"></el-option>
-              <el-option label="出院" value="出院"></el-option>
-            </el-select>
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary" style="margin-left:10px;" @click="addVisit($event)">添加</button>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="row">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">就诊记录历史</h3>
-        </div>
-        <div class="panel-body">
-          <table class="table table-hover table-bordered fctable">
-            <thead>
-              <tr>
-                <th>就诊日期</th>
-                <th v-show="isShowTypeStr">类型</th>
-                <th>主诉</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="revisitrecord in revisitRecords">
-                <td class="col-lg-2 col-sm-2">{{revisitrecord.date}}</td>
-                <td v-show="isShowTypeStr">{{revisitrecord.typestr | formateTypeStr}}</td>
-                <td>{{revisitrecord.content}}</td>
-                <td>
-                  <a v-show="!revisitrecord.content" href="javascript:" @click="doDelete(revisitrecord, $event)">删除</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <app-footer></app-footer>
 </div>
 </template>
 <style scoped>
 .panel {
-  margin-top: 20px;
+  /*margin-top: 20px;*/
+}
+.panel-heading h3 {
+    font-weight: normal;
 }
 
 .panel-title {
@@ -135,9 +134,16 @@ import api from '../config/api.js'
 import common from '../lib/common.js'
 import libpatient from '../lib/patient.js'
 import util from '../lib/util.js'
+import Bus from '../lib/bus.js'
 export default {
   data: function() {
     return {
+        breadcrumbData: [
+            {
+                name: '患者列表',
+                link: {name: 'patient-list'}
+            }
+        ],
       diseaseid: '',
       typestr: '门诊',
       patientname: '',
@@ -149,6 +155,8 @@ export default {
     'appHeader': require('../components/Header.vue'), //头组件
     'visitHeader': require('../components/VisitHeader.vue'),
     'appFooter': require('../components/Footer.vue'), //尾组件
+    'navmenu': require('../components/NavMenu.vue'),
+    'breadcrumb': require('../components/BreadCrumb.vue'),
   },
   computed: {
     patientid: function() {
@@ -258,6 +266,7 @@ export default {
     this.fetchData();
     this.diseaseid = common.getDiseaseId();
     this.value = util.getFormatDate();
+    Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '就诊记录')
   },
   watch: {
     '$route': function(to, from) {
@@ -265,6 +274,7 @@ export default {
       this.fetchData();
       this.diseaseid = common.getDiseaseId();
       this.value = util.getFormatDate();
+      Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '就诊记录')
     }
   }
 }

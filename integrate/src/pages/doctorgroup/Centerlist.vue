@@ -1,18 +1,11 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row" style="margin: 0px;border-bottom: 1px solid #ccc; padding-bottom: 0px">
-            <div class="col-sm-12"  style="padding-left:0px; padding-right: 0px">
-                <h4>{{dg_project.title}}项目</h4>
-                <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
-                <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
-                    <li>返回</li>
-                    <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                </ol>
-            </div>
+        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
+            <h4>{{dg_project.title}}项目</h4>
+            <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
         </div>
-        <div class="row" style="margin: 10px 0px 0px 0px">
+        <div class="page-content">
+        <div class="" style="margin: 10px 0px 0px 0px">
             <div class="well">
                 <p>项目名称:&nbsp;&nbsp;{{project_all.project_title}}</p>
                 <p>项目目标:&nbsp;&nbsp;{{project_all.project_content}}</p>
@@ -51,15 +44,9 @@
             </tbody>
         </table>
     </div>
-    <app-footer></app-footer>
-    </div>
+</div>
 </template>
 <style scoped>
-    h4 {
-        padding-left: 10px;
-        border-left: 3px solid #008db9;
-        display: inline-block;
-    }
 </style>
 <script>
     import api from '../../config/api.js';

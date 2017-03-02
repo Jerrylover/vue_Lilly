@@ -1,12 +1,9 @@
 <template>
-    <div>
-<app-header active='manager'>
-</app-header>
 <div class="container-fluid content">
-    <div class="row table-header" style="border-bottom:1px solid #ccc;">
-        <page-header :pagetitle="pageTitle"></page-header>
+    <div class="breadcrumbs">
+        <h4>{{pageTitle}}</h4>
     </div>
-    <div class="row mg-t-20">
+    <div class="page-content">
         <div class="col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">名称</label>
@@ -32,18 +29,10 @@
                 <a href="javascript:" class="btn btn-primary" @click="clickSave">提交</a>
             </div>
         </div>
-    </div>
-</div>
-<app-footer></app-footer>
+    </div><!--end of  page-content-->
 </div>
 </template>
 <style scoped>
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
-
 .control-label {
     font-weight: normal;
 }
@@ -79,6 +68,7 @@ export default {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
         'pageHeader': require('./Header.vue'),
+        'navmenu': require('../../components/NavMenu.vue'),
     },
     methods: {
         fetchAssistant: function() {

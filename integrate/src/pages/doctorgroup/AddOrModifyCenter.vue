@@ -1,16 +1,14 @@
 <template>
-    <div>
-    <app-header active = 'doctorgroup'></app-header>
     <div class="container-fluid content">
-        <div class="row" style="border-bottom: 1px solid #ccc;">
+        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
             <h4>{{dg_project.title}}项目&nbsp;&nbsp;&nbsp;{{pagetitle}}</h4>
-            <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
+            <!-- <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
                 <li>返回</li>
                 <li><router-link  class="scale" :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link  class="scale" :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-            </ol>
+            </ol> -->
         </div>
-        <div class="row mg-t-20">
+        <div class="page-content">
             <div class="col-sm-6" style="padding: 0">
                 <div class="form-group">
                     <label for="projecttitle" style="float: left">中心名称&nbsp;&nbsp;&nbsp;</label>
@@ -29,15 +27,8 @@
         </div>
 
     </div>
-    <app-footer></app-footer>
-    </div>
 </template>
 <style scoped>
-    h4 {
-        display: inline-block;
-        border-left: 3px solid #008db9;
-        padding-left: 10px;
-    }
     label {
         font-weight: normal;
     }

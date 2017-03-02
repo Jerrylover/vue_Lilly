@@ -1,12 +1,9 @@
 <template>
-    <div>
-<app-header active='manager'>
-</app-header>
 <div class="container-fluid content">
-    <div class="row table-header" style="border-bottom:1px solid #ccc;">
-        <page-header pagetitle="重置密码"></page-header>
+    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
+        <h4>重置密码</h4>
     </div>
-    <div class="row mg-t-20">
+    <div class="page-content">
         <div class="col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">名称</label>
@@ -26,15 +23,8 @@
         </div>
     </div>
 </div>
-<app-footer></app-footer>
-</div>
 </template>
 <style scoped>
-h4 {
-    float: left;
-    padding-left: 10px;
-    border-left: 3px solid #008db9;
-}
 
 .control-label {
     font-weight: normal;

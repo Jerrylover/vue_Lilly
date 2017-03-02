@@ -1,8 +1,9 @@
 <template>
-    <div>
-    <app-header active='patient'></app-header>
     <div class="container-fluid content">
-        <div class="row">
+        <div class="breadcrumbs">
+            <h4>新增患者</h4>
+        </div>
+        <div class="page-content">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">选择疾病</h3>
@@ -20,8 +21,6 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
-    </div>
 </template>
 <style scoped>
 
@@ -38,7 +37,7 @@ export default {
     components: {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
-
+        'navmenu': require('../../components/NavMenu.vue'),
     },
     computed: {
         'diseases': function() {
