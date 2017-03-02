@@ -92,6 +92,7 @@
                 var params = {
                     openid: this.openid,
                     content: this.content,
+                    thedate: this.time,
                     is_set_default: this.is_set_default,
                     bedtktid: this.bedtktid,
                 }
