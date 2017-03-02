@@ -1,22 +1,23 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs">
-            <h4>操作日志</h4>
-            <div class="fr" style="padding-right:10px;">
-                <div class="form-inline text-right">
-                    <div class="form-group">
-                        <select class="form-control" style="" v-model="assistantname">
-                            <option value="">全部</option>
-                            <option v-for="assistant in assistants" :value="assistant.name">{{assistant.name}}</option>
-                        </select>
+        <breadcrumb pagetitle="操作日志">
+            <div slot="other-content">
+                <div class="fr" style="padding-right:10px;">
+                    <div class="form-inline text-right">
+                        <div class="form-group">
+                            <select class="form-control" style="" v-model="assistantname">
+                                <option value="">全部</option>
+                                <option v-for="assistant in assistants" :value="assistant.name">{{assistant.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input class="input-search form-inline form-control" type="text" placeholder="输入患者名称" v-model='patientname' @keyup.enter='clickSearch'>
+                        </div>
+                        <a href="javascript:" class="btn btn-primary" @click="clickSearch">搜索</a>
                     </div>
-                    <div class="form-group">
-                        <input class="input-search form-inline form-control" type="text" placeholder="输入患者名称" v-model='patientname' @keyup.enter='clickSearch'>
-                    </div>
-                    <a href="javascript:" class="btn btn-primary" @click="clickSearch">搜索</a>
                 </div>
             </div>
-        </div>
+        </breadcrumb>
         <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
@@ -88,8 +89,7 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'pagination': require('../../components/Pagination.vue'), //翻页组件
     },
     methods: {

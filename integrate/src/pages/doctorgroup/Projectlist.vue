@@ -1,10 +1,15 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs">
-            <h4>项目列表</h4>
-            <router-link  class="dg-header-a btn btn-default btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
-        </div>
+        <breadcrumb pagetitle="项目列表">
+            <div slot="other-content">
+                <router-link class="btn btn-primary btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
+            </div>
+        </breadcrumb>
+
         <div class="row page-content">
+            <div class="">
+
+            </div>
         <table class="table table-bordered">
             <thead>
             <tr class="light-tr">
@@ -57,12 +62,7 @@
             }
         },
         components: {
-            'appHeader': function(resolve){
-                require(['../../components/Header.vue'], resolve);
-            },
-            'appFooter': function(resolve){
-                require(['../../components/Footer.vue'], resolve);
-            }
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
         },
         methods: {
             fetchData: function() {

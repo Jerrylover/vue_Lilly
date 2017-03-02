@@ -1,8 +1,10 @@
+
 <template>
 <div class="container-fluid content body-content">
-    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
-        <h4>待审核患者列表</h4>
-    </div>
+    <breadcrumb pagetitle="待审核患者列表" >
+        <div name="other-content">
+        </div>
+    </breadcrumb>
     <div class="page-content">
         <div>
             <div class="form-group" style="float:left;width:50%">
@@ -122,6 +124,7 @@ export default {
         'appHeader': require('../../components/Header.vue'), //头组件
         'appFooter': require('../../components/Footer.vue'), //尾组件
         'pagination': require('../../components/Pagination.vue'), //翻页组件
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     filters: {
         filterStatus: function(status) {
@@ -285,11 +288,13 @@ export default {
     created: function() {
         this.pathname = this.$route.name;
         this.fetchData();
+        Bus.$emit('make-menu-mini')
     },
     watch: {
         '$route': function(to, from) {
             this.pathname = to.name;
             this.fetchData();
+            Bus.$emit('make-menu-mini')
         }
     }
 }

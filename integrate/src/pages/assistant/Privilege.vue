@@ -1,8 +1,9 @@
 <template>
 <div class="container-fluid content">
-    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
-        <h4>权限管理</h4>
-    </div>
+    <breadcrumb :data="breadcrumbData" pagetitle="权限管理">
+        <div slot="other-content">
+        </div>
+    </breadcrumb>
     <div class="page-content">
         <div class="row">
             <div class="col-sm-12 col-lg-6">
@@ -52,6 +53,12 @@ import api from '../../config/api.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '助理账号列表',
+                    link: {name: 'manager'}
+                }
+            ],
             name: '',
             assistantid: '',
             privilegeids: [],
@@ -78,9 +85,7 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
-        'pageHeader': require('./Header.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {
         fetchPrivileges: function() {
@@ -140,20 +145,21 @@ export default {
                   })
               }
             })
-        }
-    },
-    created: function() {
-        this.assistantid = this.$route.query.assistantid;
-        if (this.assistantid != undefined && this.assistantid != '') {
-            this.fetchPrivileges();
-        }
-    },
-    watch: {
-        '$route': function(to, from) {
-            this.assistantid = to.query.assistantid;
+        },
+        initPage: function() {
+            Bus.$emit('make-menu-mini')
+            this.assistantid = this.$route.query.assistantid;
             if (this.assistantid != undefined && this.assistantid != '') {
                 this.fetchPrivileges();
             }
+        }
+    },
+    created: function() {
+        this.initPage()
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.initPage()
         }
     }
 }

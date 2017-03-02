@@ -1,8 +1,10 @@
 <template>
 <div class="container-fluid content">
-    <div class="breadcrumbs">
-        <h4>{{pageTitle}}</h4>
-    </div>
+    <breadcrumb :data="breadcrumbData" :pagetitle="pageTitle">
+        <div slot="other-content">
+        </div>
+    </breadcrumb>
+
     <div class="page-content">
         <div class="col-sm-6" style="padding:0">
             <div class="form-group">
@@ -44,6 +46,12 @@ import rule from '../../config/rule.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '助理账号列表',
+                    link: {name: 'manager'}
+                }
+            ],
             name: '',
             username: '',
             mobile: '',
@@ -65,9 +73,7 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
-        'pageHeader': require('./Header.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'navmenu': require('../../components/NavMenu.vue'),
     },
     methods: {
@@ -167,26 +173,24 @@ export default {
                   })
               }
             })
-        }
-    },
-    created: function() {
-        if (this.$route.name == 'assistant-modify') {
-            this.ismodify = true;
-        }
-        this.assistantid = this.$route.query.assistantid;
-        if (this.assistantid != undefined && this.assistantid != '' && this.ismodify) {
-            this.fetchAssistant();
-        }
-    },
-    watch: {
-        '$route': function(to, from) {
-            if (to.name == 'assistant-modify') {
+        },
+        initPage: function() {
+            Bus.$emit('make-menu-mini')
+            if (this.$route.name == 'assistant-modify') {
                 this.ismodify = true;
             }
-            this.assistantid = to.query.assistantid;
+            this.assistantid = this.$route.query.assistantid;
             if (this.assistantid != undefined && this.assistantid != '' && this.ismodify) {
                 this.fetchAssistant();
             }
+        }
+    },
+    created: function() {
+        this.initPage()
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.initPage()
         }
     }
 }

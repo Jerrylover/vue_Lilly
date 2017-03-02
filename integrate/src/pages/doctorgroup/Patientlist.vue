@@ -1,10 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc">
-            <div style="padding-left: 0px;float: left; margin-right: 30px">
-                <h4>患者列表</h4>
+        <breadcrumb :data="breadcrumbData" pagetitle="患者列表">
+            <div slot="other-content">
+
             </div>
-        </div>
+        </breadcrumb>
         <div class="page-content">
             <div class="row" style="margin:0">
                 <div class="input-group" style="padding-left: 0px; float: right; width: 30%;">
@@ -97,6 +97,20 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    },
+                    {
+                        name: '中心列表',
+                        link: {name: 'doctorgroup-centerlist'}
+                    },
+                    {
+                        name: '中心详情',
+                        link: {}
+                    }
+                ],
                 pagenum: 1,
                 pagesize: 10,
                 total: 100,
@@ -112,16 +126,9 @@
                 patients: [],
             }
         },
-        route: {
-            data: function(transition) {
-
-            }
-        },
         components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
             'pagination': require('../../components/Pagination.vue'),
-
         },
         methods: {
             fetchData: function() {
@@ -261,6 +268,13 @@
             },
             initPage: function() {
                 var queryString = this.$route.query;
+                this.breadcrumbData[2].link = {
+                    name: 'doctorgroup-centerdetail',
+                    params: {
+                        projectid: queryString.projectid,
+                        centerid: queryString.centerid,
+                    }
+                }
                 this.currentprojectid = queryString.projectid || '';
                 this.currentcenterid = queryString.centerid || '';
                 this.currentdoctorid = queryString.doctorid || '';

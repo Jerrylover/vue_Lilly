@@ -1,7 +1,33 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
-                <h4 style="margin-right:20px">{{dg_center.title}}</h4>
+        <breadcrumb :data="breadcrumbData" pagetitle="中心详情">
+            <div slot="other-content">
+
+            </div>
+        </breadcrumb>
+        <!-- <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
+            <div style="display: inline-block;">
+                <select class="form-control" v-model="currcenterid" @change="changeCenter">
+                    <option v-for="center in dg_centers" :value="center.id">{{center.title}}</option>
+                </select>
+            </div>
+            <div style="display: inline-block;">
+                <a v-dg-privilege="dg_project.id + '-1 |' + currcenterid +'-1'" href="javascript:" class="btn btn-info" style="margin-left: 15px; margin-right: 10px" @click="addmember"><i class="fa fa-plus fa">&nbsp;添加医生</i></a>
+                <router-link  v-dg-privilege="dg_project.id + '-2 |' + currcenterid + '-x'" href="javascript:" class="btn btn-warning"  :to="{name: 'doctorgroup-importpatients',query:{'diseaseid': getDiseaseid()}}" ><i class="fa fa-sign-in fa">&nbsp;批量导入患者</i></router-link>
+            </div>
+        </div> -->
+        <div class="page-content">
+        <div class="" style="margin-top:10px">
+            <div class="well">
+                <p>项目名称:&nbsp;&nbsp;&nbsp;{{dg_project.title}}</p>
+                <div v-show="currcenterid != 0">
+                    <p>中心名称:&nbsp;&nbsp;&nbsp;{{dg_center.title}}</p>
+                    <p>中心目标:&nbsp;&nbsp;&nbsp;{{dg_center.content}}</p>
+                    <p>中心负责人:&nbsp;&nbsp;&nbsp;{{dg_center.members | filterCenterMaster}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-left">
             <div style="display: inline-block;">
                 <select class="form-control" v-model="currcenterid" @change="changeCenter">
                     <option v-for="center in dg_centers" :value="center.id">{{center.title}}</option>
@@ -12,19 +38,7 @@
                 <router-link  v-dg-privilege="dg_project.id + '-2 |' + currcenterid + '-x'" href="javascript:" class="btn btn-warning"  :to="{name: 'doctorgroup-importpatients',query:{'diseaseid': getDiseaseid()}}" ><i class="fa fa-sign-in fa">&nbsp;批量导入患者</i></router-link>
             </div>
         </div>
-        <div class="page-content">
-        <div class="row" style="margin-top:10px">
-            <div class="well">
-                <p>项目名称:&nbsp;&nbsp;&nbsp;{{dg_project.title}}</p>
-                <div v-show="currcenterid != 0">
-                    <p>中心名称:&nbsp;&nbsp;&nbsp;{{dg_center.title}}</p>
-                    <p>中心目标:&nbsp;&nbsp;&nbsp;{{dg_center.content}}</p>
-                    <p>中心负责人:&nbsp;&nbsp;&nbsp;{{dg_center.members | filterCenterMaster}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-        <table class="table table-bordered">
+        <table class="table table-bordered mg-t-10">
             <thead>
                 <tr class="light-tr">
                     <th>医生Id</th>
@@ -59,8 +73,7 @@
             </tr>
             </tbody>
         </table>
-    </div>
-</div>
+        </div>
         <modal :show="showModal" :showheader="false" width="500px">
             <div slot="body">
                 <div class="form-horizontal">
@@ -115,6 +128,16 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    },
+                    {
+                        name: '中心列表',
+                        link: {name: 'doctorgroup-centerlist'}
+                    }
+                ],
                 showModal: false,
                 doctornameForSearch: '',
                 doctormobileForSearch: '',
@@ -173,8 +196,7 @@
             }
         },
         components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
             'modal': function(resolve) {
                 require(['../../components/Modal.vue'], resolve);
             }

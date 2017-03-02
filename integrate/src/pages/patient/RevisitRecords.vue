@@ -1,8 +1,9 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs">
-            <h4>历次就诊</h4>
-        </div>
+        <breadcrumb :data="breadcrumbData" pagetitle="历次就诊">
+            <div name="other-content">
+            </div>
+        </breadcrumb>
         <visit-header v-if="routepath == 'patient-revisitrecord'" :patientname='patientname' active='revisitrecords' :patientid="patientid" class="collapse"></visit-header>
         <div v-else class="">
             <h4>{{patientname}}</h4>
@@ -16,7 +17,7 @@
         </div>
 
         <div class="page-content">
-        <div class="row" v-if="isCancer">
+        <div class="" v-if="isCancer">
             <div class="">
                 <div class="checkbox checkbox-inline checkbox-success">
                     <input type="checkbox" id="menzhen" value="门诊" v-model="filterTypes"/>
@@ -36,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="revisitrecords.length > 0">
+        <div class="" v-if="revisitrecords.length > 0">
             <div class="col-sm-12" v-for="revisitrecord in revisitrecords" style="padding:0" :key="revisitrecord.id">
                 <template v-if="revisitrecord.typestr == '治疗'">
                     <div class="header header-1" @click="clickChemoHeader(revisitrecord, $event)">
@@ -240,9 +241,16 @@ span.title {
     import common from '../../lib/common.js'
     import libpatient from '../../lib/patient.js'
     import util from '../../lib/util.js'
+    import Bus from '../../lib/bus.js'
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '患者列表',
+                        link: {name: 'patient-list'}
+                    }
+                ],
                 projectid: '',
                 centerid: '',
                 doctorid: '',
@@ -272,9 +280,12 @@ span.title {
         'appHeader': require('../../components/Header.vue'),
         'appFooter': require('../../components/Footer.vue'),
         'visitHeader': require('../../components/VisitHeader.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {
         initPage: function() {
+            var patientname = libpatient.getPatientName(this.patientid)
+            Bus.$emit('show-patient-third-level-menu', this.patientid, patientname, '历次就诊')
             this.routepath = this.$route.name;
             var query = this.$route.query;
             if (this.routepath == 'doctorgroup-revisitinfo') {

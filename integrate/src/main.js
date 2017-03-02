@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import Bus from './lib/bus.js'
+window.Bus = Bus
 // import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 // import ElMoment from 'el-moment'

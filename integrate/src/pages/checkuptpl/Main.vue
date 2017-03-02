@@ -1,9 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <!-- <visit-header :patientname='patientname' active='addcheck' visitdesc='录数据' :patientid="patientid"></visit-header> -->
-        <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
-            <h4>录入数据</h4>
-        </div>
+        <breadcrumb :data="breadcrumbData" pagetitle="数据录入">
+            <div name="other-content">
+            </div>
+        </breadcrumb>
+
         <div class="page-content">
             <div class="container col-lg-2 col-sm-3 container-left" style="width:160px">
                 <div class="div1">
@@ -75,6 +76,12 @@ import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             treeData: [],
             name: '',
             showModal: false
@@ -99,9 +106,7 @@ export default {
         'visitHeader': require('../../components/VisitHeader.vue'),
         'appFooter': require('../../components/Footer.vue'), //尾组件
         'navmenu': require('../../components/NavMenu.vue'),
-        'calendar': function(resolve) {
-            require(['../../components/calendar.vue'], resolve);
-        },
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'fcmenu': function(resolve) {
             require(['../../components/Menu.vue'], resolve);
         },

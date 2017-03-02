@@ -233,10 +233,12 @@ export default {
     },
     created: function() {
         this.fetchData();
+        Bus.$emit('make-menu-mini')
     },
     watch: {
         $route () {
             this.fetchData();
+            Bus.$emit('make-menu-mini')
         }
     }
 }

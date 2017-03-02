@@ -1,8 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs">
-            <h4>新增患者</h4>
+        <breadcrumb :data="breadcrumbData" pagetitle="新增患者选择疾病">
+        <div slot="other-content">
         </div>
+    </breadcrumb>
+
         <div class="page-content">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -31,13 +33,17 @@ import common from '../../lib/common.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             diseaseid: '',
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
-        'navmenu': require('../../components/NavMenu.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     computed: {
         'diseases': function() {

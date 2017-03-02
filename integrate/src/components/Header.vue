@@ -3,17 +3,14 @@
     <nav class="navbar navbar-inverse navbar-xs fc-navbar">
         <div class="container-fluid container-nav">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">{{sitePreName}}</a>
+                <a class="navbar-brand" href="/">
+                    <!-- <img style="width:38px;height:38px" src="../assets/logo_icon.png" /> -->
+                    {{sitePreName}}
+                </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav" style="margin-left:10px">
-                    <!-- <li class="dropdown">
-                        <a href="javascript:" @click="clickDropMenu" class="dropdown-toggle a-dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{diseasename}}</a>
-                        <ul class="dropdown-menu" v-show="showDropMenu">
-                            <li v-for="disease in diseases"><a :class="{active: diseasename == disease.name}" href="javascript:" @click.stop="selectDisease(disease)">{{disease.name}}</a></li>
-                        </ul>
-                    </li> -->
-                    <li v-bind:class="{activeFix: active == 'patient'}">
+                <ul class="nav navbar-nav" style="margin-left:10px;float:right">
+                    <!-- <li v-bind:class="{activeFix: active == 'patient'}">
                         <router-link  :to="{path:'/patient/list'}">患者</router-link>
                     </li>
 
@@ -31,12 +28,12 @@
                     </li>
                     <li v-if="username == 'wangqian'" v-bind:class="{activeFix: active == 'doctorgroup'}">
                         <router-link   :to="{name:'doctorgroup-projectlist'}">医生团队</router-link>
+                    </li> -->
+                    <li v-if="diseaseCount > 1">
+                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:10px;" @click="switchState">{{state | filterState}}</button>
                     </li>
                     <li>
                         <a href="javascript:" @click="logout($event)">退出 [{{name}}]</a>
-                    </li>
-                    <li v-if="diseaseCount > 1">
-                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:10px;" @click="switchState">{{state | filterState}}</button>
                     </li>
                 </ul>
             </div>

@@ -1,8 +1,9 @@
 <template>
 <div class="container-fluid content">
-    <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
-        <h4>重置密码</h4>
-    </div>
+    <breadcrumb :data="breadcrumbData" pagetitle="重置密码">
+        <div slot="other-content">
+        </div>
+    </breadcrumb>
     <div class="page-content">
         <div class="col-sm-6" style="padding:0">
             <div class="form-group">
@@ -35,6 +36,12 @@ import api from '../../config/api.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '助理账号列表',
+                    link: {name: 'manager'}
+                }
+            ],
             name: '',
             password1: '',
             password2: '',
@@ -44,9 +51,7 @@ export default {
     computed: {
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
-        'pageHeader': require('./Header.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {
         fetchAssistant: function() {
@@ -103,20 +108,21 @@ export default {
                   })
               }
             })
-        }
-    },
-    created: function() {
-        this.assistantid = this.$route.query.assistantid;
-        if (this.assistantid != undefined && this.assistantid != '') {
-            this.fetchAssistant();
-        }
-    },
-    watch: {
-        '$route': function(to, from) {
-            this.assistantid = to.query.assistantid;
+        },
+        initPage: function() {
+            Bus.$emit('make-menu-mini')
+            this.assistantid = this.$route.query.assistantid;
             if (this.assistantid != undefined && this.assistantid != '') {
                 this.fetchAssistant();
             }
+        }
+    },
+    created: function() {
+        this.initPage()
+    },
+    watch: {
+        '$route': function(to, from) {
+            this.initPage()
         }
     }
 }

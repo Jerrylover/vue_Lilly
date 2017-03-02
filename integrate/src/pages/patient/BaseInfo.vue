@@ -13,7 +13,7 @@
             </ol>
         </div>
         <div class="page-content">
-            <table class="table table-bordered margin-top-20px">
+            <table class="table table-bordered">
                 <tbody>
                 <tr>
                     <tr id="baseinfohead" class="bg-F5F6FA">

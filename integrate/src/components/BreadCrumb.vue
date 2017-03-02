@@ -7,7 +7,7 @@
             </li>
             <li class="active"><span>{{pagetitle}}</span></li>
         </ul>
-        <div style="display:inline-block">
+        <div style="display:inline-block;float:right">
             <slot name="other-content">
             </slot>
         </div>

@@ -1,9 +1,11 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom:1px solid #ccc;">
-            <h4>助理账号管理</h4>
-            <router-link  class="header-a btn btn-primary btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
-        </div>
+        <breadcrumb pagetitle="助理账号列表">
+            <div slot="other-content">
+                <router-link  class="header-a btn btn-primary btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
+            </div>
+        </breadcrumb>
+
         <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
@@ -43,7 +45,6 @@
         <div class="text-center">
             <pagination :cur='pagenum' :pagesize='pagesize' :total='total' path='/manager'></pagination>
         </div>
-        <app-footer></app-footer>
     </div>
 </template>
 <style scoped>
@@ -78,8 +79,7 @@ export default {
 
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'pagination': require('../../components/Pagination.vue'), //翻页组件
         'navmenu': require('../../components/NavMenu.vue'),
         'modal': function(resolve) {
@@ -220,11 +220,13 @@ export default {
     created: function() {
         var queryStrings = this.$route.query
         this.fetchAssistantData(queryStrings)
+        Bus.$emit('make-menu-mini')
     },
     watch: {
         '$route': function(to, from) {
             var queryStrings =to.query;
             this.fetchAssistantData(queryStrings);
+            Bus.$emit('make-menu-mini')
         }
     }
 }

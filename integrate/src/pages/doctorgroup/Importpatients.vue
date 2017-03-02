@@ -1,10 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs">
-            <div style="float: left; margin-right: 30px">
-                <h4><strong>批量患者导入</strong></h4>
+        <breadcrumb :data="breadcrumbData" pagetitle="批量患者导入">
+            <div slot="other-content">
+
             </div>
-        </div>
+        </breadcrumb>
         <div class="page-content">
             <div style="padding: 0px;float: left; margin-right: 30px">
                 <select class="form-control" v-model="currentdisease">
@@ -81,6 +81,20 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    },
+                    {
+                        name: '中心列表',
+                        link: {name: 'doctorgroup-centerlist'}
+                    },
+                    {
+                        name: '中心详情',
+                        link: {}
+                    }
+                ],
                 path:'',
                 pagenum: 1,
                 pagesize: 100,
@@ -104,8 +118,7 @@
             }
         },
         components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
             'pagination': require('../../components/Pagination.vue'),
         },
         methods: {
@@ -290,6 +303,13 @@
                 var self = this;
                 var query = this.$route.query
                 var params = this.$route.params
+                this.breadcrumbData[2].link = {
+                    name: 'doctorgroup-centerdetail',
+                    params: {
+                        projectid: params.projectid,
+                        centerid: params.centerid,
+                    }
+                }
                 self.diseaseid = query.diseaseid;
                 self.projectid = params.projectid;
                 self.centerid = params.centerid;

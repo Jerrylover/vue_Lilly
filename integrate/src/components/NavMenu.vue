@@ -51,6 +51,7 @@
         border-radius: 16px;
         background-color: #fff;
         position: relative;
+        margin-right: 0;
     }
     .menu-container {
         width: 150px;
@@ -127,10 +128,13 @@
     }
     .menu-title {
         padding: 5px 10px;
-        font-size: 20px;
+        font-size: 17px;
         text-align: center;
         font-weight: 700;
         color: #008DB9;
+    }
+    .fa {
+        margin-right: 10px
     }
     </style>
 <style>
@@ -156,7 +160,7 @@ export default {
         menuData: [
         {
             name: '患者',
-            icon: 'el-icon-message',
+            icon: 'fa fa-list',
             link: {name: 'patient-list'},
             isactive: true,
             submenus: [
@@ -165,7 +169,7 @@ export default {
         },
         {
             name: '门诊',
-            icon: 'el-icon-message',
+            icon: 'fa fa-user-md',
             isactive: false,
             submenus: [
                 {
@@ -182,7 +186,7 @@ export default {
         },
         {
             name: '住院预约',
-            icon: 'el-icon-message',
+            icon: 'fa fa-bed',
             isactive: false,
             submenus: [
                 {
@@ -199,7 +203,7 @@ export default {
         },
         {
             name: '医生团队',
-            icon: 'el-icon-message',
+            icon: 'fa fa-group',
             isactive: false,
             link: {name: 'doctorgroup-projectlist'},
             submenus: [
@@ -208,7 +212,7 @@ export default {
         },
         {
             name: '管理',
-            icon: 'el-icon-setting',
+            icon: 'fa fa-cog',
             isactive: false,
             submenus: [
                 {
@@ -230,7 +234,7 @@ export default {
         },
         {
             name: '数据统计',
-            icon: 'el-icon-setting',
+            icon: 'fa fa-pie-chart',
             isactive: false,
             submenus: [
 
@@ -238,7 +242,7 @@ export default {
         },
         {
             name: '操作日志',
-            icon: 'el-icon-message',
+            icon: 'fa fa-history',
             isactive: false,
             link: {name: 'log'},
             submenus: [
@@ -467,6 +471,9 @@ export default {
           Bus.$on('hide-patient-third-level-menu', function() {
               that.showThirdLevelMenu = false
               that.ismini = false
+          })
+          Bus.$on('make-menu-mini', function() {
+              that.ismini = true
           })
       })
 

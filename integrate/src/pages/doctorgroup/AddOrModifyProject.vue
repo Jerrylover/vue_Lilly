@@ -1,8 +1,9 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
-            <h4>{{pagetitle}}</h4>
-        </div>
+        <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
+            <div slot="other-content">
+            </div>
+        </breadcrumb>
         <div class="row page-content">
             <div class="col-sm-6" style="padding: 0">
                 <div class="form-group">
@@ -57,6 +58,12 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    }
+                ],
                 routeFrom: '',
                 pagetitle: '',
                 pagepostbuttonname: '',
@@ -171,7 +178,8 @@
             },
             'modal': function(resolve) {
                 require(['../../components/Modal.vue'], resolve);
-            }
+            },
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
         },
         methods: {
             'addOrModifyProject': function(e) {

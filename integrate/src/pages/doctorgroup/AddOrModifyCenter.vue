@@ -1,13 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
-            <h4>{{dg_project.title}}项目&nbsp;&nbsp;&nbsp;{{pagetitle}}</h4>
-            <!-- <ol class="breadcrumb" style="margin: 5px 0px 0px 0px">
-                <li>返回</li>
-                <li><router-link  class="scale" :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
-                <li><router-link  class="scale" :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
-            </ol> -->
-        </div>
+        <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
+            <div slot="other-content">
+            </div>
+        </breadcrumb>
+
         <div class="page-content">
             <div class="col-sm-6" style="padding: 0">
                 <div class="form-group">
@@ -38,6 +35,16 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    },
+                    {
+                        name: '中心列表',
+                        link: {name: 'doctorgroup-centerlist'}
+                    }
+                ],
                 projectid: '',
                 centerid: '',
                 routeFrom: '',
@@ -54,8 +61,7 @@
             }
         },
         components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
         },
         methods: {
             addormodifycenter: function() {

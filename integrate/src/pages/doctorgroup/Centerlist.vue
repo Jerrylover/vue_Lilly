@@ -1,9 +1,10 @@
 <template>
     <div class="container-fluid content">
-        <div class="breadcrumbs" style="border-bottom: 1px solid #ccc;">
-            <h4>{{dg_project.title}}项目</h4>
-            <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-default" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
-        </div>
+        <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
+            <div slot="other-content">
+                <router-link  v-dg-privilege="projectid + '-1'" href="javascript:" class="btn btn-primary btn-sm" style="margin-left: 10px"  :to="{name: 'doctorgroup-addcenter'}">添加中心</router-link>
+            </div>
+        </breadcrumb>
         <div class="page-content">
         <div class="" style="margin: 10px 0px 0px 0px">
             <div class="well">
@@ -53,6 +54,12 @@
     export default {
         data: function() {
             return {
+                breadcrumbData: [
+                    {
+                        name: '项目列表',
+                        link: {name: 'doctorgroup-projectlist'}
+                    }
+                ],
                 projectid: '',
                 dg_project: {
                     title: '肺间质纤维化',
@@ -77,9 +84,13 @@
                 }]
             }
         },
+        computed: {
+            pagetitle: function() {
+                return this.dg_project.title + '中心列表'
+            }
+        },
         components: {
-            'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
         },
         filters: {
             filterProjecter: function(val) {
