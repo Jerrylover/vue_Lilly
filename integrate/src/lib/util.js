@@ -70,14 +70,14 @@ export default {
     getFormJson: function(form) {
         var o = {};
         var a = $(form).serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
+        a.forEach(function(one) {
+            if (o[one.name] !== undefined) {
+                if (!o[one.name].push) {
+                    o[one.name] = [o[one.name]];
                 }
-                o[this.name].push(this.value || '');
+                o[one.name].push(one.value || '');
             } else {
-                o[this.name] = this.value || '';
+                o[one.name] = one.value || '';
             }
         });
         return o;
@@ -156,7 +156,7 @@ export default {
     getInterOf2Arr: function(arr1, arr2) {
         var interArr = [];
         var that = this;
-        $.each(arr1, function(index, one) {
+        arr1.forEach(function(one) {
             if (that.inArray(arr2, one)) {
                 interArr.push(one);
             }

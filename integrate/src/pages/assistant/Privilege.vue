@@ -108,7 +108,7 @@ export default {
                       that.name = data.assistant.name;
                       that.allprivileges = data.allprivileges;
                       that.privileges = data.privileges;
-                      $.each(that.privileges, function(index, privilege) {
+                      that.privileges.forEach(function(privilege) {
                           that.privilegeids.push(privilege.id);
                       })
                   }
@@ -121,7 +121,7 @@ export default {
         clickSelectAll: function() {
             var ids = [];
             var that = this;
-            $.each(that.allprivileges, function(index, privilege) {
+            taht.allprivileges.forEach(function(privilege) {
                 ids.push(privilege.id);
             })
             that.privilegeids = ids;

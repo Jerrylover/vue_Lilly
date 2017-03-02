@@ -112,7 +112,7 @@ export default {
     getDiseaseName: function(diseaseid) {
         var diseases = this.getDiseases();
         var diseaseName = '';
-        $.each(diseases, function(index, disease) {
+        diseases.forEach(function(disease) {
             if (disease.diseaseid == diseaseid) {
                 diseaseName = disease.name;
                 return false; //break;
