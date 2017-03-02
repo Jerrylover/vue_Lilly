@@ -1,3 +1,6 @@
+const Doctor = {
+    template: '<div><router-view></router-view></div>',
+}
 module.exports = 
 [
     {
@@ -6,6 +9,18 @@ module.exports =
         component: function(resolve) {
             require(['../pages/BindUser.vue'], resolve);
         },
+    },
+    {
+        path: '/doctor/',
+        name: 'doctor',
+        component: Doctor,
+        children: [
+            {
+                path: 'config',
+                name: 'config',
+                component: resolve => require(['../pages/doctor/SetConfig.vue'], resolve),
+            }
+        ]
     },
     {
         path: '/active-patient',
@@ -50,12 +65,9 @@ module.exports =
         component: resolve => require(['../pages/SendEnterMsg.vue'], resolve),
     },
     {
-        path: '/waitpatientconfirm',
-        name: 'waitpatientconfirm',
-        component: resolve => require(['../pages/WaitPatientConfirm.vue'], resolve),
-        // component: function(resolve){
-        //     require(['../pages/WaitPatientConfirm.vue'], resolve)
-        // }
+        path: '/patientbookstatus',
+        name: 'patientbookstatus',
+        component: resolve => require(['../pages/PatientBookStatus.vue'], resolve),
     },
     {
         path: '/patientlist',
@@ -80,8 +92,5 @@ module.exports =
     {
         path: '*',
         redirect: '/bind',
-        // meta: {
-        //     requireBind: true,
-        // }
     },
 ]

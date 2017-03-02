@@ -28,6 +28,9 @@
                     <li v-bind:class="{activeFix: isuser}">
                         <a href="javascript:" v-link="{name:'user-info'}">个人中心</a>
                     </li>
+                    <li v-bind:class="{activeFix: active == 'learn'}">
+                        <a href="javascript:" v-link="{name:'learn'}">个人学习</a>
+                    </li>
                     <li v-if="username == 'wangqian'" v-bind:class="{activeFix: active == 'doctorgroup'}">
                         <a href="javascript:" v-link="{name:'doctorgroup-projectlist'}">医生团队</a>
                     </li>

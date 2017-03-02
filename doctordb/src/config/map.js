@@ -250,6 +250,13 @@ module.exports = {
             },
         }
     },
+    '/learn': {
+        name: 'learn',
+        auth: true,
+        component: function(resolve) {
+            require(['../pages/Learn.vue'], resolve);
+        }
+    },
     '/user': {
         component: {
             template: '<router-view></router-view>'
