@@ -1,10 +1,10 @@
 <template>
-    <div class="pipe-list">
-        <mt-header fixed title="医助交流">
+    <div class="pipe-list" style="margin-top: -50px;">
+        <!-- <mt-header fixed title="医助交流">
             <router-link :to="{name: 'active-patient', query: {'thedate':thedate}}" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
         <div class="body">
             <div style="margin: 5px; padding: 5px;border-radius: 4px; text-align: left">
                 <span>{{patient.name}}&nbsp;&nbsp;{{patient.sexstr}}&nbsp;&nbsp;{{patient.agestr}}</span>
@@ -12,16 +12,19 @@
             <div class="filterArea">
                 <a :class="{'filterActive': filterActive == 'all'}" href="javascript:" @click="clickAll">全部</a><a :class="{'filterActive': filterActive == 'patient'}" href="javascript:" @click="clickPatient">患者</a><a :class="{'filterActive': filterActive == 'auditor'}" href="javascript:" @click="clickAudit">医助</a>
             </div>
-            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" style="list-style-type: none; padding:0px">
+            <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
                 <li v-for="pipe in pipes">
                     <div :class="{'pipe-from-audit': pipe.owner_type == 'Auditor', 'pipe-from-patient': pipe.owner_type == 'Patient'}" style="padding: 10px 10px 10px 0px">
                         <div>
                             <span class="pipe-title">{{pipe.title}}</span>
                             <span style="padding:5px 10px 10px 10px; float: right; color: #555">{{pipe.createtime}}</span>
-                            <!-- <div style="clear: both;"></div> -->
+                            <div style="clear: both;"></div>
                         </div>
-                        <div>
+                        <div v-if="pipe.type=='text'">
                             <p style="clear: both;word-break: break-all; text-align: left; margin-left: 10px;padding: 10px 5px 5px 0px">{{pipe.content}}</p>
+                        </div>
+                        <div v-if="pipe.type == 'picture'" style="margin-top: 15px; width: 100%;">
+                            <img :src="pipe.picture.thumb_url" style="width: 90%;margin: auto;">
                         </div>
                     </div>
                 </li>
@@ -40,6 +43,14 @@
                 filterActive: 'all',
                 patient:{},
                 pipes: [
+                    {
+                        owner_type: 'Patient',
+                        title: '患者回复',
+                        type: 'picture',
+                        picture:{
+                            thumb_url: 'http://photo.fangcunyisheng.com/8/20/820114d19871d260431fc0620a429fe5.300_300.jpeg',
+                        }
+                    }
                 ]
             }
         },

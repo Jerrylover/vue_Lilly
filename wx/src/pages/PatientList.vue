@@ -1,26 +1,28 @@
 <template>
     <div class="patientlist">
         <div style="position: fixed; top: 0px; left: 0px; width: 100%">
-            <mt-search v-model="keyword" :show="true" v-on:keyup.13.native="doSearch">
+            <mt-search v-model="patient_name" :show="true" v-on:keyup.13.native="doSearch">
                 <div class="body-container">
-                    <div class="item-box" v-for="patient in patients" @click="goPatientPipeList(patient)">
-                        <div class="item-box-header">
-                            <span>{{patient.name}}</span>
-                            <span style="float: right">{{patient.diseasename}}</span>
-                        </div>
-                        <div class="item-box-item" style="margin-top: 10px">
-                            <span class="left">性别: </span>
-                            <span>{{patient.sex}}</span>
-                        </div>
-                        <div class="item-box-item">
-                            <span class="left">电话号码: </span>
-                            <span>{{patient.mobile}}</span>
-                        </div>
-                        <div class="item-box-item">
-                            <span class="left">入组日期: </span>
-                            <span>{{patient.entertime}}</span>
-                        </div>
-                    </div>
+                    <ul v-infinite-scroll="loadMore" :infinite-scroll-disabled="true" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
+                        <li class="item-box" v-for="patient in patients" @click="goPatientPipeList(patient)">
+                                <div class="item-box-header">
+                                    <span>{{patient.name}}</span>
+                                    <span style="float: right">{{patient.disease_name}}</span>
+                                </div>
+                                <div class="item-box-item" style="margin-top: 10px">
+                                    <span class="left">性别: </span>
+                                    <span>{{patient.sex}}</span>
+                                </div>
+                                <div class="item-box-item">
+                                    <span class="left">电话号码: </span>
+                                    <span>{{patient.mobile}}</span>
+                                </div>
+                                <div class="item-box-item">
+                                    <span class="left">入组日期: </span>
+                                    <span>{{patient.entertime}}</span>
+                                </div>
+                        </li>
+                    </ul>
                 </div>
             </mt-search>
         </div>
@@ -32,86 +34,19 @@
     module.exports = {
         data: function() {
             return {
-                keyword: '',
+                flag: 1,
+                openid: '',
+                patient_name: '',
+                pagenum: 1,
+                pagesize: 10,
                 patients: [
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
-                    {
-                        id: "1",
-                        name: '方汉文',
-                        diseasename: '肺癌',
-                        sex: '男',
-                        mobile: '19323214124',
-                        entertime: '2016-05-03',
-                    },
                 ]
             }
         },
         methods: {
             goPatientPipeList: function(patient) {
-                this.$router.push({name: 'pipelist', params:{'patientid': patient.id}})
+                console.log(patient);
+                this.$router.push({name: 'pipelist', params:{'patientid': patient.patientid}})
             },
             clickdiv: function() {
                 console.log('aaaaa');
@@ -123,18 +58,55 @@
                 console.log('22222');
             },
             doSearch: function(){
-                console.log('11111111');
-                var url = api.get('');
+                this.pagenum = 1;
+                this.flag = 1;
+                var self = this;
+                var url = api.get('patient.list');
                 var params = {
-                    keyword: this.keyword,
+                    patient_name: self.patient_name,
+                    pagenum: self.pagenum,
+                    pagesize: self.pagesize,
+                    openid: self.openid
                 }
                 common.post(url, params, function(response) {
                     if (response.errno == 0) {
                         var data = response.data;
-
+                        self.patients = data.patients;
+                    }
+                })
+                
+            },
+            loadMore: function() {
+                this.fetchData();
+            },
+            fetchData: function() {
+                if (this.flag == 0) {
+                    return ;
+                }
+                var self = this;
+                var url = api.get('patient.list');
+                var params = {
+                    patient_name: self.patient_name,
+                    pagenum: self.pagenum,
+                    pagesize: self.pagesize,
+                    openid: self.openid
+                }
+                self.flag = 0;
+                common.post(url, params, function(response) {
+                    if (response.errno == 0) {
+                        var data = response.data;
+                        if (data.patients.length != 0) {
+                            self.pagenum++;
+                            self.patients = self.patients.concat(data.patients);
+                        }
+                        self.flag =1;
                     }
                 })
             }
+        },
+        created: function() {
+            this.openid = localStorage.getItem('_openid_');
+            this.fetchData();
         }
 
     }

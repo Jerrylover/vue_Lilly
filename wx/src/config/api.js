@@ -11,6 +11,7 @@ var urls = {
     },
     'bind': {
         'binduserpost': '/bind/binduserpost',
+        'unbindpost': '/bind/unbindpost',
     },
     'sickbed': {
         'list': '/bedtkt/list',
@@ -26,6 +27,15 @@ var urls = {
         'list': '/revisittkt/list',
         'schedulelist': '/revisittkt/schedulelist',
     },
+    'patient': {
+        'list': '/patient/list'
+    },
+    'doctor': {
+        'config': '/doctor/config',
+        'info': '/doctor/info',
+        'modifypwdjson': '/doctor/modifypwdjson',
+        'configpost': '/doctor/configpost',
+    }
 }
 
 export default {

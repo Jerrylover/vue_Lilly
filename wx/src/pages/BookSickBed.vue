@@ -104,7 +104,7 @@
             clickWaitPatientConfirm: function(tkt) {
                 console.log(tkt);
                 this.$router.push({
-                    name: 'waitpatientconfirm',
+                    name: 'patientbookstatus',
                     query:{
                         name: tkt.name,
                         bedtktid: tkt.id,
@@ -137,7 +137,7 @@
             },
             clickPatientConfirmCanEnter: function(tkt) {
                 this.$router.push({
-                    name: 'waitpatientconfirm',
+                    name: 'patientbookstatus',
                     query:{
                         name: tkt.name,
                         bedtktid: tkt.id,
