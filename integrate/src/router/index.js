@@ -137,6 +137,14 @@ export default new Router({
                 require(['../pages/patient/Paperone.vue'], resolve)
             }
         },
+        {//诊后管理
+            name: 'patient-list-aftertreatment',
+            path: ':patientid/aftertreatment',
+            meta: {auth: true},
+            component: function(resolve) {
+                require(['../pages/patient/Aftertreatment.vue'], resolve)
+            }
+        }
     ]
     },
     {

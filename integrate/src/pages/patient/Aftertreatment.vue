@@ -1,22 +1,20 @@
 <template>
-    <div class="borderstyle">
-        <div class="bg-gray">
-            <a href="javascript:" v-link="{path: '/patient/list/' + patientid + '/visitinfo?pagenum=' + pagenum + '&patient_name=' + patient_name}"><strong>门诊</strong></a>
-            <a class="active" href="javascript:"><strong>诊后</strong></a>
-        </div>
-        <div class="colorBox" style="margin-top:10px;">
-            <a href="javascript:" style="margin:2px" class="btn-info btn header-a" @click="clickMedicalPic">病历图</a>
-            <a href="javascript:" style="margin:2px" class="btn btn-info" @click="patientPaperList">数据量表</a>
-        </div>
+    <div class="container-fluid content">
+        <breadcrumb pagetitle="诊后管理">
+            <div slot="other-content">
+            </div>
+        </breadcrumb>
+        <div class="page-content">
         <div>
             <baseinfo :patient="patient"></baseinfo>
         </div>
         <div class="colorBox">
             <span>医护人员代填量表</span>
-            <a class="btn btn-warning btn-sm" @click="clickpaperbtndescribe">{{{paperbtndescribe | filterPaperBtnDesc}}}</a>
+            <a class="btn btn-warning btn-sm" @click="clickpaperbtndescribe" v-html="filterPaperBtnDesc(paperbtndescribe)"></a>
         </div>
         <div v-show="showOtherWrite">
             <table class="table table-bordered">
+                <tbody>
                 <tr>
                     <td>分组</td>
                     <td>标题</td>
@@ -27,6 +25,7 @@
                     <td>{{papertpl.title}}</td>
                     <td><a href="javascript:" @click="clickWrite(papertpl.id)">填写</a></td>
                 </tr>
+                </tbody>
             </table>
         </div>
         <div style="border: 1px solid #ccc; background-color: #f5f5f5">
@@ -48,7 +47,7 @@
             </div>
         </div>
         <div style="margin: 15px 0px 15px 0px;">
-            <div v-for="pipe in pipelist" style="border:1px solid #ccc;margin-bottom:5px;">
+            <div v-for="(pipe, index) in pipelist" style="border:1px solid #ccc;margin-bottom:5px;">
                 <div class="pipetitle" style="background-color: #eee;padding: 5px">
                     <span style="font-size: 14px">{{pipe.typestr}}</span>&nbsp;&nbsp;&nbsp;
                     <span style="color: #888">{{pipe.createtime}}&nbsp;&nbsp;&nbsp;{{pipe.writer}}&nbsp;&nbsp;&nbsp;{{pipe.shipstr}}</span>
@@ -58,20 +57,21 @@
                 </div>
                 <div v-show="pipe.response == true" class="row" style="margin: 0 0 5px 5px;">
                     <div class="col-sm-6" style="padding:0">
-                        <textarea id="textareapipe{{$index}}" rows="5" v-model="pipe.responseData" class="form-control"></textarea>
+                        <textarea :id="'textareapipe' + index" rows="5" v-model="pipe.responseData" class="form-control"></textarea>
                     </div>
                 </div>
-                <button v-show="pipe.response != true" class="btn btn-default btn-sm" style="margin: 0px 0px 10px 5px" @click="responsePipe(pipe,$index)">回复</button>
-                <button v-show="pipe.response == true" class="btn btn-info btn-sm" style="margin: 0px 0px 10px 5px" @click="submitResponsePipe($index)">提交回复</button>
-                <button v-show="pipe.response == true" class="btn btn-default btn-sm" style="margin: 0px 0px 10px 5px" @click="stopResponsePipe($index)">收起</button>
+                <button v-show="pipe.response != true" class="btn btn-default btn-sm" style="margin: 0px 0px 10px 5px" @click="responsePipe(pipe,index)">回复</button>
+                <button v-show="pipe.response == true" class="btn btn-info btn-sm" style="margin: 0px 0px 10px 5px" @click="submitResponsePipe(index)">提交回复</button>
+                <button v-show="pipe.response == true" class="btn btn-default btn-sm" style="margin: 0px 0px 10px 5px" @click="stopResponsePipe(index)">收起</button>
             </div>
         </div>
         <div v-show="!moredata" class="row" style="margin: 0px; padding: 20px 0px 20px 0px; text-align: center; font-size: 18px; color: red">无更多数据</div>
         <div class="row" style="text-align: center">
             <a href="javascript:"  class="btn btn-info" style="margin-top: 20px" @click='loadMore'>加载更多 <i class="fa fa-angle-double-down"></i></a>
         </div>
+        <photo-gallery :photourls="photourls" :show="showPhotoGallery" :currentindex="currentPhotoIndex"></photo-gallery>
     </div>
-    <photo-gallery :photourls="photourls" :show.sync="showPhotoGallery" :currentindex.sync="currentPhotoIndex"></photo-gallery>
+</div>
 </template>
 <style scoped>
     .borderstyle {
@@ -110,6 +110,7 @@
 </style>
 <script>
     import api from '../../config/api.js';
+    import libpatient from '../../lib/patient.js'
     export default {
         data: function() {
             return {
@@ -118,10 +119,8 @@
                 photourls: [],
 
                 pagenum: 0,
-                patient_name: '',
 
                 moredata: true,
-                patientid: '',
                 patient: '',
                 pipelist: '',
 
@@ -132,55 +131,9 @@
                 content: '',
             }
         },
-        route: {
-            data: function(transition) {
-                var self = this;
-                self.moredata = true;
-                this.patientid = transition.to.params.patientid;
-                this.pagenum = transition.to.query.pagenum;
-                this.patient_name = transition.to.query.patient_name;
-                console.log(transition.to.name);
-                console.log('after');
-                if (!this.patient_name) {
-                    this.patient_name = '';
-                }
-                if (this.patientid == 0) {
-                    return ;
-                }
-
-                $.ajax({
-                    url: api.get('patient.baseinfo'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid,
-                    }
-                })
-                .done(function(response){
-                    var data = response.data;
-                    self.patient = data;
-                    self.sendtoopenid = self.patient.users[0].openid;
-                });
-
-                $.ajax({
-                    url: api.get('patient.pipelist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid
-                    }
-                })
-                .done(function(response){
-                    self.pipelist = response.data.list;
-                    for (var i = 0; i < self.pipelist.length; i++) {
-                        self.pipelist[i].responseData = '';
-                        self.pipelist[i].response = false;
-                    }
-                })
-            }
-        },
         components: {
             'baseinfo':  require('../../components/Baseinfo.vue'),
+            'breadcrumb': require('../../components/BreadCrumb.vue'),
             'courseuserref': function(resolve){
                 require(['../../components/pipelist/Courseuserref.vue'], resolve);
             },
@@ -231,7 +184,44 @@
             },
             'PhotoGallery': require('../../components/PhotoGallery.vue'),
         },
+        computed: {
+            patientid: function() {
+                return this.$route.params.patientid || ''
+            },
+            patientname: function() {
+                return libpatient.getPatientName(this.patientid) || ''
+            },
+        },
         methods: {
+            initPage: function() {
+                var self = this;
+                self.moredata = true;
+                this.pagenum = this.$route.query.pagenum;
+                api.http({
+                  url: 'patient.baseinfo',
+                  data: {
+                    patientid: self.patientid,
+                  },
+                  successCallback: function(d) {
+                      var data = d.data;
+                      self.patient = data;
+                      self.sendtoopenid = self.patient.users[0].openid;
+                  }
+                })
+                api.http({
+                  url: 'patient.pipelist',
+                  data: {
+                    patientid: self.patientid,
+                  },
+                  successCallback: function(d) {
+                      self.pipelist = d.data.list;
+                      for (var i = 0; i < self.pipelist.length; i++) {
+                          self.pipelist[i].responseData = '';
+                          self.pipelist[i].response = false;
+                      }
+                  }
+                })
+            },
             clickpaperbtndescribe: function() {
                 if (this.paperbtndescribe == "展开") {
                     this.paperbtndescribe = "收起";
@@ -246,24 +236,19 @@
                 if (self.pipelist.length == 0) {
                     return ;
                 }
-                $.ajax({
-                    url: api.get('patient.pipelist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid,
-                        offsetpipetime: self.pipelist[self.pipelist.length-1].createtime,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        if (response.data.list.length > 0) {
-                            self.pipelist=self.pipelist.concat(response.data.list);
-                        }else {
-                            self.moredata = false;
-                        }
-                    }else {
-                        self.$dispatch('show-alert', response.errmsg);
-                    }
+                api.http({
+                  url: 'patient.pipelist',
+                  data: {
+                      patientid: self.patientid,
+                      offsetpipetime: self.pipelist[self.pipelist.length-1].createtime,
+                  },
+                  successCallback: function(d) {
+                      if (d.data.list.length > 0) {
+                          self.pipelist = self.pipelist.concat(d.data.list);
+                      }else {
+                          self.moredata = false;
+                      }
+                  }
                 })
             },
             clickWrite: function(papertplid) {
@@ -277,27 +262,27 @@
             },
             pushMsg: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('pipe.pushmsg'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        open_id: self.sendtoopenid,
-                        content: self.content,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.$dispatch('show-popup', "发送成功");
-                        self.content = "";
-                    }else {
-                        self.$dispatch('show-alert', errmsg);
-                    }
+                api.http({
+                  url: 'pipe.pushmsg',
+                  data: {
+                      open_id: self.sendtoopenid,
+                      content: self.content,
+                  },
+                  successCallback: function(d) {
+                      self.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '发送成功!'
+                      });
+                      self.content = "";
+                  }
                 })
             },
             responsePipe: function(pipe, index) {
                 pipe.response = true;
                 pipe = Object.assign({}, pipe);
-                this.pipelist.$set(index, pipe);
+                this.$set(this.pipelist, index, this.pipelist[index])
 
                 setTimeout(function(){
                     $('#textareapipe' + index ).focus();
@@ -306,34 +291,31 @@
             stopResponsePipe: function(index) {
                 this.pipelist[index].response = false;
                 this.pipelist[index] = Object.assign(index, this.pipelist[index]);
-                this.pipelist.$set(index, this.pipelist[index]);
+                this.$set(this.pipelist, index, this.pipelist[index])
             },
             submitResponsePipe: function(index) {
                 var self = this;
                 if (self.pipelist[index].responseData.trim() == '') {
                     return ;
                 }
-                $.ajax({
-                    url: api.get('pipe.pushmsg'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        open_id: self.pipelist[index].master_wxuser_openid,
-                        content: self.pipelist[index].responseData,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        self.pipelist[index].responseData = '';
-                        self.$dispatch('show-popup', '回复成功');
-                        // self.stopResponsePipe(index);
-                    }else {
-                        self.$dispatch('show-alert', response.errmsg);
-                    }
+                api.http({
+                  url: 'pipe.pushmsg',
+                  data: {
+                      open_id: self.pipelist[index].master_wxuser_openid,
+                      content: self.pipelist[index].responseData,
+                  },
+                  successCallback: function(d) {
+                      self.pipelist[index].responseData = '';
+                      self.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '回复成功!'
+                      });
+                  }
                 })
             },
             patientPaperList: function() {
-                sessionStorage.setItem('patientid', this.patientid);
-                sessionStorage.setItem('patient_name', this.patient.name);
                 var url = '/#!/patient/' + this.patientid + '/paperlist';
                 window.open(url);
             },
@@ -366,9 +348,7 @@
             hideGallery: function() {
                 this.showPhotoGallery = false;
                 $('body').removeClass('hide-scroll');
-            }
-        },
-        filters: {
+            },
             filterPaperBtnDesc: function(value) {
                 var str = value;
                 if (value == '展开') {
@@ -377,14 +357,24 @@
                     str += " <i class='fa fa-caret-up'></i>";
                 }
                 return str;
-            }
-        },
-        events: {
+            },
             'showPhotoGallery': function(e) {
                 this.clickPhoto(e);
             },
             'closePhotoGallery': function() {
                 this.hideGallery();
+            }
+        },
+        created: function() {
+            this.initPage()
+            Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '诊后管理')
+            Bus.$on('show-photogallery', this.showPhotoGallery)
+            Bus.$on('close-photogallery', this.closePhotoGallery)
+        },
+        watch: {
+            '$route': function() {
+                this.initPage()
+                Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '诊后管理')
             }
         }
     }

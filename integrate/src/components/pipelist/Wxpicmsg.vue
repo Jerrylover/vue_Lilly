@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="photo-a imgShell" data-url="{{obj.detail.imgurl}}" href="javascript:" @click="clickPhoto($event)"><img :src="obj.detail.thumburl"></a>
+        <a class="photo-a imgShell" :data-url="obj.detail.imgurl" href="javascript:" @click="clickPhoto($event)"><img :src="obj.detail.thumburl"></a>
     </div>
 </template>
 <style scoped>
@@ -24,7 +24,7 @@
         props: ['obj'],
         methods: {
             clickPhoto: function(e) {
-                this.$dispatch('showPhotoGallery',e);
+                Bus.$emit('show-photogallery', e);
             }
         }
     }

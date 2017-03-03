@@ -25,7 +25,7 @@
             <div>{{obj.detail.last_answer}}</div>
         </div>
         <div v-if="obj.detail.tasks != undefined">
-            <a href="javascript:" class="btn btn-warning btn-sm" @click="clickbtn">{{{btndiscribe | filterBtnDesc}}}</a>
+            <a href="javascript:" class="btn btn-warning btn-sm" @click="clickbtn" v-html="filterBtnDesc(btndiscribe)"></a>
             <span>(writer: {{obj.detail.writer}})</span> <a class="btn btn-danger btn-sm" href="javascript:" @click="modifyAnswer(obj.detail.xanswersheetid)">修改答卷</a>
             <div v-if="showlist" style="margin-top:5px">
                 <div v-for="task in obj.detail.tasks">
@@ -69,9 +69,7 @@
                     var url = '/api/xanswersheetmgr/modify?xanswersheetid' + xanswersheetid;
                 }
                 window.open(url);
-            }
-        },
-        filters: {
+            },
             filterBtnDesc: function(value) {
                 var str = value;
                 if (value == '展开') {
@@ -81,6 +79,9 @@
                 }
                 return str;
             }
+        },
+        filters: {
+
         }
     }
 </script>

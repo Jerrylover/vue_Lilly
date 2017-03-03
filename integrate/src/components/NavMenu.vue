@@ -422,6 +422,14 @@ export default {
                     }
                 })
                 break;
+            case '诊后管理':
+                this.$router.push({
+                    name: 'patient-list-aftertreatment',
+                    params: {
+                        patientid: this.patientid
+                    }
+                })
+                break;
             default:
 
         }

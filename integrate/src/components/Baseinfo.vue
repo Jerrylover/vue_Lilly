@@ -1,5 +1,6 @@
 <template>
     <table class="table table-bordered" style="margin-top: 15px">
+        <tbody>
         <tr class="bg-F5F6FA">
             <td colspan="6"><strong>个人资料</strong></td>
         </tr>
@@ -47,6 +48,7 @@
             <td>首次</td>
             <td>{{medicine.first_start_date}}</td>
         </tr>
+        </tbody>
     </table>
 </template>
 <style scoped>

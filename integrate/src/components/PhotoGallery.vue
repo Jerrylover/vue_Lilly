@@ -1,21 +1,19 @@
 <template>
 <div class="modal-mask" v-show="show">
-        
-        
         <div class="div-img">
             <i class="fa fa-rotate-left fa-2x" style="color: #fff; cursor: pointer; padding: 10px;" title="左转90度" @click="clickRotate('left')"></i>
             <i class="fa fa-rotate-right fa-2x" style="color: #fff; cursor: pointer; padding: 10px" title="右转90度" @click="clickRotate('right')"></i>
             <img id="picture" :src="photourls[currentindex]" />
         </div>
-        
+
         <i class="fa fa-times-circle fa-3x photoclose" @click="clickClose"></i>
         <i class="fa fa-chevron-circle-left fa-3x prev" @click="clickPrev"></i>
         <i class="fa fa-chevron-circle-right fa-3x next" @click="clickNext"></i>
         <div class="circle text-center">
-            <template v-for="photourl in photourls" track-by="$index">
-                    <i v-if="$index == currentindex" class="fa fa-circle fa-md i-circle" style="color:red"></i>
+            <div v-for="(photourl, index) in photourls" :key="index">
+                    <i v-if="index == currentindex" class="fa fa-circle fa-md i-circle" style="color:red"></i>
                     <i v-else class="fa fa-circle-thin fa-md i-circle"></i>
-            </template>
+            </div>
         </div>
 </div>
 </template>
@@ -135,7 +133,6 @@ export default {
             type: Boolean,
             require: false,
             default: false,
-            twoWay: true,
         },
         currentindex: {
             type: Number,
@@ -145,7 +142,7 @@ export default {
     },
     computed: {
         currentPhotoUrl: function() {
-            this.photourls
+            // this.photourls
         }
     },
     created: function() {
@@ -175,7 +172,7 @@ export default {
             // this.show = false;
             // $('body').removeClass('hide-scroll');
             $('#visitContent').css('-webkit-overflow-scrolling', 'touch');
-            this.$dispatch('closePhotoGallery');
+            Bus.$emit('close-photogallery');
         },
         clickPrev: function() {
             if (this.currentindex > 0) {
