@@ -196,9 +196,10 @@ export default {
         Bus.$on('ajax-error', this.showErrorMsg)
         Bus.$on('menu-mini', function(ismini) {
             if (ismini) {
-                $('.body-content').addClass('menu-mini')
+                console.log('xxxx---')
+                $('.container-fluid.content').addClass('menu-mini')
             } else {
-                $('.body-content').removeClass('menu-mini')
+                $('.container-fluid.content').removeClass('menu-mini')
             }
         })
     }

@@ -473,7 +473,10 @@ export default {
               that.ismini = false
           })
           Bus.$on('make-menu-mini', function() {
-              that.ismini = true
+
+              if (that.subMenuData.length > 0) {
+                    that.ismini = true
+              }
           })
       })
 

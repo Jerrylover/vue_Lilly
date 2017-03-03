@@ -95,6 +95,14 @@ export default {
               }
             })
         },
+    },
+    created: function() {
+        Bus.$emit('make-menu-mini')
+    },
+    watch: {
+        '$route': function() {
+            Bus.$emit('make-menu-mini')
+        }
     }
 }
 </script>

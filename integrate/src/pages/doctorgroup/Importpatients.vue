@@ -303,6 +303,12 @@
                 var self = this;
                 var query = this.$route.query
                 var params = this.$route.params
+                this.breadcrumbData[1].link = {
+                    name: 'doctorgroup-centerlist',
+                    params: {
+                        projectid: params.projectid,
+                    }
+                }
                 this.breadcrumbData[2].link = {
                     name: 'doctorgroup-centerdetail',
                     params: {

@@ -38,7 +38,7 @@
                 <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': currentprojectid, 'centerid': currentcenterid}}" style="text-decoration: none">中心详情</router-link></li> -->
             <!-- </ol> -->
         <div class="">
-        <table class="table table-bordered mg-t-20">
+        <table class="table table-bordered mg-t-10">
             <thead>
             <tr>
                 <th>姓名</th>
@@ -268,6 +268,12 @@
             },
             initPage: function() {
                 var queryString = this.$route.query;
+                this.breadcrumbData[1].link = {
+                    name: 'doctorgroup-centerlist',
+                    params: {
+                        projectid: queryString.projectid,
+                    }
+                }
                 this.breadcrumbData[2].link = {
                     name: 'doctorgroup-centerdetail',
                     params: {

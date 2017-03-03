@@ -48,20 +48,20 @@
     margin-bottom: 0
 }
 .navbar-xs {
-    min-height: 50px;
-    height: 50px;
+    min-height: 38px;
+    height: 38px;
 }
 
 .navbar-xs .navbar-brand {
     padding: 0px 1px;
     font-size: 16px;
-    line-height: 50px;
+    line-height: 38px;
 }
 
 .navbar-xs .navbar-nav > li > a {
     padding-top: 0px;
     padding-bottom: 0px;
-    line-height: 50px;
+    line-height: 38px;
 }
 
 .navbar-inverse {
@@ -86,6 +86,11 @@
 .navbar {
     border-radius: 0px;
     border: 0px solid #ccc;
+    overflow: hidden;
+}
+
+.navbar .navbar-header {
+    height: 38px;
 }
 
 .navbar .activeFix {
@@ -103,13 +108,13 @@ li.dropdown {
 .a-dropdown {
     border: 1px solid #57b8d4;
     height: 30px;
-    width: 150px;
+    width: 138px;
     line-height: 30px !important;
 }
 
 .dropdown-menu {
     display: block;
-    min-width: 150px;
+    min-width: 138px;
     background-color: #008DB9;
 }
 
@@ -358,7 +363,7 @@ export default {
     mounted: function() {
         this.$nextTick(function() {
             if (process.env.NODE_ENV === 'development') {
-              $('.navbar-inverse').css('background-color', '#1996ea');
+            //   $('.navbar-inverse').css('background-color', '#1996ea');
             }
             this.state = common.getState();
             var diseaseid = common.getDiseaseId();

@@ -415,6 +415,12 @@
                 var self = this;
                 var params = this.$route.params
                 var centerid = params.centerid;
+                this.breadcrumbData[1].link = {
+                    name: 'doctorgroup-centerlist',
+                    params: {
+                        projectid: params.projectid,
+                    }
+                }
                 self.currcenterid = centerid;
                 self.projectid = params.projectid;
                 self.fetchData();

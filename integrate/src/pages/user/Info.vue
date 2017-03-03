@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid content body-content">
+<div class="container-fluid content">
     <!-- <page-nav active="info"></page-nav> -->
         <div class="breadcrumbs">
             <h4>个人信息</h4>
@@ -52,8 +52,6 @@ export default {
     computed: {
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
         'navmenu': require('../../components/NavMenu.vue'),
         'pageNav': require('./Nav.vue'),
     },
@@ -75,10 +73,13 @@ export default {
         },
     },
     created: function() {
+        Bus.$emit('make-menu-mini')
         this.fetchAssistant()
     },
     watch: {
-        '$route': 'fetchAssistant'
+        '$route': function() {
+            Bus.$emit('make-menu-mini')
+        }
     }
 }
 </script>

@@ -206,10 +206,22 @@
         },
         created: function() {
             this.fetchData()
+            this.breadcrumbData[1].link = {
+                name: 'doctorgroup-centerlist',
+                params: {
+                    projectid: this.$route.params.projectid,
+                }
+            }
         },
         watch: {
             '$route': function() {
                 this.fetchData()
+                this.breadcrumbData[1].link = {
+                    name: 'doctorgroup-centerlist',
+                    params: {
+                        projectid: this.$route.params.projectid,
+                    }
+                }
             }
         }
     }
