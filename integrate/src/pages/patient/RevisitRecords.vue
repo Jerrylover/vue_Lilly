@@ -520,7 +520,7 @@ span.title {
             } else {
                 var self = this;
                 api.http({
-                  url: 'patient.baseinfo',
+                  url: 'patient.patientinfo',
                   data: {
                       patientid: self.patientid,
                   },

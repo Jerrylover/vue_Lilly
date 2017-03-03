@@ -174,12 +174,12 @@ export default {
             submenus: [
                 {
                     name: '复诊日历',
-                    link: '',
+                    link: {name: 'schedule-revisit'},
                     isactive: false,
                 },
                 {
                     name: '设置门诊时间',
-                    link: '',
+                    link: {name: 'schedule-visit'},
                     isactive: false,
                 }
             ]
@@ -191,12 +191,12 @@ export default {
             submenus: [
                 {
                     name: '预约列表',
-                    link: '',
+                    link: {name: 'sickbed-listofpendingoperation'},
                     isactive: false,
                 },
                 {
                     name: '操作记录',
-                    link: '',
+                    link: {name: 'operation-history'},
                     isactive: false,
                 }
             ]
@@ -393,6 +393,30 @@ export default {
             case '历次就诊':
                 this.$router.push({
                     name: 'patient-revisitrecord',
+                    params: {
+                        patientid: this.patientid
+                    }
+                })
+                break;
+            case '患者用药':
+                this.$router.push({
+                    name: 'patient-prescription',
+                    params: {
+                        patientid: this.patientid
+                    }
+                })
+                break;
+            case '患者复诊':
+                this.$router.push({
+                    name: 'patient-appointment',
+                    params: {
+                        patientid: this.patientid
+                    }
+                })
+                break;
+            case '评估量表':
+                this.$router.push({
+                    name: 'patient-paperlist',
                     params: {
                         patientid: this.patientid
                     }

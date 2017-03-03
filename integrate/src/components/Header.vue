@@ -30,7 +30,7 @@
                         <router-link   :to="{name:'doctorgroup-projectlist'}">医生团队</router-link>
                     </li> -->
                     <li v-if="diseaseCount > 1">
-                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:10px;" @click="switchState">{{state | filterState}}</button>
+                        <button class="btn btn-warning btn-sm" style="line-height:1.5;padding:5px 10px;margin-top:4px;" @click="switchState">{{state | filterState}}</button>
                     </li>
                     <li>
                         <a href="javascript:" @click="logout($event)">退出 [{{name}}]</a>
@@ -241,6 +241,13 @@ tr.light-tr th {
     background: #fff;
     margin: 0;
     padding: 8px 20px 24px;
+}
+.page-content:before {
+    display: table;
+    content: " ";
+}
+.page-content:after {
+    clear: both;
 }
 .breadcrumbs {
     position: relative;

@@ -122,7 +122,6 @@ export default {
           query[i] = this.$route.query[i]
         }
         query.pagenum = page;
-        console.log(this.path, query)
         this.$router.push({
           path: this.path,
           query: query

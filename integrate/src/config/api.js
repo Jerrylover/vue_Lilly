@@ -14,10 +14,13 @@ var urls = {
     },
     'patient': {
         'list': '/patient/list',
-        'baseinfo': '/patient/patientinfo',
+        'patientinfo': '/patient/patientinfo',
+        'baseinfo': '/patient/baseinfo',
+        'revisitrecordlist': '/patient/revisitrecordlist',
         'addpost': '/patient/addpost',
         'checkuphistory': '/revisitrecord/list4onepatient',
         'modifypost': '/patient/modifypost',
+        'pipelist': '/pipe/listhtml',
         'getwxuser': '/patient/getwxuser',
         'getunbindwxusers': '/patient/getunbindwxusers',
         'searchwxusers': '/patient/searchwxusers',
@@ -25,6 +28,21 @@ var urls = {
         'auditpass': '/patient/auditpass',
         'auditrefuse': '/patient/auditrefuse',
         'delete': '/patient/delete',
+        'prescription': '/patientmedicinepkg/list',
+        // 'addmodify': '/patientmedicinepkg/addandmodifyhtml',
+        'addmodifymedicinepost': '/patientmedicinepkg/addandmodifypost',
+        'deletemedicinepost': '/patientmedicinepkg/deletepost',
+        'sendmsgmedicinepost': '/patientmedicinepkg/sendmsgpost',
+        'addormodifyappointment': '/revisittkt/addormodify',
+        'addormodifyappointmentjson': '/revisittkt/addormodifyjson',
+        'addmedicine': '/doctormedicineref/addpost',
+        'addmedicinehtml': '/doctormedicineref/addhtml',
+        'deletemedicalpic': '/common/wxpicmsgremovejson',
+        'addtag': '/common/wxpicmsgaddtagrefjson',
+        'removetag': '/common/wxpicmsgremovetagrefjson',
+        'medicalpic': '/common/wxpicmsglist',
+        'paperlist': '/paper/list',
+        'paperone': '/paper/one'
     },
     'revisitrecord': {
         'addzhusu': '/revisitrecord/addzhusu',
@@ -94,6 +112,29 @@ var urls = {
       'dg_patientimportpatients': '/dg_patient/bataddpatientlist',
       'dg_patientimportpost': '/dg_patient/bataddpost',
       'dg_patientremovepost': '/dg_patient/batremovepost',
+  },
+  'schedule': {
+      list: '/schedule/list',
+      openjson: '/schedule/openjson',
+      closejson: '/schedule/closejson',
+      addjson: '/schedule/addjson',
+      appointmentcanlendar: '/schedule/schedulecandeler',
+      revisittktlist: '/schedule/showschedulerevisittkts',
+  },
+  'pipe': {
+      'pushmsg': '/pipe/pushmsgbyopenidjson',
+  },
+  'sickbedorder': {
+      'tktlist': '/bedtkt/list',
+      'pass': '/bedtkt/doctorpass',
+      'refuse': '/bedtkt/doctorrefuse',
+
+      'operatehistorylist': '/bedtkt/historylist',
+  },
+  'common': {
+      'changenewjson': '/common/changenewjson',
+      'uploadimage': '/picture/uploadimagepost',
+      'uploadcase': '/common/wxpicmsgbatuploadcasepost',
   }
 }
 

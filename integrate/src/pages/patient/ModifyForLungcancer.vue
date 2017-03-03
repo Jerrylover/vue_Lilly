@@ -1411,7 +1411,7 @@ export default {
             }
             if (this.isModify()) {
                 api.http({
-                  url: 'patient.baseinfo',
+                  url: 'patient.patientinfo',
                   data: {
                       patientid: that.patientid,
                   },

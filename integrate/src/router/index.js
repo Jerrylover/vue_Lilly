@@ -104,7 +104,39 @@ export default new Router({
           component: function(resolve) {
             require(['../pages/patient/SelectDisease.vue'], resolve);
           }
-        }
+        },
+        {
+          name: 'patient-prescription',//开用药
+          path: ':patientid/prescription',
+          meta: {auth: true},
+          component: function(resolve) {
+              require(['../pages/patient/Prescription.vue'], resolve)
+          }
+        },
+        {
+            name: 'patient-appointment',//患者约复诊
+            path: ':patientid/appointment',
+            meta: {auth: true},
+            component: function(resolve) {
+                require(['../pages/patient/Appointment.vue'], resolve)
+            }
+        },
+        {
+            name: 'patient-paperlist',
+            path: ':patientid/paperlist',
+            meta: {auth: true},
+            component: function(resolve) {
+                require(['../pages/patient/Paperlist.vue'], resolve)
+            }
+        },
+        {
+            name: 'patient-paperone',
+            path: ':patientid/paperone',
+            meta: {auth: true},
+            component: function(resolve) {
+                require(['../pages/patient/Paperone.vue'], resolve)
+            }
+        },
     ]
     },
     {
@@ -297,6 +329,38 @@ export default new Router({
           }
         },
     ]
+    },
+    {//设置门诊时间
+      name: 'schedule-visit',
+      path: '/schedule/visit',
+      meta: {auth: true},
+      component: function(resolve) {
+          require(['../pages/schedule/Visit.vue'], resolve)
+      }
+    },
+    {//复诊日历
+      name: 'schedule-revisit',
+      path: '/schedule/revisit',
+      meta: {auth: true},
+      component: function(resolve) {
+          require(['../pages/schedule/VisitOfCanlendar.vue'], resolve)
+      }
+    },
+    {
+        name: 'sickbed-listofpendingoperation',
+        path: '/sickbed/listofpendingoperation',
+        meta: {auth: true},
+        component: function(resolve) {
+            require(['../pages/sickbedorder/ListOfPendingOperation.vue'], resolve);
+        }
+    },
+    {
+        name: 'operation-history',
+        path: '/sickbed/operation-history',
+        meta: {auth: true},
+        component: function(resolve) {
+            require(['../pages/sickbedorder/DoctorOperateHistory.vue'], resolve);
+        }
     },
     {
       path: '/user',

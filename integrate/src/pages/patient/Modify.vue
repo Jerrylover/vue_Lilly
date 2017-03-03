@@ -1013,7 +1013,7 @@ export default {
             }
             if (that.isModify()) {
                 $.ajax({
-                    url: api.get('patient.baseinfo'),
+                    url: api.get('patient.patientinfo'),
                     type: "post",
                     dataType: 'json',
                     data: {

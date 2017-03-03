@@ -2,7 +2,7 @@
   <div class="container-fluid content">
     <!-- <visit-header :patientname='patientname' :patientid='patientid' active='addvist' class="collapse"></visit-header> -->
         <breadcrumb :data="breadcrumbData" pagetitle="就诊记录">
-            <div name="other-content">
+            <div slot="other-content">
             </div>
         </breadcrumb>
 
@@ -152,9 +152,7 @@ export default {
     }
   },
   components: {
-    'appHeader': require('../components/Header.vue'), //头组件
     'visitHeader': require('../components/VisitHeader.vue'),
-    'appFooter': require('../components/Footer.vue'), //尾组件
     'navmenu': require('../components/NavMenu.vue'),
     'breadcrumb': require('../components/BreadCrumb.vue'),
   },
@@ -213,7 +211,7 @@ export default {
       } else {
         var that = this;
         api.http({
-          url: 'patient.baseinfo',
+          url: 'patient.patientinfo',
           data: {
             patientid: that.patientid
           },

@@ -150,7 +150,7 @@ export default {
             if (!this.patientname) {
                 var self = this;
                 api.http({
-                  url: 'patient.baseinfo',
+                  url: 'patient.patientinfo',
                   data: {
                       patientid: self.patientid
                   },

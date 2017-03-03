@@ -479,7 +479,7 @@ export default {
                 that.fetchWxUser();
             }
             api.http({
-              url: 'patient.baseinfo',
+              url: 'patient.patientinfo',
               data: {
                   patientid: that.patientid,
                   dg_group: that.dg_group,
