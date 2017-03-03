@@ -1,6 +1,6 @@
 
 <template>
-<div class="container-fluid content body-content">
+<div class="container-fluid content">
     <breadcrumb pagetitle="待审核患者列表" >
         <div name="other-content">
         </div>
@@ -178,7 +178,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             if (typeof patient != 'undefined') {
                 if (common.isCancerDisease(diseaseId)) {
                     this.$router.push({
@@ -196,7 +196,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             if (typeof patient != 'undefined') {
                 this.$router.push({
                     path: '/patient/' + patient.patient_id + '/revisitrecords/'
@@ -207,7 +207,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             if (typeof patient != 'undefined') {
                 this.$router.push({
                     path: '/addvisit/' + patient.patient_id

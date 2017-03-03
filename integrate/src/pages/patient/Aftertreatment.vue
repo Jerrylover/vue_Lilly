@@ -261,6 +261,15 @@
                 window.open(url);
             },
             pushMsg: function() {
+                if ($.trim(this.content) == '') {
+                    this.$message({
+                        type: 'error',
+                        duration: 1500,
+                        showClose: true,
+                        message: '请输入内容'
+                    })
+                    return
+                }
                 var self = this;
                 api.http({
                   url: 'pipe.pushmsg',
@@ -358,23 +367,28 @@
                 }
                 return str;
             },
-            'showPhotoGallery': function(e) {
+            showPhotoGalleryFn: function(e) {
                 this.clickPhoto(e);
             },
-            'closePhotoGallery': function() {
+            closePhotoGalleryFn: function() {
                 this.hideGallery();
+            },
+            changePhotoIndex: function(index) {
+                this.currentPhotoIndex = index
             }
         },
         created: function() {
             this.initPage()
             Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '诊后管理')
-            Bus.$on('show-photogallery', this.showPhotoGallery)
-            Bus.$on('close-photogallery', this.closePhotoGallery)
+            Bus.$on('show-photogallery', this.showPhotoGalleryFn)
+            Bus.$on('close-photogallery', this.closePhotoGalleryFn)
+            Bus.$on('change-photo-index', this.changePhotoIndex)
         },
         watch: {
             '$route': function() {
                 this.initPage()
                 Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '诊后管理')
+                Bus.$on
             }
         }
     }

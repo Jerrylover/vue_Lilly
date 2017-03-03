@@ -225,16 +225,13 @@ tr.light-tr th {
     margin: 5px 0 10px 20px;
 }
 .content.container-fluid {
-    margin-left: 135px;
+    margin-left: 45px;
     overflow: auto;
     padding-left: 0;
+    min-height: 800px;
 }
-.body-content {
-    margin-left: 135px;
-    overflow: auto;
-    padding-left: 0;
-}
-.menu-mini.body-content {
+
+.menu-mini.content.container-fluid {
     margin-left:25px;
 }
 .page-content {

@@ -3,21 +3,24 @@
         <div class="div-img">
             <i class="fa fa-rotate-left fa-2x" style="color: #fff; cursor: pointer; padding: 10px;" title="左转90度" @click="clickRotate('left')"></i>
             <i class="fa fa-rotate-right fa-2x" style="color: #fff; cursor: pointer; padding: 10px" title="右转90度" @click="clickRotate('right')"></i>
-            <img id="picture" :src="photourls[currentindex]" />
+            <img id="picture" :src="photourls[myCurrentIndex]" />
         </div>
 
         <i class="fa fa-times-circle fa-3x photoclose" @click="clickClose"></i>
         <i class="fa fa-chevron-circle-left fa-3x prev" @click="clickPrev"></i>
         <i class="fa fa-chevron-circle-right fa-3x next" @click="clickNext"></i>
         <div class="circle text-center">
-            <div v-for="(photourl, index) in photourls" :key="index">
-                    <i v-if="index == currentindex" class="fa fa-circle fa-md i-circle" style="color:red"></i>
+            <div class="page-icon" v-for="(photourl, index) in photourls" :key="index">
+                    <i v-if="index == myCurrentIndex" class="fa fa-circle fa-md i-circle" style="color:#20A0FF"></i>
                     <i v-else class="fa fa-circle-thin fa-md i-circle"></i>
             </div>
         </div>
 </div>
 </template>
 <style scoped>
+.page-icon {
+    display: inline-block;
+}
 .photoclose {
     position: absolute;
     z-index: 200000;
@@ -117,6 +120,7 @@ export default {
             rotateTimes: 0,
             lastDeg: 0,
             currentDeg: 0,
+            myCurrentIndex: this.currentindex
         }
     },
     props: {
@@ -175,8 +179,8 @@ export default {
             Bus.$emit('close-photogallery');
         },
         clickPrev: function() {
-            if (this.currentindex > 0) {
-                this.currentindex = this.currentindex - 1;
+            if (this.myCurrentIndex > 0) {
+                this.myCurrentIndex = this.myCurrentIndex - 1;
                 this.rotateTimes = 0;
                 this.lastDeg = 0;
                 var img = document.getElementById('picture');
@@ -186,8 +190,8 @@ export default {
             }
         },
         clickNext: function() {
-            if (this.currentindex < this.photourls.length - 1) {
-                this.currentindex = this.currentindex + 1;
+            if (this.myCurrentIndex < this.photourls.length - 1) {
+                this.myCurrentIndex = this.myCurrentIndex + 1;
                 this.rotateTimes = 0;
                 this.lastDeg = 0;
                 var img = document.getElementById('picture');
@@ -217,8 +221,13 @@ export default {
              }else {
                 img.style.width = this.picwidth + 'px';
              }
-             console.log('width',img.style.width, '------height', img.style.height);
+            //  console.log('width',img.style.width, '------height', img.style.height);
         },
     },
+    watch: {
+        myCurrentIndex: function(newval, oldval) {
+            Bus.$emit('change-photo-index', newval)
+        }
+    }
 }
 </script>

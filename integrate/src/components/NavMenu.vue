@@ -1,6 +1,6 @@
 <template>
 <div class="nav-menu">
-    <div class="menu-container" :class="{'menu-min': ismini}">
+    <div class="menu-container" :class="{'menu-mini': ismini}">
         <div class="text-center div-toggle" @click.stop="toggleMenu"><i class="menu-fa fa" :class="{'fa-angle-double-left' : !ismini, 'fa-angle-double-right' : ismini}"></i></div>
 
         <ul class="el-menu">
@@ -14,18 +14,25 @@
             </li>
         </ul>
     </div>
-    <div class="submenu-container" v-show="isShowSubMenu">
-        <ul class="el-menu submenu">
-            <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in subMenuData" @click="clickSubMenu(index)">
-                <span class="menu-text">
-                    {{one.name}}
-                </span>
-            </li>
-        </ul>
-    </div>
+    <transition name="transition-submenu">
+        <div class="submenu-container" v-show="isShowSubMenu">
+            <ul class="el-menu submenu">
+                <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in subMenuData" @click="clickSubMenu(index)">
+                    <span class="menu-text">
+                        {{one.name}}
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </transition>
     <div  class="submenu-container" v-show="showThirdLevelMenu">
         <ul class="el-menu submenu">
-            <li class="menu-title">{{patientname}}</li>
+            <li class="menu-title" :class="{'fullinfo': isShowFullInfo}" @click="showFullInfo">
+                <p class="title">{{patientname}}&nbsp;&nbsp;<i :class="{'el-icon-arrow-right': !isShowFullInfo, 'el-icon-arrow-down': isShowFullInfo}"></i></p>
+                <div>{{patientinfo.agestr}}岁 {{patientinfo.sexstr}}</div>
+                <div>{{patientinfo.diseasename}}</div>
+                <div>{{patientinfo.out_case_no}}</div>
+            </li>
             <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in patientGrandsonMenus" @click="clickThirdMenu(one)">
                 <span class="menu-text">
                     {{one.name}}
@@ -38,7 +45,11 @@
 <style scoped>
     .div-toggle {
         border-bottom: 1px solid #ddd;
-        padding: 2px 0
+        padding: 2px 0;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
     }
     .div-toggle .menu-fa {
         display: inline-block;
@@ -54,15 +65,16 @@
         margin-right: 0;
     }
     .menu-container {
-        width: 150px;
+        width: 125px;
         float: left;
         margin-left: -15px;
         border-right: 1px solid #ccc;
+        transition: width .2s;
     }
     .menu-container:before {
         content: "";
         display: block;
-        width: 150px;
+        width: 125px;
         position: fixed;
         bottom: 0;
         top: 0;
@@ -70,18 +82,20 @@
         background-color: #f2f2f2;
         border: 1px solid #ccc;
         border-width: 0 1px 0 0;
+        transition: width .2s;
     }
     /*二级菜单*/
     .submenu-container {
-        width: 150px;
+        width: 125px;
         float: left;
         margin-left: 0;
         border-right: 1px solid #ccc;
     }
+
     .submenu-container:before {
         content: "";
         display: block;
-        width: 150px;
+        width: 125px;
         position: fixed;
         bottom: 0;
         top: 0;
@@ -96,20 +110,26 @@
     .submenu.el-menu-item {
         border: 0;
     }
-
+    .el-menu-item {
+        transition: background-color .3s,color .3s;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+    }
     .el-menu > li {
         border-bottom: 1px solid #ddd;
     }
-    .menu-min.menu-container {
+    .menu-mini.menu-container {
         width:50px;
     }
-    .menu-min.menu-container:before {
+    .menu-mini.menu-container:before {
         width:50px;
     }
-    .menu-min .menu-text {
+    .menu-mini .menu-text {
         display:none
     }
-    .menu-min .el-menu > li {
+    .menu-mini .el-menu > li {
         border: 0;
         padding: 0;
     }
@@ -127,30 +147,50 @@
         user-select:none;
     }
     .menu-title {
-        padding: 5px 10px;
-        font-size: 17px;
-        text-align: center;
-        font-weight: 700;
+        /*padding: 0 20px;*/
+        text-align: left;
+        height: 30px;
+        line-height: 30px;
+        transition: height .5s ease;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .menu-title .title {
+        padding: 0 20px;
+        font-size: 15px;
         color: #008DB9;
+        font-weight: 700;
+        margin: 0;
+        /*border-bottom: 1px solid #ddd;*/
+    }
+    .menu-title div {
+        padding: 0 20px;
+    }
+    .menu-title.fullinfo {
+        height: 130px;
+        transition: height .5s ease;
     }
     .fa {
         margin-right: 10px
     }
     </style>
 <style>
-    .menu-min i.el-submenu__icon-arrow.el-icon-arrow-down {
+    /*.menu-min i.el-submenu__icon-arrow.el-icon-arrow-down {
         display:none !important;
-    }
+    }*/
 </style>
 <script>
 import Bus from '../lib/bus.js'
 import common from '../lib/common.js'
 import libpatient from '../lib/patient.js'
+import api from '../config/api.js'
 export default {
   data: function() {
     return {
+        isShowFullInfo: true,
         patientid: '',
         patientname: '',
+        patientinfo: '',
         ismini: false,
         showSubMenu: true,
         activeMenu: '',
@@ -211,7 +251,24 @@ export default {
             ]
         },
         {
-            name: '管理',
+            name: '数据统计',
+            icon: 'fa fa-pie-chart',
+            isactive: false,
+            submenus: [
+
+            ]
+        },
+        {
+            name: '操作日志',
+            icon: 'fa fa-history',
+            isactive: false,
+            link: {name: 'log'},
+            submenus: [
+
+            ]
+        },
+        {
+            name: '设置',
             icon: 'fa fa-cog',
             isactive: false,
             submenus: [
@@ -232,23 +289,6 @@ export default {
                 }
             ]
         },
-        {
-            name: '数据统计',
-            icon: 'fa fa-pie-chart',
-            isactive: false,
-            submenus: [
-
-            ]
-        },
-        {
-            name: '操作日志',
-            icon: 'fa fa-history',
-            isactive: false,
-            link: {name: 'log'},
-            submenus: [
-
-            ]
-        }
       ],
       patientGrandsonMenus: [
           {
@@ -303,9 +343,27 @@ export default {
     },
     diseaseid: function() {
         return libpatient.getDiseaseId(this.patientid);
-    }
+    },
   },
   methods: {
+    getPatientInfo: function() {
+        if (this.patientinfo == '') {
+            var that = this
+            api.http({
+              url: 'patient.patientinfo',
+              data: {
+                  patientid: that.patientid,
+                  dg_group: that.dg_group,
+              },
+              successCallback: function(d) {
+                  that.patientinfo = d.data
+              }
+          })
+        }
+    },
+    showFullInfo: function(e) {
+        this.isShowFullInfo = !this.isShowFullInfo
+    },
     toggleMenu: function() {
         this.ismini = !this.ismini
         this.$nextTick(function() {
@@ -470,6 +528,8 @@ export default {
                 one.isactive = false
             }
         })
+        //获取患者基本信息
+        this.getPatientInfo()
     }
   },
   mounted: function() {

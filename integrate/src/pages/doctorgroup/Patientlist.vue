@@ -224,7 +224,7 @@
                 var self = this;
                 var patient = this.patients[index];
                 libpatient.setPatientName(patient.patient_id, patient.name);
-                libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+                libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
                 if (typeof patient != 'undefined') {
                     this.$router.push({
                         path: '/doctorgroup/' + patient.patient_id + '/revisitinfo/',
@@ -242,7 +242,7 @@
                 e.preventDefault();
                 var patient = this.patients[index];
                 libpatient.setPatientName(patient.patient_id, patient.name);
-                libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+                libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
                 if (typeof patient != 'undefined') {
                     if (common.isCancerDisease(diseaseId)) {
                         this.$router.push({

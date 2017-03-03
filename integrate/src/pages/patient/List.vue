@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid content body-content">
+<div class="container-fluid content">
     <!-- <navmenu></navmenu> -->
     <breadcrumb pagetitle="患者列表" >
         <div name="other-content">
@@ -171,7 +171,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
                 if (common.isCancerDisease(diseaseId)) {
@@ -190,7 +190,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
                 this.$router.push({
@@ -202,7 +202,7 @@ export default {
             e.preventDefault();
             var patient = this.patients[index];
             libpatient.setPatientName(patient.patient_id, patient.name);
-            libpatient.setDiseaseid(patient.patient_id, patient.diseaseid);
+            libpatient.setDisease(patient.patient_id,  patient.diseaseid, patient.diseasename);
             localStorage.setItem('_diseaseid_', patient.diseaseid);
             if (typeof patient != 'undefined') {
                 this.$router.push({

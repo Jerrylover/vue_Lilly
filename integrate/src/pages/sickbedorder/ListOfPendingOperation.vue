@@ -2,7 +2,6 @@
     <div class="container-fluid content">
         <breadcrumb pagetitle="住院预约名单">
             <div slot="other-content">
-                <router-link class="btn btn-primary btn-sm" style="" :to="{name: 'operation-history', query:{pagenum: 1, fromdate: '', todate: '', patient_name: '', sex: '', result_type: ''}}">住院预约操作记录</router-link>
             </div>
         </breadcrumb>
         <div class="page-content">

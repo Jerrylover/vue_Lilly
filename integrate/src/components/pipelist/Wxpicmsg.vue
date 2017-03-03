@@ -15,6 +15,7 @@
     }
 </style>
 <script>
+import Bus from '../../lib/bus.js'
     export default {
         data: function() {
             return {

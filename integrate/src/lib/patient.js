@@ -27,14 +27,23 @@ export default {
         var obj = JSON.parse(json);
         return obj.diseaseid;
     },
-    setDiseaseid: function(patientid, diseaseid) {
+    getDiseaseName: function(patientid) {
+        var json = sessionStorage.getItem(patientid);
+        if (json == undefined || json.indexOf('{') == -1) {
+            return '';
+        }
+        var obj = JSON.parse(json);
+        return obj.diseaseid;
+    },
+    setDisease: function(patientid, diseaseid, diseasename) {
         var json = sessionStorage.getItem(patientid);
         var obj = {};
         if (json == undefined || json.indexOf('{') == -1) {
-            obj = {'diseaseid': diseaseid};
+            obj = {'diseaseid': diseaseid, 'diseasename': diseasename};
         } else {
             obj = JSON.parse(json);
             obj.diseaseid = diseaseid;
+            obj.diseasename = diseasename;
         }
         json = JSON.stringify(obj);
         sessionStorage.setItem(patientid, json);
