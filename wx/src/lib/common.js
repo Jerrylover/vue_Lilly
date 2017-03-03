@@ -48,7 +48,6 @@ module.exports = {
         if (isbind == "1") {
             return true;
         }
-
         var openid = localStorage.getItem('_openid_');
         openid = openid == null ? '' : openid;
         var result = this.checkLoginFromServerSync(openid);

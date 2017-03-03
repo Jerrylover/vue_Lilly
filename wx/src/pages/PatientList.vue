@@ -45,7 +45,8 @@
         },
         methods: {
             goPatientPipeList: function(patient) {
-                this.$router.push({name: 'pipelist', params:{'patientid': patient.id}})
+                console.log(patient);
+                this.$router.push({name: 'pipelist', params:{'patientid': patient.patientid}})
             },
             clickdiv: function() {
                 console.log('aaaaa');

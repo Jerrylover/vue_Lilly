@@ -11,6 +11,7 @@ var urls = {
     },
     'bind': {
         'binduserpost': '/bind/binduserpost',
+        'unbindpost': '/bind/unbindpost',
     },
     'sickbed': {
         'list': '/bedtkt/list',

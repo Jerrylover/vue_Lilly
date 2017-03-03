@@ -19,6 +19,16 @@ module.exports =
                 path: 'config',
                 name: 'config',
                 component: resolve => require(['../pages/doctor/SetConfig.vue'], resolve),
+            },
+            {
+                path: 'modifypwd',
+                name: 'modifypwd',
+                component: resolve => require(['../pages/doctor/ModifyPwd.vue'], resolve),
+            },
+            {
+                path: 'info',
+                name: 'info',
+                component: resolve => require(['../pages/doctor/Info.vue'], resolve)
             }
         ]
     },
@@ -73,6 +83,9 @@ module.exports =
         path: '/patientlist',
         name: 'patientlist',
         component: resolve => require(['../pages/PatientList.vue'], resolve),
+        meta: {
+            requireBind: true,
+        }
     },
     {
         path: '/cannotenter',

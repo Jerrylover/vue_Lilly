@@ -8,7 +8,7 @@
                     <div style="display: inline-block; float: right;">
                         <mt-switch v-model="config.statusValue" @change.native="clickCheckBox(config, index, parentIndex)"></mt-switch>
                     </div>
-                    <span style="float: right; display: inline-block;line-height: 2;margin-right: 20px">{{config.status | buttondesfilter}}</span>
+                    <span style="float: right; display: inline-block;line-height: 2;margin-right: 20px" :class="{'opendesc': config.status == 1, 'closedesc': config.status== '0'}">{{config.status | buttondesfilter}}</span>
                 </div>
                 <div class="config-item-content">
                     <span>说明:&nbsp;&nbsp;&nbsp;</span>
@@ -37,8 +37,6 @@
                 }else {
                     config.status = "0";
                 }
-                // this.groups[parentIndex].configs[index] = Object.assign({}, config);
-                // this.$set(this.groups, parentIndex, this.groups[parentIndex]);
                 var url = api.get('doctor.configpost');
                 var params = {
                     openid: this.openid,
@@ -107,6 +105,7 @@
 </script>
 <style scoped>
     .set-config {
+        margin-top: -41.3px;
         text-align: left;
     }
     .config-item {
@@ -121,5 +120,11 @@
     }
     .config-item-content {
         margin-top: 10px;
+    }
+    .opendesc {
+        color: #1996ea;
+    }
+    .closedesc {
+        color: #f06500;
     }
 </style>

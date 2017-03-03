@@ -15,6 +15,7 @@
         <template v-if="isbind == 1">
             <img src="../assets/bindsuccess.png" style="width: 100px; height: 100px; margin-top: 130px;"><br/>
             <span style="color: #1996ea; margin-top: 20px; display: block; font-size: 22px">已绑定成功</span>
+            <a class="unbind-btn" href="javascript:" @click="unbindUser">解除绑定</a>
         </template>
     </div>
 </template>
@@ -52,6 +53,7 @@
                 }).done(function(response){
                     if (response.errno == 0) {
                         var data = response.data;
+                        localStorage.setItem('_isbind_', '1');
                         let instance = self.$toast('绑定成功');
                         setTimeout(() => {
                             instance.close();
@@ -66,6 +68,27 @@
                     }
                 })
 
+            },
+            unbindUser: function() {
+                var self = this;
+                this.$messagebox.confirm('您确定要取消绑定吗?').then(action => {
+                    var url = api.get('bind.unbindpost');
+                    var params = {
+                        openid: this.openid,
+                    }
+                    common.post(url, params, function(response){
+                        if (response.errno == 0) {
+                            localStorage.setItem('_isbind_', '0');
+                            let instance = self.$toast('解绑成功');
+                            setTimeout(() => {
+                                instance.close();
+                                WeixinJSBridge.call('closeWindow');
+                            }, 2000);
+                        }
+                    })
+                }, cancel => {
+
+                });
             },
             checkPostParams: function() {
                 if (this.username.trim() == '') {
@@ -131,4 +154,14 @@
         -webkit-justify-content: center;
               justify-content: center;
     }*/
+    .unbind-btn {
+        text-decoration: none;
+        position: fixed;
+        color: #fff;
+        background-color: #f06602;
+        padding: 10px;
+        width: 100%;
+        bottom:0px;
+        left: 0px;
+    }
 </style>
