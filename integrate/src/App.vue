@@ -2,7 +2,9 @@
     <div class="row">
         <app-header v-if="showHeader()"></app-header>
         <navmenu v-if="showMenu()"></navmenu>
+        <transition name="fade">
         <router-view></router-view>
+        </transition>
         <app-footer v-if="showFooter()"></app-footer>
         <modal :show="showModal" width="300px">
             <div slot="header">
@@ -28,7 +30,12 @@
     </div>
 </template>
 <style scoped>
-
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .1s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
 .header-span {
     color: #fff;
 }
@@ -58,6 +65,7 @@ import Bus from './lib/bus.js'
 export default {
     data: function() {
         return {
+            slideName: 'slide-right',
             showModal: false,
             showPopup: false,
             showAlert: false,
@@ -201,6 +209,13 @@ export default {
                 $('.container-fluid.content').removeClass('menu-mini')
             }
         })
-    }
+    },
+    watch: {
+    //   '$route' (to, from) {
+    //     const toDepth = to.path.split('/').length
+    //     const fromDepth = from.path.split('/').length
+    //     this.slideName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    //   }
+  }
 }
 </script>

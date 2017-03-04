@@ -28,10 +28,12 @@
     <div  class="submenu-container" v-show="showThirdLevelMenu">
         <ul class="el-menu submenu">
             <li class="menu-title" :class="{'fullinfo': isShowFullInfo}" @click="showFullInfo">
-                <p class="title">{{patientname}}&nbsp;&nbsp;<i :class="{'el-icon-arrow-right': !isShowFullInfo, 'el-icon-arrow-down': isShowFullInfo}"></i></p>
+                <p class="title">{{patientname}}&nbsp;&nbsp;<i class="menu-title-arrow el-icon-arrow-right" :class="{'opened': isShowFullInfo}" ></i></p>
+                <div class="menu-content">
                 <div>{{patientinfo.agestr}}岁 {{patientinfo.sexstr}}</div>
                 <div>{{patientinfo.diseasename}}</div>
                 <div>{{patientinfo.out_case_no}}</div>
+                </div>
             </li>
             <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in patientGrandsonMenus" @click="clickThirdMenu(one)">
                 <span class="menu-text">
@@ -154,21 +156,37 @@
         transition: height .5s ease;
         overflow: hidden;
         cursor: pointer;
+        background-color: #F9FAFC;
     }
     .menu-title .title {
         padding: 0 20px;
         font-size: 15px;
         color: #008DB9;
+        background-color: #eef1f6;
         font-weight: 700;
         margin: 0;
-        /*border-bottom: 1px solid #ddd;*/
+        -moz-box-shadow:0px 1px 2px #ccc;
+        -webkit-box-shadow:0px 1px 2px #ccc;
+        box-shadow:0px 1px 2px #ccc;
+        /*border-bottom: 1px solid #ccc;*/
     }
-    .menu-title div {
+    .menu-title .menu-content {
         padding: 0 20px;
     }
     .menu-title.fullinfo {
         height: 130px;
         transition: height .5s ease;
+    }
+    .menu-title-arrow {
+        position: absolute;
+        right: 5px;
+        font-size: 12px;
+        top: 10px;
+        color: #48576A;
+        transition: .3s;
+    }
+    .menu-title-arrow.opened {
+        transform: rotate(90deg);
     }
     .fa {
         margin-right: 10px
