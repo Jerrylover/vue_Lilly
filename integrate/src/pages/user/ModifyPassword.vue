@@ -1,8 +1,9 @@
 <template>
 <div class="container-fluid content">
-    <div class="breadcrumbs">
-        <h4>修改密码</h4>
-    </div>
+    <breadcrumb pagetitle="修改密码">
+        <div name="other-content">
+        </div>
+    </breadcrumb>
     <div class="page-content">
         <div class="col-lg-6 col-sm-6" style="padding:0">
             <div class="form-group">
@@ -42,9 +43,7 @@ export default {
     computed: {
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
-        'pageNav': require('./Nav.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {
         clickSave: function() {

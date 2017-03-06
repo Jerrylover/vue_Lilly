@@ -787,7 +787,8 @@ export default {
                         message: '保存成功',
                         duration: 1500,
                         onClose: function() {
-                            document.location.reload();
+                            // document.location.reload();
+                            that.$router.go(0)
                         }
                     })
                 }
@@ -1001,7 +1002,7 @@ export default {
             that.$emit('change-action', '修改')
             that.chemoid = chemo.id;
             var pickedMedicines = util.isArray(chemo.pkg_items) ? chemo.pkg_items : [];
-            
+
 
             if (pickedMedicines.length > 1) {
                 pickedMedicines.forEach(function(pickedMedicine) {

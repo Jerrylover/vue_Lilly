@@ -1,11 +1,11 @@
 <template>
-<div class="nav-menu">
+<div class="nav-menu" v-show="!isfullscreen">
     <div class="menu-container" :class="{'menu-mini': ismini}">
         <div class="text-center div-toggle" @click.stop="toggleMenu"><i class="menu-fa fa" :class="{'fa-angle-double-left' : !ismini, 'fa-angle-double-right' : ismini}"></i></div>
 
         <ul class="el-menu">
             <li class="el-menu-item" :class="{'is-active': menu.isactive}" style="padding-left: 20px;" v-for="(menu, index) in menuData" @click="clickMenu(menu)">
-                <el-tooltip placement="top" v-show="ismini">
+                <el-tooltip placement="right" v-show="ismini">
                     <div slot="content">{{menu.name}}</div>
                     <i :class="menu.icon"></i>
                 </el-tooltip>
@@ -205,6 +205,7 @@ import api from '../config/api.js'
 export default {
   data: function() {
     return {
+        isfullscreen: false,
         isShowFullInfo: true,
         patientid: '',
         patientname: '',
@@ -226,20 +227,16 @@ export default {
             ]
         },
         {
-            name: '门诊',
-            icon: 'fa fa-user-md',
+            name: '复诊预约',
+            icon: 'fa fa-calendar',
+            link: {name: 'schedule-revisit'},
             isactive: false,
             submenus: [
-                {
-                    name: '复诊日历',
-                    link: {name: 'schedule-revisit'},
-                    isactive: false,
-                },
-                {
-                    name: '设置门诊时间',
-                    link: {name: 'schedule-visit'},
-                    isactive: false,
-                }
+                // {
+                //     name: '复诊日历',
+                //     link: {name: 'schedule-revisit'},
+                //     isactive: false,
+                // }
             ]
         },
         {
@@ -298,6 +295,11 @@ export default {
                 {
                     name: '修改密码',
                     link: {name: 'user-modifypassword'},
+                    isactive: false,
+                },
+                {
+                    name: '设置门诊时间',
+                    link: {name: 'schedule-visit'},
                     isactive: false,
                 },
                 {
@@ -548,6 +550,9 @@ export default {
         })
         //获取患者基本信息
         this.getPatientInfo()
+    },
+    letFullScreen: function(isfullscreen) {
+        this.isfullscreen = isfullscreen
     }
   },
   mounted: function() {
@@ -588,6 +593,7 @@ export default {
                     that.ismini = true
               }
           })
+          Bus.$on('let-fullscreen', this.letFullScreen)
       })
 
   }

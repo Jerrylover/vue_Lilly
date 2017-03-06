@@ -1,7 +1,8 @@
 <template>
-    <div class="container-fluid content">
+    <div class="container-fluid content" :class="{'fullscreen': isfullscreen}">
         <breadcrumb :data="breadcrumbData" pagetitle="数据录入">
-            <div name="other-content">
+            <div slot="other-content">
+                <button class="btn-fullscreen btn btn-success btn-sm" @click.prevent="letFullScreen" v-if="showFullScreenIcon"><i :class="{'glyphicon glyphicon-resize-full': !isfullscreen, 'glyphicon glyphicon-resize-small': isfullscreen}" style=""><span style="padding-left:5px;">{{screeTitle}}</span></i></button>
             </div>
         </breadcrumb>
 
@@ -35,6 +36,9 @@
     </div>
 </template>
 <style scoped>
+.btn-fullscreen {
+    margin-right: 50px;
+}
 .container-left {
     padding: 0;
 }
@@ -84,7 +88,8 @@ export default {
             ],
             treeData: [],
             name: '',
-            showModal: false
+            showModal: false,
+            isfullscreen: false,
         }
     },
     computed: {
@@ -99,6 +104,12 @@ export default {
         },
         ename: function() {
             return this.$route.params.ename;
+        },
+        showFullScreenIcon: function() {
+            return this.$route.name == 'checkuptpl-child'
+        },
+        screeTitle: function() {
+            return this.isfullscreen ? '取消全屏' : '全屏'
         }
     },
     components: {
@@ -116,6 +127,12 @@ export default {
     },
     mounted: function() {
         this.$nextTick(function() {
+            var isfullscreen = localStorage.getItem('_checkup-isfullscreen_') == 1 ? true : false
+            console.log('+++', isfullscreen)
+            if (isfullscreen) {
+                this.isfullscreen = true
+                Bus.$emit('let-fullscreen', this.isfullscreen)
+            }
             this.fetchPatient();
             var self = this;
             api.http({
@@ -146,6 +163,11 @@ export default {
         })
     },
     methods: {
+        letFullScreen: function() {
+            this.isfullscreen = !this.isfullscreen
+            Bus.$emit('let-fullscreen', this.isfullscreen)
+            localStorage.setItem('_checkup-isfullscreen_', this.isfullscreen ? 1 : 0)
+        },
         fetchPatient: function() {
             if (!this.patientname) {
                 var self = this;
@@ -163,6 +185,7 @@ export default {
     },
     created: function() {
         Bus.$emit('show-patient-third-level-menu', this.patientid, this.patientname, '数据录入')
+
     },
     watch: {
         '$route': function(to, from) {

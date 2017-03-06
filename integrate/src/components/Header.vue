@@ -234,6 +234,10 @@ tr.light-tr th {
 .menu-mini.content.container-fluid {
     margin-left:25px;
 }
+.content.container-fluid.fullscreen {
+    margin: 0;
+}
+
 .page-content {
     background: #fff;
     margin: 0;
@@ -254,6 +258,7 @@ tr.light-tr th {
     line-height: 40px;
     padding: 0 12px 0 0;
     display: block;
+    margin-right: -15px;
 }
 .breadcrumbs h4 {
     margin: 0;

@@ -1,9 +1,10 @@
 <template>
 <div class="container-fluid content">
     <!-- <page-nav active="info"></page-nav> -->
-        <div class="breadcrumbs">
-            <h4>个人信息</h4>
-        </div>
+        <breadcrumb pagetitle="个人信息">
+            <div name="other-content">
+            </div>
+        </breadcrumb>
         <div class="page-content">
             <div class="col-lg-6 col-sm-12" style="padding:0">
                 <table class="table table-bordered">
@@ -52,8 +53,7 @@ export default {
     computed: {
     },
     components: {
-        'navmenu': require('../../components/NavMenu.vue'),
-        'pageNav': require('./Nav.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {
         fetchAssistant: function() {
