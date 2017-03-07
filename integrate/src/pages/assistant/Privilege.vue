@@ -20,7 +20,7 @@
                 <div class="col-sm-6 text-right" style="padding:0">
                     <a href="javascript:" class="mg-r-10" @click="clickSelectAll">全选</a>
                     <a href="javascript:" class="mg-r-20" @click="clickResetAll">不选</a>
-                    <a href="javascript:" class="btn btn-success" @click="clickSave">保存</a>
+                    <a href="javascript:" class="btn btn-primary" @click="clickSave">保存</a>
                 </div>
             </div>
         </div>
@@ -147,7 +147,6 @@ export default {
             })
         },
         initPage: function() {
-            Bus.$emit('make-menu-mini')
             this.assistantid = this.$route.query.assistantid;
             if (this.assistantid != undefined && this.assistantid != '') {
                 this.fetchPrivileges();
@@ -156,6 +155,7 @@ export default {
     },
     created: function() {
         this.initPage()
+        Bus.$emit('make-menu-mini')
     },
     watch: {
         '$route': function(to, from) {

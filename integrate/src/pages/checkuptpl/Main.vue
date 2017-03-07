@@ -7,7 +7,7 @@
         </breadcrumb>
 
         <div class="page-content">
-            <div class="container col-lg-2 col-sm-3 container-left" style="width:160px">
+            <div class="container col-lg-2 col-sm-3 container-left" :class="{'fixed-width': !isfullscreen}">
                 <div class="div1">
                     <ul class="list-unstyled">
                         <fcmenu v-for="model in treeData" :model="model" :patientid="patientid" :ename="ename"></fcmenu>
@@ -70,6 +70,9 @@ div.row-content {
 .list-unstyled {
     width: 60%;
     margin: auto;
+}
+.fixed-width {
+    width: 160px;
 }
 </style>
 <script>

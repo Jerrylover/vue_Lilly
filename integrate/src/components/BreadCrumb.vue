@@ -14,7 +14,7 @@
     </div>
 
 </template>
-<style scoped>
+<style>
 .breadcrumb>.active {
     color: #333;
 }

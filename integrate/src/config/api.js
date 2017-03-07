@@ -155,8 +155,7 @@ export default {
         var code = '';
         var diseaseid = '';
         if (process.env.NODE_ENV === 'development') {
-            code = cookie.get('_myuserid_');
-            code = typeof code == 'undefined' ? '' : code;
+            code = cookie.get('_myuserid_') || '';
             url = util.appendUrl(url, '_code_', code);
         }
         diseaseid = common.getDiseaseId()

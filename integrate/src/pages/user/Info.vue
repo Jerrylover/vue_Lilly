@@ -78,7 +78,6 @@ export default {
     },
     watch: {
         '$route': function() {
-            Bus.$emit('make-menu-mini')
         }
     }
 }

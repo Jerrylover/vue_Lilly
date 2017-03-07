@@ -42,7 +42,7 @@
 </div>
 </template>
 <style scoped>
-@charset "utf-8";
+@charset "utf-8";z
 body {
     margin: 0 auto;
 }

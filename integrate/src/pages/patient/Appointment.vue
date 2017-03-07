@@ -54,7 +54,6 @@
                         <td>星期日</td>
                     </tr>
                     <tr v-for="row in getrows">
-
                         <td v-for="col in 7" :class="getTdClass(row, col)" :style="getTdStyle(row, col)" @click="clickDate(row, col)">
                             <div :style="getDivStyle(row, col, 'bgdate')">{{handleDate(row, col)}}</div>
                             <div :style="getDivStyle(row, col, 'bgtype')">{{getTagstr(row, col)}}</div>
@@ -132,6 +131,7 @@ h4 {
 }
 .table tr td  {
     text-align: center;
+    cursor: pointer;
 }
 .over:hover {
     background-color: #cee8ff;
@@ -307,13 +307,13 @@ h4 {
             shortcutChangeTheDate: function(increment) {
                 var self = this;
                 var month = Number(self.themonth) + increment;
-                if (Number(self.themonth == 12)) {
-                    self.year =Number(self.theyear) + Math.ceil(month/12) - 1;
+                if (Number(month)%12 == 0) {
+                    self.year =Number(self.theyear) + Math.floor(month/12) -1;
                 }else {
-                    self.year =Number(self.theyear) + Math.ceil(month/12);
+                    self.year =Number(self.theyear) + Math.floor(month/12);
                 }
                 self.month = month%12 == 0 ? 12 : month%12;
-                if (self.month < 10) {
+                if (self.month < 10 && self.month > 0) {
                     self.month = '0' + self.month;
                 }
                 api.http({

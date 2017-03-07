@@ -1,6 +1,6 @@
 <template>
     <div class="app-header">
-    <nav class="navbar navbar-inverse navbar-xs fc-navbar">
+    <nav class="navbar navbar-inverse navbar-xs fc-navbar navbar-fixed-top">
         <div class="container-fluid container-nav">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
@@ -225,14 +225,15 @@ tr.light-tr th {
     margin: 5px 0 10px 20px;
 }
 .content.container-fluid {
-    margin-left: 45px;
+    /*margin-left: 125px;*/
     overflow: auto;
     padding-left: 0;
     min-height: 800px;
+    margin-top: 38px;
 }
 
 .menu-mini.content.container-fluid {
-    margin-left:25px;
+    /*margin-left:170px;*/
 }
 .content.container-fluid.fullscreen {
     margin: 0;
@@ -265,6 +266,16 @@ tr.light-tr th {
     line-height: 40px;
     padding-left: 10px;
     float: left;
+}
+.btn-primary, .pagination>.active>span {
+    color: #fff;
+    background-color: #008DB9;
+    border-color: #008DB9;
+}
+.btn-primary:focus, .btn-primary:hover, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background: #2da0b9;
+    border-color: #2da0b9;
+    color: #fff;
 }
 
 </style>

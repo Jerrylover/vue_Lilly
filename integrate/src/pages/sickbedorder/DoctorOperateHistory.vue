@@ -5,8 +5,8 @@
             </div>
         </breadcrumb>
         <div class="page-content">
-        <div class="row" style="margin: 0px; background-color: #eee">
-            <div class="form-horizontal" style="border: 1px solid #ccc; margin:0px;padding: 10px">
+        <div class="row" style="margin: 0px; background-color: #f8f8f8">
+            <div class="form-horizontal" style="border: 1px solid #f2f2f2; margin:0px;padding: 10px">
                 <div class="form-group">
                     <span class="col-sm-1 control-label">日期选择:</span>
                     <!-- <div class="col-sm-2">
@@ -93,7 +93,7 @@
                     <td :class="{pass: patient.result_type == '确认入住', refuse: patient.result_type == '拒绝入住'}">{{patient.result_type}}</td>
                 </tr>
                 <tr v-if="bedtkts.length == 0">
-                    <td colspan="11" style="text-align: center">暂无数据</td>
+                    <td colspan="12" style="text-align: center">暂无数据</td>
                 </tr>
             </tbody>
             </table>
@@ -216,7 +216,6 @@
         watch: {
             '$route': function(to, from) {
                 this.initPage()
-                Bus.$emit('make-menu-mini')
             }
         }
     }

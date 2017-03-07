@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="row" style="border-top: 1px solid #ccc; padding: 10px; margin: 0px" v-show="doctorMedicineRefs_group[index].status == true">
-                        <a v-for="(medicine, index2) in medicinegroup.medicines" class="btn btn-success" style="margin: 5px 0 5px 5%;width: 27%" href="javascript:" @click="clickMedicine(index, index2, $event)">{{medicine.title}}</a>
+                        <a v-for="(medicine, index2) in medicinegroup.medicines" class="btn btn-default" style="margin: 5px 0 5px 5%;width: 27%" href="javascript:" @click="clickMedicine(index, index2, $event)">{{medicine.title}}</a>
                     </div>
                 </div>
                 <modal :show="showMedicineDetail" width="600px">

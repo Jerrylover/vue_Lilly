@@ -30,7 +30,7 @@
             <li class="menu-title" :class="{'fullinfo': isShowFullInfo}" @click="showFullInfo">
                 <p class="title">{{patientname}}&nbsp;&nbsp;<i class="menu-title-arrow el-icon-arrow-right" :class="{'opened': isShowFullInfo}" ></i></p>
                 <div class="menu-content">
-                <div>{{patientinfo.agestr}}岁 {{patientinfo.sexstr}}</div>
+                <div>{{patientinfo.agestr | filterAgestr}} {{patientinfo.sexstr}}</div>
                 <div>{{patientinfo.diseasename}}</div>
                 <div>{{patientinfo.out_case_no}}</div>
                 </div>
@@ -138,7 +138,8 @@
 
     .el-menu-item.is-active {
         color: #fff;
-        background-color: #20a0ff;
+        /*background-color: #20a0ff;*/
+        background-color: #2da0b9;
         border-right: 0;
     }
     .nav-menu {
@@ -147,6 +148,8 @@
         -moz-user-select:none;
         -ms-user-select:none;
         user-select:none;
+        position:fixed;
+        top: 38px;
     }
     .menu-title {
         /*padding: 0 20px;*/
@@ -190,6 +193,10 @@
     }
     .fa {
         margin-right: 10px
+    }
+    .el-menu-item.submenu {
+        height: 45px;
+        line-height: 45px;
     }
     </style>
 <style>
@@ -367,28 +374,25 @@ export default {
   },
   methods: {
     getPatientInfo: function() {
-        if (this.patientinfo == '') {
+        // if (this.patientinfo == '') {
             var that = this
             api.http({
               url: 'patient.patientinfo',
               data: {
                   patientid: that.patientid,
-                  dg_group: that.dg_group,
               },
               successCallback: function(d) {
                   that.patientinfo = d.data
               }
           })
-        }
+        // }
     },
     showFullInfo: function(e) {
         this.isShowFullInfo = !this.isShowFullInfo
     },
     toggleMenu: function() {
         this.ismini = !this.ismini
-        this.$nextTick(function() {
-            Bus.$emit('menu-mini', this.ismini)
-        })
+        Bus.$emit('menu-mini', {ismini: this.ismini, isShowSubMenu: this.isShowSubMenu, showThirdLevelMenu: this.showThirdLevelMenu})
     },
     clickMenu: function(menu) {//点击一级菜单
         this.showThirdLevelMenu = false
@@ -401,7 +405,7 @@ export default {
         localStorage.setItem('_activeMenu_', this.activeMenu)
         this.subMenuData = menu.submenus
         if (menu.submenus.length > 0) {//有二级菜单的收起一级菜单，同时路由到第一个二级菜单页
-            this.ismini = true
+            this.ismini = false
             var _activeSubMenu = menu.submenus[0]
             menu.submenus.forEach(function(one) {
                 one.isactive = false
@@ -410,16 +414,13 @@ export default {
             this.activeSubmenu = _activeSubMenu.name//记录active的二级菜单
             localStorage.setItem('_activeSubmenu_', this.activeSubmenu)
             this.$router.push(_activeSubMenu.link)
-            this.$nextTick(function() {
-                Bus.$emit('menu-mini', this.ismini)
-            })
-
         } else {
             this.ismini = false
             if (menu.link != '' && menu.link != undefined) {
                 this.$router.push(menu.link)
             }
         }
+        Bus.$emit('menu-mini', {ismini: this.ismini, isShowSubMenu: this.isShowSubMenu, showThirdLevelMenu: this.showThirdLevelMenu})
     },
     clickSubMenu: function(index) {//点击二级菜单
         this.showThirdLevelMenu = false
@@ -512,14 +513,14 @@ export default {
 
         }
     },
-    initPage: function() {
+    initMenus: function() {
         var that = this
         this.menuData.forEach(function(menu) {
             if (menu.isactive) {
                 that.subMenuData = menu.submenus
             }
         })
-        if (this.doctorUserName == 'xuyan') {
+        if (this.doctorUserName == 'xuyan' && this.menuData[0].submenus == 0) {
             this.menuData[0].submenus.push(
                 {
                     name: '患者列表',
@@ -534,13 +535,19 @@ export default {
                  }
              )
         }
+        var isminimenu = that.subMenuData.length > 0 ? true : false
+        this.ismini = false
+        Bus.$emit('menu-mini', {ismini: this.ismini, isShowSubMenu: this.isShowSubMenu, showThirdLevelMenu: this.showThirdLevelMenu})
     },
     showGrandsonMenu: function(patientid, patientname, pagename) {//专门为patient做的三级菜单
         this.showThirdLevelMenu = true
         this.ismini = true
         this.showSubMenu = false
-        this.patientid = patientid
-        this.patientname = patientname
+        if (patientid != this.patientid) {
+            this.patientid = patientid
+            this.patientname = patientname
+            this.getPatientInfo()
+        }
         this.patientGrandsonMenus.forEach(function(one) {
             if (one.name == pagename) {
                 one.isactive = true
@@ -549,53 +556,67 @@ export default {
             }
         })
         //获取患者基本信息
-        this.getPatientInfo()
+        // console.log('showGrandsonMenu....')
+
+        Bus.$emit('menu-mini', {ismini: this.ismini, isShowSubMenu: this.isShowSubMenu, showThirdLevelMenu: this.showThirdLevelMenu})
     },
     letFullScreen: function(isfullscreen) {
         this.isfullscreen = isfullscreen
+    },
+    initPage: function() {
+        var _activeMenu = localStorage.getItem('_activeMenu_')
+        var _activeSubmenu = localStorage.getItem('_activeSubmenu_')
+        if (_activeMenu) {
+            var flag1 = false
+            this.menuData.forEach(function(menu) {
+                if (menu.name == _activeMenu) {
+                    menu.isactive = true
+                    flag1 = true
+                } else {
+                    menu.isactive = false
+                }
+                menu.submenus.forEach(function(submenu) {
+                    if (submenu.name == _activeSubmenu) {
+                        submenu.isactive = true
+                    } else {
+                        submenu.isactive = false
+                    }
+                })
+            })
+            if (!flag1) {//第一个菜单设置成active
+                this.menuData[0].isactive = true
+            }
+        }
+        this.initMenus()
+        Bus.$on('show-patient-third-level-menu', this.showGrandsonMenu)
+        var that = this
+        Bus.$on('hide-patient-third-level-menu', function() {
+            that.showThirdLevelMenu = false
+            that.ismini = false
+        })
+        Bus.$on('make-menu-mini', function() {
+            if (that.subMenuData.length > 0) {
+                //   that.ismini = true
+            }
+        })
+        Bus.$on('let-fullscreen', this.letFullScreen)
     }
   },
+  filters: {
+      filterAgestr: function(val) {
+          return val ? val + '岁': '未知年龄'
+      }
+  },
   mounted: function() {
-      this.$nextTick(function() {
-          var _activeMenu = localStorage.getItem('_activeMenu_')
-          var _activeSubmenu = localStorage.getItem('_activeSubmenu_')
-          if (_activeMenu) {
-              var flag1 = false
-              this.menuData.forEach(function(menu) {
-                  if (menu.name == _activeMenu) {
-                      menu.isactive = true
-                      flag1 = true
-                  } else {
-                      menu.isactive = false
-                  }
-                  menu.submenus.forEach(function(submenu) {
-                      if (submenu.name == _activeSubmenu) {
-                          submenu.isactive = true
-                      } else {
-                          submenu.isactive = false
-                      }
-                  })
-              })
-              if (!flag1) {//第一个菜单设置成active
-                  this.menuData[0].isactive = true
-              }
-          }
-          this.initPage()
-          Bus.$on('show-patient-third-level-menu', this.showGrandsonMenu)
-          var that = this
-          Bus.$on('hide-patient-third-level-menu', function() {
-              that.showThirdLevelMenu = false
-              that.ismini = false
-          })
-          Bus.$on('make-menu-mini', function() {
+  },
+  created: function() {
+    this.initPage()
+  },
+  watch: {
+      '$route': function(to, from, next) {
+        //   this.initPage()
 
-              if (that.subMenuData.length > 0) {
-                    that.ismini = true
-              }
-          })
-          Bus.$on('let-fullscreen', this.letFullScreen)
-      })
-
+      }
   }
 }
 </script>

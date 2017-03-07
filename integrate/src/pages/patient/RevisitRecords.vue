@@ -1,19 +1,17 @@
 <template>
     <div class="container-fluid content">
-        <breadcrumb :data="breadcrumbData" pagetitle="历次就诊">
-            <div name="other-content">
+        <breadcrumb :data="breadcrumbData" pagetitle="历次就诊" v-if="routepath == 'patient-revisitrecord'">
+            <div slot="other-content">
             </div>
         </breadcrumb>
-        <visit-header v-if="routepath == 'patient-revisitrecord'" :patientname='patientname' active='revisitrecords' :patientid="patientid" class="collapse"></visit-header>
-        <div v-else class="">
-            <h4>{{patientname}}</h4>
-            <ol class="breadcrumb" style="margin: 0">
-                <li>返回</li>
+        <div v-else class="breadcrumbs">
+            <ul class="breadcrumb">
                 <li><router-link   :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
-            </ol>
+                <li>历次就诊</li>
+            </ul>
         </div>
 
         <div class="page-content">

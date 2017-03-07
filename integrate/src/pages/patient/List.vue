@@ -6,20 +6,49 @@
         </div>
     </breadcrumb>
     <div class="page-content">
-        <div>
-            <div class="form-group" style="float:left;width:50%">
-                <div class="input-group">
-                    <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.enter='doSearch($event)'>
-                    <span class="input-group-btn" style="width: 1%;line-height:35px">
-                            <button class="btn btn-primary" type="submit" @click="doSearch($event)">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
-                    </span>
+        <div class="row" style="margin:10px 0 0 0">
+            <div class="col-sm-1 success" style="float:left;padding:0;line-height:2.5">
+                <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-success btn-sm" href="javascript:"  @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
+            </div>
+            <div class="col-sm-11" style="padding-right:0">
+                <div class="col-sm-3" style="float:right;padding-right:0">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input class="input-search form-inline form-control" type="text" placeholder="搜索患者姓名/手机号/病历号" v-model='patient_name' @keyup.prevent.enter='doSearch'>
+                            <span class="input-group-btn" style="width: 1%;line-height:35px">
+                                    <button class="btn btn-primary" type="submit" @click.prevent="doSearch">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div style="float:right;padding-left:15px;">
+                    <select class="form-control" id="selectBindWx" v-model="filterDiseaseid" @change="diseaseIdChange">
+                        <option value="0" disabled hidden>选择疾病</option>
+                        <option value="-1">全部</option>
+                        <option v-for="disease in diseases" :value="disease.diseaseid">{{disease.name}}</option>
+                    </select>
+                </div>
+                <div style="float:right;padding-left:15px;">
+                    <select class="form-control" id="selectBindWx" v-model="filterBindWx" @change="bindWxChange">
+                        <option value="0" disabled hidden>选择绑定微信</option>
+                        <option value="-1">全部</option>
+                        <option value="1">已绑定</option>
+                        <option value="2">未绑定</option>
+                    </select>
+                </div>
+                <div style="float:right;padding-left:15px;">
+                    <select class="form-control" id="selectGender" v-model="filterGender" @change="genderChange">
+                        <option value="0" disabled hidden>选择性别</option>
+                        <option value="-1">全部</option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
                 </div>
             </div>
-            <a v-privilege="'数据库-患者-添加'" class="a-new-patient btn btn-primary btn-sm" href="javascript:"  @click="addPatient"><i class="fa fa-plus">&nbsp;新增患者</i></a>
         </div>
-        <table class="table table-bordered table-hover fctable">
+        <table class="table table-bordered table-hover fctable mg-t-10">
             <thead>
                 <tr>
                     <th>姓名</th>
@@ -64,10 +93,6 @@
 </div>
 </template>
 <style scoped>
-.a-new-patient {
-    margin: 2px 0 10px 20px;
-    float: left;
-}
 
 .a-today-visit {
     margin: 5px 20px 10px 20px;
@@ -75,7 +100,10 @@
 }
 
 .form-group {
-    margin-bottom: 0;
+    margin-bottom: 0
+}
+.form-group .control-label{
+    font-weight: normal;
 }
 
 table thead tr {
@@ -99,8 +127,10 @@ export default {
             pagesize: 20,
             total: 0,
             patient_name: '', //搜索词
-            pathname: '',
             auditcnt: 0,
+            filterGender: 0,
+            filterBindWx: 0,
+            filterDiseaseid: 0,
         }
     },
     computed: {
@@ -114,13 +144,13 @@ export default {
         },
         diseaseid: function() {
             return common.getDiseaseId();
+        },
+        diseases: function() {
+            return common.getDiseases();
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'appFooter': require('../../components/Footer.vue'), //尾组件
         'pagination': require('../../components/Pagination.vue'), //翻页组件
-        'navmenu': require('../../components/NavMenu.vue'),
         'breadcrumb': require('../../components/BreadCrumb.vue')
     },
     filters: {
@@ -130,21 +160,19 @@ export default {
         fetchData: function() {
             var self = this;
             var queryStrings = this.$route.query;
-            this.pathname = this.$route.name;
-            $.ajax({
-                    url: api.get('patient.list'),
-                    type: 'post',
-                    dataType: 'json',
-                    data: queryStrings,
-                }).done(function(d) {
-                    var data = d.data;
-                    self.patients = data.list || [];
-                    self.pagenum = data.page - '';
-                    self.pagesize = data.pagesize - '';
-                    self.total = data.total - '';
-                    self.patient_name = data.patient_name;
-                    self.auditcnt = data.auditcnt;
-                })
+            api.http({
+              url: 'patient.list',
+              data: queryStrings,
+              successCallback: function(d) {
+                  var data = d.data;
+                  self.patients = data.list || [];
+                  self.pagenum = data.page - '';
+                  self.pagesize = data.pagesize - '';
+                  self.total = data.total - '';
+                  self.patient_name = data.patient_name;
+                  self.auditcnt = data.auditcnt;
+              }
+            })
         },
         isbindwxdesc: function(value) {
             var desc = '';
@@ -157,13 +185,22 @@ export default {
             }
             return desc;
         },
-        doSearch: function(e) {
-            e.preventDefault();
+        doSearch: function() {
+            var query = {
+                patient_name: this.patient_name
+            }
+            if (this.filterGender != -1 && this.filterGender != 0) {
+                query.sex = this.filterGender;
+            }
+            if (this.filterBindWx != -1 && this.filterBindWx != 0) {
+                query.isbindwx = this.filterBindWx
+            }
+            if (this.filterDiseaseid != -1 && this.filterDiseaseid != 0) {
+                query.diseaseid = this.filterDiseaseid
+            }
             this.$router.push({
                 path: '/patient/list',
-                query: {
-                    'patient_name': this.patient_name
-                }
+                query: query
             });
         },
         goPatient: function(index, e) {
@@ -227,18 +264,34 @@ export default {
             this.$router.push({
                 path:'/patient/' + path,
             });
+        },
+        initPage: function() {
+            var query = this.$route.query
+            this.patient_name = query.patient_name || ''
+            this.filterGender = query.sex || 0
+            this.filterBindWx = query.isbindwx || 0
+            this.filterDiseaseid = query.diseaseid || 0
+            this.fetchData()
+        },
+        genderChange: function() {
+            this.doSearch()
+        },
+        bindWxChange: function() {
+            this.doSearch()
+        },
+        diseaseIdChange: function() {
+            this.doSearch()
         }
     },
     mounted: function() {
     },
     created: function() {
-        this.fetchData();
+        this.initPage();
         Bus.$emit('make-menu-mini')
     },
     watch: {
         $route () {
-            this.fetchData();
-            Bus.$emit('make-menu-mini')
+            this.initPage();
         }
     }
 }
