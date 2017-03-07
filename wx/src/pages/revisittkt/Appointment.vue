@@ -1,19 +1,19 @@
 <template>
     <div class="appointment">
         <mt-header fixed title="复诊预约列表">
-            <router-link to="/" slot="left">
+            <!-- <router-link to="/" slot="left"> -->
                 <mt-button icon="back">返回</mt-button>
-            </router-link>
+            <!-- </router-link> -->
         </mt-header>
 
         <mt-navbar v-model="selected">
             <mt-tab-item id="1">七日内患者</mt-tab-item>
             <mt-tab-item id="2">本月患者</mt-tab-item>
-            <mt-tab-item id="3">更多</mt-tab-item>
+            <mt-tab-item id="3" @click.native="moreStatus">更多</mt-tab-item>
         </mt-navbar>
 
         <mt-tab-container :active.sync="selected">
-            <mt-tab-container-item id="1" v-show="selected == 1 || selected == 2 || selected == 3">
+            <mt-tab-container-item id="1" v-show="selected == '1' || selected == '2' || selected == '3'">
                 <div v-show="showSchedule">
                     <div v-for="month in months" style="text-align: left;">
                         <h3>{{month.themonth}}</h3>
@@ -41,61 +41,33 @@
                         </table>
                     </div>
                 </div>
+                <div v-if="days.length == 0 && showSchedule == false" style="margin-top: 200px; margin-bottom: 20px;width: 100%;float: none">
+                    <span style="padding: 10px;padding: 10px;background-color: #fcf8e3;float: none">无预约患者</span>
+                </div>
             </mt-tab-container-item>
         </mt-tab-container>
     </div>
 </template>
 <script>
-    import utils from '../lib/utils.js'
-    import api from '../config/api.js'
-    import common from '../lib/common.js'
+    import utils from '../../lib/utils.js'
+    import api from '../../config/api.js'
+    import common from '../../lib/common.js'
     import moment from 'moment'
     module.exports = {
         data: function() {
             return {
                 showSchedule: false,
                 openid: '',
-                selected: 1,
+                selected: '',
                 days:[
                 ],
-                months:[{
-                    themonth: "2017年3月",
-                    days: [
-                        {
-                            thedate:"2017-03-15",
-                             theday:"15日",
-                             cnt:7,
-                             max_cnt:8,
-                             desc: "7/8",
-                        },
-                        {
-                            thedate:"2017-03-15",
-                             theday:"15日",
-                             cnt:7,
-                             max_cnt:8,
-                             desc: "7/8",
-                        },
-                        {
-                            thedate:"2017-03-15",
-                             theday:"15日",
-                             cnt:7,
-                             max_cnt:8,
-                             desc: "7/8",
-                        },
-                        {
-                            thedate:"2017-03-15",
-                             theday:"15日",
-                             cnt:7,
-                             max_cnt:8,
-                             desc: "7/8",
-                        }
-                    ]
-                }],
+                months:[
+                ],
             }
         },
         created(){
             this.openid = localStorage.getItem('_openid_');
-            this.selected = 1;
+            this.selected = "1";
             this.getData(7);
         },
         methods: {
@@ -113,9 +85,13 @@
                     if (response.errno == 0) {
                         var data = response.data;
                         self.days = data.days;
-                        console.log(response);
+                        self.days = [];
+                        console.log(self.days);
                     }
                 })
+            },
+            moreStatus: function() {
+                this.showSchedule = true;
             },
             goRevisittkt: function(day){
                 console.log(day);

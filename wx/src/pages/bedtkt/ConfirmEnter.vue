@@ -53,9 +53,9 @@
     </div>
 </template>
 <script>
-    import common from '../lib/common.js'
-    import api from '../config/api.js'
-    import utils from '../lib/utils.js'
+    import common from '../../lib/common.js'
+    import api from '../../config/api.js'
+    import utils from '../../lib/utils.js'
     module.exports = {
         data: function() {
             return {

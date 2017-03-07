@@ -12,7 +12,7 @@
                 </div>
                 <div class="config-item-content">
                     <span>说明:&nbsp;&nbsp;&nbsp;</span>
-                    <span>{{config.brief}}</span>
+                    <span style="word-break: break-all">{{config.brief}}</span>
                 </div>
             </div>
         </div>

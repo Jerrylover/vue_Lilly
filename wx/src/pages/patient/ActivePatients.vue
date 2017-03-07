@@ -1,7 +1,7 @@
 <template>
     <div class="vertical-container">
         <mt-header fixed title="今日活跃患者">
-            <mt-button icon="back" @click="close">返回</mt-button>
+            <!-- <mt-button icon="back" @click="close">返回</mt-button> -->
         </mt-header>
         <div class="body">
             <div v-for="item in items" style="border: 1px solid #ccc; padding: 5px;border-radius: 0px; margin: 5px;" @click="goPipe(item)">
@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-    import api from '../config/api.js';
+    import api from '../../config/api.js';
     module.exports = {
         data: function() {
             return {

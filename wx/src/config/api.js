@@ -23,12 +23,16 @@ var urls = {
         'historylist': '/bedtkt/historylist',
         // ''
     },
+    'bedtkt': {
+        'info': '/bedtkt/info',
+    },
     'appointment': {
         'list': '/revisittkt/list',
         'schedulelist': '/revisittkt/schedulelist',
     },
     'patient': {
-        'list': '/patient/list'
+        'list': '/patient/list',
+        'info': '/patient/info'
     },
     'doctor': {
         'config': '/doctor/config',

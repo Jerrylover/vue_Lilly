@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-    import api from '../config/api.js'
+    import api from '../../config/api.js'
     module.exports = {
         data: function() {
             return {

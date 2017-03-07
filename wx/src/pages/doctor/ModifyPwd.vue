@@ -1,10 +1,10 @@
 <template>
     <div class="modifypwd">
-        <mt-field label="旧密码" placeholder="" style="border-bottom: 1px solid #ccc" @touchstart.native="clearErrmsg" type="password" v-model="oldpwd"></mt-field>
-        <mt-field label="新密码" placeholder="" style="border-bottom: 1px solid #ccc" @touchstart.native="clearErrmsg" type="password" v-model="pwd"></mt-field>
-        <mt-field label="重复新密码" placeholder="" style="border-bottom: 1px solid #ccc" @touchstart.native="clearErrmsg" type="password" v-model="repeatpwd"></mt-field>
+        <mt-field label="旧密码" placeholder=""  @touchstart.native="clearErrmsg" type="password" v-model="oldpwd"></mt-field>
+        <mt-field label="新密码" placeholder=""  @touchstart.native="clearErrmsg" type="password" v-model="pwd"></mt-field>
+        <mt-field label="重复新密码" placeholder="" @touchstart.native="clearErrmsg" type="password" v-model="repeatpwd"></mt-field>
         <div v-show="errmsg != ''" style="padding: 10px;margin-top: 10px;"><span style="color: red">{{errmsg}}</span></div>
-        <mt-button type="danger" size="large" @touchstart="clickModifypwd">提交修改</mt-button>
+        <mt-button type="danger" size="large" style="margin-top: 10px" @touchstart="clickModifypwd">提交修改</mt-button>
     </div>
 </template>
 <script>

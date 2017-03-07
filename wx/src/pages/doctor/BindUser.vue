@@ -2,7 +2,7 @@
     <div class="vertical-container">
         <template v-if="isbind == 0">
         <div style="padding: 20px 0px 40px 0px">
-            <img src="../assets/fcqx_icon.png" style="width: 100px; height: 100px">
+            <img src="../../assets/fcqx_icon.png" style="width: 100px; height: 100px">
         </div>
         <mt-field label="用户名" placeholder="请输入用户名" v-model="username"></mt-field>
         <mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
@@ -13,15 +13,15 @@
         </div>
         </template>
         <template v-if="isbind == 1">
-            <img src="../assets/bindsuccess.png" style="width: 100px; height: 100px; margin-top: 130px;"><br/>
+            <img src="../../assets/bindsuccess.png" style="width: 100px; height: 100px; margin-top: 130px;"><br/>
             <span style="color: #1996ea; margin-top: 20px; display: block; font-size: 22px">已绑定成功</span>
             <a class="unbind-btn" href="javascript:" @click="unbindUser">解除绑定</a>
         </template>
     </div>
 </template>
 <script>
-    import common from '../lib/common.js';
-    import api from '../config/api.js';
+    import common from '../../lib/common.js';
+    import api from '../../config/api.js';
     module.exports = {
         data: function() {
             return {
@@ -159,8 +159,10 @@
         position: fixed;
         color: #fff;
         background-color: #f06602;
-        padding: 10px;
         width: 100%;
+        line-height: 2.4;
+        height: 41px;
+        font-size: 18px;
         bottom:0px;
         left: 0px;
     }

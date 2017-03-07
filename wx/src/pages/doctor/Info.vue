@@ -6,6 +6,11 @@
                 <img :src="disease.qr_url">
             </div>
         </div>
+        <!-- <router-link :to="{name: 'doctor-config'}">hahaha</router-link> -->
+
+        <!-- <mt-popup v-model="popupVisible">
+            <img :src="picurl" style="width: 100%;">
+        </mt-popup> -->
     </div>
 </template>
 <script>
@@ -14,6 +19,8 @@
     module.exports = {
         data: function() {
             return {
+                // picurl: '',
+                // popupVisible: false,
                 test: '',
                 openid: '',
                 doctor: {
@@ -35,6 +42,10 @@
                     }
                 })
             },
+            // clickPhoto: function(disease) {
+            //     this.popupVisible = true;
+            //     this.picurl = disease.qr_url;
+            // }
         },
         created: function(){
             this.openid = localStorage.getItem('_openid_');

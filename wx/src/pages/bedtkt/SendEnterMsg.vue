@@ -1,22 +1,22 @@
 <template>
     <div class="SendEnterMsg">
         <mt-header fixed title="发送入院通知">
-            <router-link to="/booksickbed" slot="left">
+            <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
         </mt-header>
         <div class="patientinfo">
             <div>
-                <span>姓名:&nbsp;&nbsp;{{name}}</span>
-                <span>应住院日期:&nbsp;&nbsp;{{plan_date}}</span>
+                <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
+                <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
             </div>
             <div>
-                <span>性别:&nbsp;&nbsp;{{sex}}</span>
-                <span>手机号:&nbsp;&nbsp;{{mobile}}</span>
+                <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
+                <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
             </div>
             <div>
-                <span>年龄:&nbsp;&nbsp;{{age}}岁</span>
-                <span>近期居住地:&nbsp;&nbsp;{{address}}</span>
+                <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
+                <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
             </div>
         </div>
         <p style="width: 80%; margin: 30px auto; text-align: left; text-indent: 2em">发送确认信息至患者,询问患者是否可以入院,点击发送确认通知将会发送确认信息给患者,届时请查收患者反馈。</p>
@@ -42,17 +42,13 @@
     </div>
 </template>
 <script>
-    import api from '../config/api.js'
-    import common from '../lib/common.js'
+    import api from '../../config/api.js'
+    import common from '../../lib/common.js'
     module.exports = {
         data: function() {
             return {
-                name: '',
-                sex: '',
-                age: '',
-                mobile: '',
-                address: '',
-                plan_date: '',
+                bedtktid: '',
+                bedtkt:{},
 
 
                 openid: '',
@@ -63,15 +59,16 @@
             }
         },
         created(){
+            var self = this;
             this.openid = localStorage.getItem('_openid_');
             var queryString = this.$route.query;
-            this.name = queryString.name;
-            this.sex = queryString.sex;
-            this.age = queryString.age;
-            this.mobile = queryString.mobile;
-            this.address = queryString.address;
-            this.plan_date = queryString.plan_date;
-            this.bedtktid = queryString.bedtktid;
+            self.bedtktid = queryString.bedtktid;
+            common.getBedtktInfo(self.bedtktid, self.openid, function(response){
+                if (response.errno == 0) {
+                    var data = response.data;
+                    self.bedtkt = data;
+                }
+            })
 
             this.startDate = new Date();
         },
@@ -90,7 +87,6 @@
                 common.post(url, params, function(response){
                     if (response.errno == 0) {
                         var data = response.data;
-                        // console.log(data);
                         let instance = self.$toast('通知发送成功!');
                         setTimeout(() => {
                             instance.close();
@@ -127,7 +123,10 @@
     }
     .patientinfo span {
         font-size: 16px;
-        width: 50%;
         display: inline-block;
+        word-break: break-all;
+    }
+    .patientinfo span.left {
+        width: 45%;
     }
 </style>

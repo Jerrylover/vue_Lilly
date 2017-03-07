@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
             next();
         }else {
             console.log('test');
-            next({name: 'bind'});
+            next({name: 'doctor-bind'});
         }
     }else {
         next();

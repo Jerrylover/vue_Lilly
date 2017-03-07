@@ -27,8 +27,8 @@
     </div>
 </template>
 <script>
-    import common from '../lib/common.js'
-    import api from '../config/api.js'
+    import common from '../../lib/common.js'
+    import api from '../../config/api.js'
     module.exports = {
         data: function() {
             return {

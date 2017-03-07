@@ -113,5 +113,14 @@ module.exports = {
         }).always(function(){
             Indicator.close();
         })
+    },
+    getBedtktInfo: function(bedtktid, openid, f){
+        // var api = require('../config/api.js');
+        var url = api.get('bedtkt.info');
+        var params = {
+            bedtktid: bedtktid,
+            openid: openid,
+        }
+        this.post(url, params, f); 
     }
 }

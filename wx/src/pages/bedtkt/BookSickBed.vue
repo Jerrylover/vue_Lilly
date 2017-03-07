@@ -1,9 +1,9 @@
 <template>
     <div class="book-sick-bed" style="background-color: #ddd; margin: 8px 0px;">
         <mt-header fixed title="住院预约详情">
-            <router-link to="/" slot="left">
+            <!-- <router-link to="/" slot="left">
                 <mt-button icon="back">返回</mt-button>
-            </router-link>
+            </router-link> -->
             <mt-button slot="right" @click="clickOperationHistory">操作记录</mt-button>
         </mt-header>
         <div style="position: fixed;top: 39px;left: 0px;width: 100%;box-shadow: 0px 1px 2px #ddd">
@@ -40,8 +40,8 @@
     </div>
 </template>
 <script>
-    import api from '../config/api.js'
-    import common from '../lib/common.js'
+    import api from '../../config/api.js'
+    import common from '../../lib/common.js'
     module.exports = {
         data: function() {
             return {
@@ -87,67 +87,35 @@
                 })
             },
             'clickSendMsg': function(tkt) {
-                // console.log(tkt);
                 this.$router.push({
-                    name: 'sendentermsg', 
+                    name: 'bedtkt-sendentermsg', 
                     query:{
-                        name: tkt.name,
-                        bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
+                        bedtktid: tkt.id
                     }
                 })
             },
             clickWaitPatientConfirm: function(tkt) {
-                console.log(tkt);
                 this.$router.push({
-                    name: 'patientbookstatus',
+                    name: 'bedtkt-patientstatus',
                     query:{
-                        name: tkt.name,
                         bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
-                        confirmdate: tkt.confirm_date,
-                        patient_status: tkt.patient_status,
                     }
                 })
             },
             clickPatientRefuse: function(tkt) {
                 this.$router.push({
-                    name: 'cannotenter',
+                    name: 'bedtkt-patientstatus',
                     query:{
-                        name: tkt.name,
-                        bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
-                        confirmdate: tkt.confirm_date,
-                        patient_status: tkt.patient_status,
-                        patient_remark: tkt.patient_remark,
+                        // patient_remark: tkt.patient_remark,
+                        bedtktid: tkt.id
                     }
                 })
             },
             clickPatientConfirmCanEnter: function(tkt) {
                 this.$router.push({
-                    name: 'patientbookstatus',
+                    name: 'bedtkt-patientstatus',
                     query:{
-                        name: tkt.name,
-                        bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
-                        confirmdate: tkt.confirm_date,
-                        patient_status: tkt.patient_status,
+                        bedtktid: tkt.id
                     }
                 });
             },
@@ -189,14 +157,14 @@
     .navbar {
         width:50%;
         display: inline-block;
-        background-color: #fff;
+        background-color: #26a2ff;
         padding: 10px 0px;
         text-decoration: none;
-        color: #26a2ff;
+        color: #fff;
     }
     a.selected {
-        background-color: #26a2ff;
-        color: #fff;
+        background-color: #fff;
+        color: #26a2ff;
     }
     .patientinfo span.left {
         width: 45%;

@@ -29,8 +29,8 @@
     </div>
 </template>
 <script>
-    import api from '../config/api.js'
-    import common from '../lib/common.js'
+    import api from '../../config/api.js'
+    import common from '../../lib/common.js'
     module.exports = {
         data: function() {
             return {
@@ -116,6 +116,8 @@
         background-color: #eee;
         margin: 0px -8px 0px -8px;
         padding:  0px 0px 0px 0px;
+        overflow-scrolling: touch;
+        -webkit-overflow-scrolling: touch;
     }
     .item-box {
         background-color: #fff;

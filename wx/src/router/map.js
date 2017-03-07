@@ -1,109 +1,118 @@
 const Doctor = {
-    template: '<div><router-view></router-view></div>',
+    template: '<router-view></router-view>',
+}
+const Patient = {
+    template: '<router-view></router-view>',
+}
+const EmptyTemplate = {
+    template: '<router-view></router-view>',
 }
 module.exports = 
 [
-    {
-        path: '/bind',
-        name: 'bind',
-        component: function(resolve) {
-            require(['../pages/BindUser.vue'], resolve);
-        },
-    },
     {
         path: '/doctor/',
         name: 'doctor',
         component: Doctor,
         children: [
             {
+                path: 'bind',
+                name: 'doctor-bind',
+                component: function(resolve) {
+                  require(['../pages/doctor/BindUser.vue'], resolve);
+                },
+            },
+            {
                 path: 'config',
-                name: 'config',
+                name: 'doctor-config',
                 component: resolve => require(['../pages/doctor/SetConfig.vue'], resolve),
             },
             {
                 path: 'modifypwd',
-                name: 'modifypwd',
+                name: 'doctor-modifypwd',
                 component: resolve => require(['../pages/doctor/ModifyPwd.vue'], resolve),
             },
             {
                 path: 'info',
-                name: 'info',
+                name: 'doctor-info',
                 component: resolve => require(['../pages/doctor/Info.vue'], resolve)
             }
         ]
     },
     {
-        path: '/active-patient',
-        name: 'active-patient',
-        component: resolve => require(['../pages/ActivePatients.vue'], resolve),
-        meta: {
-            requireBind: true,
-        }
+        path: '/patient',
+        name: 'patient',
+        component: Patient,
+        children: [
+            {
+                path: ':patientid/pipelist',
+                name: 'patient-pipelist',
+                component: resolve => require(['../pages/patient/PipeList.vue'], resolve)
+            },
+            {
+                path: 'list',
+                name: 'patient-list',
+                component: resolve => require(['../pages/patient/PatientList.vue'], resolve)
+            },
+            {
+                path: 'active',
+                name: 'patient-active',
+                component: resolve => require(['../pages/patient/ActivePatients.vue'], resolve)
+            }
+        ]
+
+
     },
     {
-        path: '/pipelist/:patientid',
-        name: 'pipelist',
-        component: resolve => require(['../pages/PipeList.vue'], resolve),
-        meta: {
-            requireBind: true,
-        }
+        path: '/bedtkt',
+        name: 'bedtkt',
+        component: EmptyTemplate,
+        children: [
+            {
+                path: 'list',
+                name: 'bedtkt-list',
+                component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
+            },
+            {
+                path: 'historylist',
+                name: 'bedtkt-historylist',
+                component: resolve => require(['../pages/bedtkt/OperationHistory.vue'], resolve)
+            },
+            {
+                path: 'refuse',
+                name: 'bedtkt-refuse',
+                component: resolve => require(['../pages/bedtkt/RefuseEnter.vue'], resolve)
+            },
+            {
+                path: 'pass',
+                name: 'bedtkt-pass',
+                component: resolve => require(['../pages/bedtkt/ConfirmEnter.vue'], resolve)
+            },
+            {
+                path: 'sendentermsg',
+                name: 'bedtkt-sendentermsg',
+                component: resolve => require(['../pages/bedtkt/SendEnterMsg.vue'], resolve)
+            },
+            {
+                path: 'patientstatus',
+                name: 'bedtkt-patientstatus',
+                component: resolve => require(['../pages/bedtkt/PatientBookStatus.vue'], resolve)
+            },
+        ]
     },
     {
-        path: '/booksickbed',
-        name: 'booksickbed',
-        component: resolve => require(['../pages/BookSickBed.vue'], resolve),
-        meta: {
-            requireBind: true,
-        }
-    },
-    {
-        path: '/refuseenter',
-        name: 'refuseenter',
-        component: resolve => require(['../pages/RefuseEnter.vue'], resolve),
-        meta: {
-            requireBind: false,
-        }
-    },
-    {
-        path: '/confirmenter',
-        name: 'confirmenter',
-        component: resolve => require(['../pages/ConfirmEnter.vue'], resolve),
-    },
-    {
-        path: '/sendentermsg',
-        name: 'sendentermsg',
-        component: resolve => require(['../pages/SendEnterMsg.vue'], resolve),
-    },
-    {
-        path: '/patientbookstatus',
-        name: 'patientbookstatus',
-        component: resolve => require(['../pages/PatientBookStatus.vue'], resolve),
-    },
-    {
-        path: '/patientlist',
-        name: 'patientlist',
-        component: resolve => require(['../pages/PatientList.vue'], resolve),
-        meta: {
-            requireBind: true,
-        }
-    },
-    {
-        path: '/cannotenter',
-        name: 'cannotenter',
-        component: resolve => require(['../pages/PatientCannotEnter.vue'], resolve),
-    },
-    {
-        path: '/operationhistory',
-        name: 'operationhistory',
-        component: resolve => require(['../pages/OperationHistory.vue'], resolve),
-    },
-    {
-        path: '/appointment',
-        name: 'appointment',
-        component: resolve => require(['../pages/Appointment.vue'], resolve),
+        path: '/revisittkt',
+        name: 'revisittkt',
+        component: EmptyTemplate,
+        children: [
+            {
+                path: 'list',
+                name: 'revisittkt-list',
+                component: resolve => require(['../pages/revisittkt/Appointment.vue'], resolve)
+            }
+        ]
     },
     {
         path: '*',
-        redirect: '/bind',
+        redirect: '/doctor/bind',
     },
 ]
