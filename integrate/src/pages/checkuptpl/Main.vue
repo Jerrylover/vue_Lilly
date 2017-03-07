@@ -2,7 +2,7 @@
     <div class="container-fluid content" :class="{'fullscreen': isfullscreen}">
         <breadcrumb :data="breadcrumbData" pagetitle="数据录入">
             <div slot="other-content">
-                <button class="btn-fullscreen btn btn-success btn-sm" @click.prevent="letFullScreen" v-if="showFullScreenIcon"><i :class="{'glyphicon glyphicon-resize-full': !isfullscreen, 'glyphicon glyphicon-resize-small': isfullscreen}" style=""><span style="padding-left:5px;">{{screeTitle}}</span></i></button>
+                <button class="btn-fullscreen btn btn-success btn-sm" @click.prevent="letFullScreen" v-if="showFullScreenIcon"><i :class="{'glyphicon glyphicon-resize-full': !isfullscreen, 'glyphicon glyphicon-resize-small': isfullscreen}" style=""><span style="padding-left:5px;">{{screenTitle}}</span></i></button>
             </div>
         </breadcrumb>
 
@@ -115,7 +115,7 @@ export default {
         showFullScreenIcon: function() {
             return this.$route.name == 'checkuptpl-child' && this.showModal == false
         },
-        screeTitle: function() {
+        screenTitle: function() {
             return this.isfullscreen ? '取消全屏' : '全屏'
         }
     },

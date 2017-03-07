@@ -60,6 +60,10 @@
 .app-container.menu-mini.menu-thirdlevel {
     padding-left: 170px;
 }
+.app-container.fullscreen {
+    margin-top:38px;
+    padding-left: 0 !important;
+}
 
 
 .header-span {
@@ -110,6 +114,7 @@ export default {
             ismenumini: false,
             isShowSubMenu: false,
             showThirdLevelMenu: false,
+            isfullscreen: false,
         }
     },
     computed: {
@@ -126,6 +131,9 @@ export default {
             }
             if (this.showThirdLevelMenu) {
                 appclass += ' menu-thirdlevel'
+            }
+            if (this.isfullscreen) {
+                appclass += ' fullscreen'
             }
             return appclass
         }
@@ -250,6 +258,9 @@ export default {
             that.isShowSubMenu = data.isShowSubMenu
             that.ismenumini = data.ismini
             that.showThirdLevelMenu = data.showThirdLevelMenu
+        })
+        Bus.$on('let-fullscreen', function(isfullscreen) {
+            that.isfullscreen = isfullscreen
         })
     },
     watch: {
