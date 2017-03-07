@@ -287,7 +287,7 @@ export default {
     },
     created: function() {
         this.initPage();
-        Bus.$emit('make-menu-mini')
+        Bus.$emit('make-menu-mini', '患者')
     },
     watch: {
         $route () {

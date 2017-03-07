@@ -6,7 +6,7 @@
             </div>
         </breadcrumb>
 
-        <div class="page-content">
+        <div class="page-content" v-if="!showModal">
             <div class="container col-lg-2 col-sm-3 container-left" :class="{'fixed-width': !isfullscreen}">
                 <div class="div1">
                     <ul class="list-unstyled">
@@ -18,8 +18,12 @@
                 <router-view></router-view>
             </div>
         </div>
+        <div v-else style="width:100%;text-align:center;padding-top:100px">
+            <h4>您还没有开通数据库服务，请联系运营人员开通，谢谢！</h4>
+        </div>
 
-    <modal :show="showModal">
+
+    <!-- <modal :show="showModal">
         <div slot="header">
             <span class="header-span">提示信息</span>
         </div>
@@ -30,9 +34,9 @@
                 </span>
         </div>
         <div slot="footer">
-            <div><router-link   :to="{path: '/'}" @click="showModal = false">返回首页</router-link></div>
+            <div><a href="javascript:"  @click.prevent="goBackIndex">返回首页</a></div>
         </div>
-    </modal>
+    </modal> -->
     </div>
 </template>
 <style scoped>
@@ -109,7 +113,7 @@ export default {
             return this.$route.params.ename;
         },
         showFullScreenIcon: function() {
-            return this.$route.name == 'checkuptpl-child'
+            return this.$route.name == 'checkuptpl-child' && this.showModal == false
         },
         screeTitle: function() {
             return this.isfullscreen ? '取消全屏' : '全屏'
@@ -131,7 +135,6 @@ export default {
     mounted: function() {
         this.$nextTick(function() {
             var isfullscreen = localStorage.getItem('_checkup-isfullscreen_') == 1 ? true : false
-            console.log('+++', isfullscreen)
             if (isfullscreen) {
                 this.isfullscreen = true
                 Bus.$emit('let-fullscreen', this.isfullscreen)
@@ -166,6 +169,12 @@ export default {
         })
     },
     methods: {
+        goBackIndex: function() {
+            this.$router.push({
+                name: 'webindex'
+            })
+            Bus.$emit('hide-patient-third-level-menu')
+        },
         letFullScreen: function() {
             this.isfullscreen = !this.isfullscreen
             Bus.$emit('let-fullscreen', this.isfullscreen)

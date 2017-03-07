@@ -563,6 +563,31 @@ export default {
     letFullScreen: function(isfullscreen) {
         this.isfullscreen = isfullscreen
     },
+    makeMenuMini: function(menuName, subMenuName) {
+        console.log('一级菜单', menuName, '二级菜单', subMenuName)
+        if (menuName == undefined) {
+            return
+        }
+        var that = this
+        this.menuData.forEach(function(menu) {
+            if (menu.name == menuName) {
+                menu.isactive = true
+                that.subMenuData = menu.submenus
+            } else {
+                menu.isactive = false
+            }
+            if (that.subMenuData.length > 0) {
+                that.subMenuData.forEach(function(subMenu) {
+                    if (subMenu.name == subMenuName) {
+                        subMenu.isactive = true
+                    } else {
+                        subMenu.isactive = false
+                    }
+                })
+            }
+        })
+        Bus.$emit('menu-mini', {ismini: this.ismini, isShowSubMenu: this.isShowSubMenu, showThirdLevelMenu: this.showThirdLevelMenu})
+    },
     initPage: function() {
         var _activeMenu = localStorage.getItem('_activeMenu_')
         var _activeSubmenu = localStorage.getItem('_activeSubmenu_')
@@ -594,11 +619,7 @@ export default {
             that.showThirdLevelMenu = false
             that.ismini = false
         })
-        Bus.$on('make-menu-mini', function() {
-            if (that.subMenuData.length > 0) {
-                //   that.ismini = true
-            }
-        })
+        Bus.$on('make-menu-mini', this.makeMenuMini)
         Bus.$on('let-fullscreen', this.letFullScreen)
     }
   },

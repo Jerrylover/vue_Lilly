@@ -186,7 +186,7 @@ export default {
     },
     created: function() {
         this.initPage()
-        Bus.$emit('make-menu-mini')
+        Bus.$emit('make-menu-mini', '设置', '助理账号')
     },
     watch: {
         '$route': function(to, from) {

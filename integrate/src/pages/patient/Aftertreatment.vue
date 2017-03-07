@@ -182,6 +182,9 @@
             'WxVoiceMsg': function(resolve) {
                 require(['../../components/pipelist/WxVoiceMsg.vue'], resolve);
             },
+            'CdrMeeting': function(resolve) {
+                require(['../../components/pipelist/CdrMeeting.vue'], resolve);
+            },
             'PhotoGallery': require('../../components/PhotoGallery.vue'),
         },
         computed: {
