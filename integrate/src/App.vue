@@ -3,7 +3,10 @@
         <app-header v-if="showHeader()"></app-header>
         <navmenu v-if="showMenu()"></navmenu>
         <transition name="fade">
-        <router-view></router-view>
+        <div class="app-container" :class="getAppContainerClass" v-if="!isLoginPage">
+            <router-view></router-view>
+        </div>
+        <router-view v-else></router-view>
         </transition>
         <app-footer v-if="showFooter()"></app-footer>
         <modal :show="showModal" width="300px">
@@ -36,6 +39,33 @@
 .fade-enter, .fade-leave-active {
   opacity: 0
 }*/
+.app-container {
+    padding-left: 120px;
+    transition: padding-left .2s;
+}
+.app-container.menu-mini {
+    padding-left: 45px;
+}
+
+.app-container.menu-thirdlevel {
+    padding-left: 245px;
+}
+
+.app-container.menu-submenu {
+    padding-left: 245px;
+}
+.app-container.menu-submenu.menu-mini {
+    padding-left: 170px;
+}
+.app-container.menu-mini.menu-thirdlevel {
+    padding-left: 170px;
+}
+.app-container.fullscreen {
+    margin-top:38px;
+    padding-left: 0 !important;
+}
+
+
 .header-span {
     color: #fff;
 }
@@ -80,10 +110,33 @@ export default {
             msg: '',
             alertType: 'error',
             timer: '',
-            showLoadingModal: false
+            showLoadingModal: false,
+            ismenumini: false,
+            isShowSubMenu: false,
+            showThirdLevelMenu: false,
+            isfullscreen: false,
         }
     },
     computed: {
+        isLoginPage: function() {
+            return this.$route.name == 'login'
+        },
+        getAppContainerClass: function() {
+            var appclass = ''
+            if (this.ismenumini) {
+                appclass += ' menu-mini'
+            }
+            if (this.isShowSubMenu) {
+                appclass += ' menu-submenu'
+            }
+            if (this.showThirdLevelMenu) {
+                appclass += ' menu-thirdlevel'
+            }
+            if (this.isfullscreen) {
+                appclass += ' fullscreen'
+            }
+            return appclass
+        }
     },
     mounted: function() {
 
@@ -98,22 +151,19 @@ export default {
     },
     methods: {
         showMenu: function() {
-            var routeName = this.$route.name
-            if (routeName == 'login') {
+            if (this.isLoginPage) {
                 return false
             }
             return true
         },
         showHeader: function() {
-            var routeName = this.$route.name
-            if (routeName == 'login') {
+            if (this.isLoginPage) {
                 return false
             }
             return true
         },
         showFooter: function() {
-            var routeName = this.$route.name
-            if (routeName == 'login') {
+            if (this.isLoginPage) {
                 return false
             }
             return true
@@ -202,12 +252,15 @@ export default {
         Bus.$on('doctor-limited', this.doctorLimited)
         Bus.$on('show-loading-modal', this.showHideLoadingModal)
         Bus.$on('ajax-error', this.showErrorMsg)
-        Bus.$on('menu-mini', function(ismini) {
-            if (ismini) {
-                $('.container-fluid.content').addClass('menu-mini')
-            } else {
-                $('.container-fluid.content').removeClass('menu-mini')
-            }
+        var that = this
+        Bus.$on('menu-mini', function(data) {
+            console.log('....收到消息啦--- ismini', data.ismini, 'isShowSubMenu', data.isShowSubMenu, 'showThirdLevelMenu', data.showThirdLevelMenu)
+            that.isShowSubMenu = data.isShowSubMenu
+            that.ismenumini = data.ismini
+            that.showThirdLevelMenu = data.showThirdLevelMenu
+        })
+        Bus.$on('let-fullscreen', function(isfullscreen) {
+            that.isfullscreen = isfullscreen
         })
     },
     watch: {

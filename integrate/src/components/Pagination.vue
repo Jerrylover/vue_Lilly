@@ -8,9 +8,9 @@
   <li v-for="(item, index) in items" :key="index" v-bind:class="{ active: myCur == item, disabled: item == '...'}">
     <span v-if="item == myCur">{{item}}</span>
     <template v-else>
-                <span v-if="item == '...'">{{item}}</span>
-                <a v-else @click="pageClick(item)">{{item}}</a>
-</template>
+        <span v-if="item == '...'">{{item}}</span>
+        <a v-else @click="pageClick(item)">{{item}}</a>
+    </template>
         </li>
         <li v-if="myCur >= totalPage"><a href="javascript:" style="border-top-right-radius: 4px; border-bottom-right-radius: 4px">&raquo;</a></li>
         <li v-else><a @click="pageClick(myCur+1)" style="border-top-right-radius: 4px; border-bottom-right-radius: 4px">&raquo;</a></li>
@@ -64,7 +64,9 @@ export default {
     }
   },
   watch: {
-
+      cur: function(newVal, oldVal) {
+          this.myCur = newVal
+      }
   },
   computed: {
     totalPage: function() {

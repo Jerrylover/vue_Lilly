@@ -1,22 +1,20 @@
 <template>
     <div class="container-fluid content">
-        <visit-header v-if="routepath == 'patient-baseinfo-lungcancer'" :patientname="patientname" :patientid="patientid" active='basic' class="collapse"></visit-header>
-        <div v-else class="">
-            <h4>{{patientname}}</h4>
-            <ol class="breadcrumb" style="margin: 0">
-                <li>返回</li>
+        <breadcrumb :data="breadcrumbData" pagetitle="基本信息" v-if="routepath == 'patient-baseinfo-lungcancer'">
+            <div slot="other-content">
+                <a v-privilege="'数据库-患者-删除'" class="btn btn-danger btn-sm" style="margin-right:25px;" href="javascript: " @click="removePatientClick">删除患者</a>
+            </div>
+        </breadcrumb>
+        <div v-else class="breadcrumbs">
+            <ol class="breadcrumb">
                 <li><router-link :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
                 <li><router-link :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
                 <li><router-link :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
+                <li>基本信息</li>
             </ol>
         </div>
-        <div class="breadcrumbs" id="breadcrumbs">
-            <h4>基本信息</h4>
-        </div>
-        <div class="row">
-            <!--面包屑-->
-            <div class="page-content">
+        <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
                 <tr>
@@ -201,7 +199,6 @@
                 </tr>
             </tbody>
             </table>
-            </div>
         </div>
     <div id="modal">
     <modal :show="showModal" width="800px">
@@ -319,6 +316,12 @@ import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             headerselected: 'patient',
             projectid: '',
             centerid: '',
@@ -407,13 +410,10 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue'),
         'modal': function(resolve) {
             require(['../../components/Modal.vue'], resolve);
         },
-        'navmenu': require('../../components/NavMenu.vue'),
     },
     computed: {
         doctorname: function() {
@@ -435,6 +435,9 @@ export default {
     methods: {
         filterFamilyHistory: function(val) {
             console.log(val);
+            if (!util.isArray(val)) {
+                return val
+            }
             var str = '';
             for (var i=0;i<val.length;i++) {
                 var one = val[i];
@@ -651,6 +654,36 @@ export default {
                 this.fetchWxUser();//获取wxuser信息
             }
             this.fetchData();
+        },
+        removePatientClick: function() {
+            var that = this;
+            this.$confirm("是否删除该患者，患者删除后则连同数据库中的数据及诊后管理数据同时删除。请谨慎处理", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                api.http({
+                  url: 'patient.delete',
+                  data: {
+                    patientid: that.patientid
+                  },
+                  successCallback: function(d) {
+                      that.$message({
+                        type: 'success',
+                        duration: 1000,
+                        showClose: true,
+                        message: '删除成功!',
+                        onClose: function() {
+                            that.$router.push({
+                                path:'/'
+                            })
+                        }
+                      });
+                  }
+                })
+            }).catch(() => {
+
+            });
         }
     },
     filters: {

@@ -294,7 +294,6 @@ export default {
         '$route': function(to, from) {
             this.pathname = to.name;
             this.fetchData();
-            Bus.$emit('make-menu-mini')
         }
     }
 }

@@ -2,11 +2,16 @@
     <div class="container-fluid content">
         <breadcrumb pagetitle="助理账号列表">
             <div slot="other-content">
-                <router-link  class="header-a btn btn-primary btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
+
             </div>
         </breadcrumb>
 
         <div class="page-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <router-link  class="header-a btn btn-success btn-sm" href="javascript:"  :to="{name:'assistant-add'}"><i class="fa fa-plus fa">&nbsp;新增助理账号</i></router-link>
+                </div>
+            </div>
             <table class="table table-bordered">
                 <tbody>
                 <tr class="light-tr">
@@ -49,7 +54,7 @@
 </template>
 <style scoped>
 .header-a {
-    margin: 5px 0 10px 20px;
+    margin: 5px 0 10px 0;
     float: left;
 }
 .input-group {
@@ -226,7 +231,6 @@ export default {
         '$route': function(to, from) {
             var queryStrings =to.query;
             this.fetchAssistantData(queryStrings);
-            Bus.$emit('make-menu-mini')
         }
     }
 }

@@ -2,15 +2,17 @@
     <div class="container-fluid content">
         <breadcrumb pagetitle="项目列表">
             <div slot="other-content">
-                <router-link class="btn btn-primary btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
+
             </div>
         </breadcrumb>
 
         <div class="row page-content">
-            <div class="">
-
+            <div class="row">
+                <div class="col-sm-12">
+                    <router-link class="header-a btn btn-success btn-sm" href="javascript:"  :to="{name: 'doctorgroup-addproject'}"><i class="fa fa-plus fa">&nbsp;添加项目</i></router-link>
+                </div>
             </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered mg-t-10">
             <thead>
             <tr class="light-tr">
                 <th>项目名称</th>
@@ -48,9 +50,9 @@
 </div>
 </template>
 <style scoped>
-    .table {
-        margin-top: 15px;
-    }
+.header-a {
+    margin-top: 5px;
+}
 </style>
 <script>
     import api from '../../config/api.js';

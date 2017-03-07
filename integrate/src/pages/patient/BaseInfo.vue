@@ -1,16 +1,19 @@
+
 <template>
     <div class="container-fluid content">
-        <breadcrumb :data="breadcrumbData" pagetitle="基本信息"></breadcrumb>
-        <visit-header v-if="routepath == 'patient-baseinfo'" :patientname="patientname" :patientid="patientid" active='basic' class="collapse"></visit-header>
-        <div v-else class="" style="border-bottom: 1px solid #ccc">
-            <h4>{{patientname}}</h4>
-            <ol class="breadcrumb" style="margin: 0">
-                <li>返回</li>
+        <breadcrumb :data="breadcrumbData" pagetitle="基本信息" v-if="routepath == 'patient-baseinfo'" >
+            <div slot="other-content">
+                <a v-privilege="'数据库-患者-删除'" class="btn btn-danger btn-sm" style="margin-right:25px;" href="javascript: " @click="removePatientClick">删除患者</a>
+            </div>
+        </breadcrumb>
+        <div v-else class="breadcrumbs">
+            <ul class="breadcrumb">
                 <li><router-link   :to="{name: 'doctorgroup-projectlist'}" style="text-decoration: none">项目列表</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-centerlist', params:{'projectid': projectid}}" style="text-decoration: none">中心列表</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-centerdetail', params: {'projectid': projectid, 'centerid': centerid}}" style="text-decoration: none">中心详情</router-link></li>
                 <li><router-link   :to="{name: 'doctorgroup-patientlist', query: {'projectid': projectid, 'centerid': centerid, 'doctorid': doctorid}}" style="text-decoration: none">患者列表</router-link></li>
-            </ol>
+                <li>基本信息</li>
+            </ul>
         </div>
         <div class="page-content">
             <table class="table table-bordered">
@@ -341,9 +344,6 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
         'breadcrumb': require('../../components/BreadCrumb.vue'),
         'modal': function(resolve) {
             require(['../../components/Modal.vue'], resolve);
@@ -460,7 +460,6 @@ export default {
             this.goPatient()
             var that = this;
             var patientname = libpatient.getPatientName(that.patientid)
-            Bus.$emit('show-patient-third-level-menu', this.patientid, patientname, '基本信息')
             that.routepath= this.$route.name;
             var query = this.$route.query;
             if ($.trim(that.routepath) == 'doctorgroup-baseinfo') {
@@ -573,6 +572,36 @@ export default {
                     path: '/patient/' + this.patientid + '/baseinfo-lungcancer/',
                 })
             }
+        },
+        removePatientClick: function() {
+            var that = this;
+            this.$confirm("是否删除该患者，患者删除后则连同数据库中的数据及诊后管理数据同时删除。请谨慎处理", '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                api.http({
+                  url: 'patient.delete',
+                  data: {
+                    patientid: that.patientid
+                  },
+                  successCallback: function(d) {
+                      that.$message({
+                        type: 'success',
+                        duration: 1000,
+                        showClose: true,
+                        message: '删除成功!',
+                        onClose: function() {
+                            that.$router.push({
+                                path:'/'
+                            })
+                        }
+                      });
+                  }
+                })
+            }).catch(() => {
+
+            });
         }
     },
     filters: {
@@ -593,6 +622,8 @@ export default {
         }
     },
     created: function() {
+        var patientname = libpatient.getPatientName(this.patientid)
+        Bus.$emit('show-patient-third-level-menu', this.patientid, patientname, '基本信息')
         this.initPage()
     },
     watch: {

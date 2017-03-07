@@ -213,7 +213,6 @@
         watch: {
             '$route': function(to, from) {
                 this.fetchData()
-                Bus.$emit('make-menu-mini')
             }
         }
     }

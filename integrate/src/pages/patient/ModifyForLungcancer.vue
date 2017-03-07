@@ -1,9 +1,10 @@
 <template>
     <div class="container-fluid content">
         <!-- <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header> -->
-            <div class="breadcrumbs">
-                <h4>{{pagetitle}}</h4>
-            </div>
+        <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
+        <div name="other-content">
+        </div>
+        </breadcrumb>
             <div class="page-content">
         <div class="patientinfo">
             <div class="baseinfo">
@@ -756,6 +757,12 @@ import util from '../../lib/util.js';
 export default {
     data: function() {
         return {
+            breadcrumbData: [
+                {
+                    name: '患者列表',
+                    link: {name: 'patient-list'}
+                }
+            ],
             smokeEnvArr: ['二手', '三手', '厨房油烟', '其他'],//环境接触
             pmhArr: ['高血压', '糖尿病', '心脏病', '脑血管病', '其他'],//常见疾病
             family_history_diseases: [],//家族病史疾病
@@ -987,10 +994,7 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
-        'navmenu': require('../../components/NavMenu.vue'),
+        'breadcrumb': require('../../components/BreadCrumb.vue')
     },
     methods: {
         getFamilyDiseases: function() {

@@ -17,7 +17,7 @@
         </div>
         <div v-if="obj.detail.tasks != undefined">
             <span>课堂作业</span><br/>
-            <div v-for="task in obj.detail.tasks">
+            <div v-for="(task, index) in obj.detail.tasks">
                 <span>{{index+1}}. {{task.xquestionname}}</span>
                 <div>
                     <span v-if="task.xquestiontype == 'Radio'">&nbsp;&nbsp;&nbsp;选择&nbsp;&nbsp;&nbsp;</span>

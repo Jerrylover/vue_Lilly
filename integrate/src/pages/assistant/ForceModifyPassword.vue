@@ -110,7 +110,6 @@ export default {
             })
         },
         initPage: function() {
-            Bus.$emit('make-menu-mini')
             this.assistantid = this.$route.query.assistantid;
             if (this.assistantid != undefined && this.assistantid != '') {
                 this.fetchAssistant();
@@ -119,6 +118,7 @@ export default {
     },
     created: function() {
         this.initPage()
+        Bus.$emit('make-menu-mini')
     },
     watch: {
         '$route': function(to, from) {

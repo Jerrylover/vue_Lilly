@@ -2,8 +2,8 @@
     <div class="container-fluid content">
         <!-- <visit-header :patientname='pagetitle' :patientid='patientid'></visit-header> -->
         <breadcrumb :data="breadcrumbData" :pagetitle="pagetitle">
-        <div name="other-content">
-        </div>
+            <div slot="other-content">
+            </div>
         </breadcrumb>
 
         <div class="page-content">

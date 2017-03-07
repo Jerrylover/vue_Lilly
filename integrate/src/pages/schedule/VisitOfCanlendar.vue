@@ -95,6 +95,7 @@
     }
     .table tr td  {
         text-align: center;
+        cursor: pointer;
     }
 </style>
 <script>
@@ -131,10 +132,10 @@
             shortcutChangeTheDate: function(increment) {
                 var self = this;
                 var month = Number(self.themonth) + increment;
-                if (Number(self.themonth == 12)) {
-                    self.year =Number(self.theyear) + Math.ceil(month/12) -1;
+                if (Number(month)%12 == 0) {
+                    self.year =Number(self.theyear) + Math.floor(month/12) -1;
                 }else {
-                    self.year =Number(self.theyear) + Math.ceil(month/12);
+                    self.year =Number(self.theyear) + Math.floor(month/12);
                 }
                 self.month = month%12 == 0 ? 12 : month%12;
                 if (self.month < 10 && self.month > 0) {
@@ -316,7 +317,6 @@
         watch: {
             '$route': function(to, from) {
                 this.fetchData()
-                Bus.$emit('make-menu-mini')
             }
         }
     }

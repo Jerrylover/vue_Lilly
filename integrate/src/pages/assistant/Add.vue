@@ -175,7 +175,6 @@ export default {
             })
         },
         initPage: function() {
-            Bus.$emit('make-menu-mini')
             if (this.$route.name == 'assistant-modify') {
                 this.ismodify = true;
             }
@@ -187,6 +186,7 @@ export default {
     },
     created: function() {
         this.initPage()
+        Bus.$emit('make-menu-mini', '设置', '助理账号')
     },
     watch: {
         '$route': function(to, from) {

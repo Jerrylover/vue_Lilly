@@ -14,7 +14,7 @@
     </div>
 
 </template>
-<style scoped>
+<style>
 .breadcrumb>.active {
     color: #333;
 }
@@ -62,7 +62,7 @@ export default {
     },
     methods: {
         clickLink: function(link) {
-            if (link.name == 'patient-list') {
+            if (link.name == 'patient-list') {//只有出现三级菜单的面包屑才有患者列表连接
                 Bus.$emit('hide-patient-third-level-menu')
             }
             this.$router.push(link)

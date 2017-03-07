@@ -5,7 +5,7 @@
         </div>
     </breadcrumb>
     <div class="page-content">
-        <div class="col-lg-6 col-sm-6" style="padding:0">
+        <div class="col-lg-4 col-sm-6" style="padding:0">
             <div class="form-group">
                 <label class="control-label">当前密码</label>
                 <input type="password" class="form-control" v-model="password" />
@@ -100,7 +100,6 @@ export default {
     },
     watch: {
         '$route': function() {
-            Bus.$emit('make-menu-mini')
         }
     }
 }
