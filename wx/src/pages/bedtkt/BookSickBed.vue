@@ -58,31 +58,17 @@
             'clickRefuseBook': function(tkt) {
 
                 this.$router.push({
-                    name: 'refuseenter',
+                    name: 'bedtkt-refuse',
                     query:{
-                        name: tkt.name,
                         bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
                     }
                 })
             },
             'clickConfirmEnter': function(tkt) {
                 this.$router.push({
-                    name: 'confirmenter',
+                    name: 'bedtkt-pass',
                     query:{
-                        name: tkt.name,
-                        bedtktid: tkt.id,
-                        sex: tkt.sex,
-                        age: tkt.age,
-                        plan_date: tkt.plan_date,
-                        mobile: tkt.mobile,
-                        address: tkt.address,
-                        confirmdate: tkt.confirm_date,
-                        patient_status: tkt.patient_status,
+                        bedtktid: tkt.id
                     }
                 })
             },
@@ -128,9 +114,8 @@
                 this.tktlist = this.tktlist_female;
             },
             clickOperationHistory: function() {
-                // console.log('aaaaa');
                 this.$router.push({
-                    name: 'operationhistory',
+                    name: 'bedtkt-historylist',
                 })
             }
         },
@@ -147,7 +132,6 @@
                     self.tktlist_male = data.tktlist_male;
                     self.tktlist_female = data.tktlist_female;
                     self.tktlist = self.tktlist_male;
-                    // self.tktlist[0].patient_status = 1;
                 }
             })
         }

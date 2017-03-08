@@ -1,10 +1,24 @@
 <template>
     <div class="refuse-enter">
         <mt-header fixed title="拒绝入院">
-            <router-link to="/booksickbed" slot="left">
+            <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
         </mt-header>
+        <div class="patientinfo">
+            <div>
+                <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
+                <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
+            </div>
+            <div>
+                <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
+                <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
+            </div>
+            <div>
+                <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
+                <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
+            </div>
+        </div>
         <div>
             <p style="width: 80%; margin: auto">请填写拒绝患者入院的理由,该理由内容会发送至患者服务号中。可不填写。</p>
             <div style="width: 80%; margin: auto; text-align: left">
@@ -36,6 +50,7 @@
                 content: '',
                 is_set_default: false,
                 bedtktid: '',
+                bedtkt: {},
             }
         },
         methods: {
@@ -74,6 +89,11 @@
             this.openid = localStorage.getItem('_openid_');
             var queryString = this.$route.query;
             this.bedtktid = queryString.bedtktid;
+            common.getBedtktInfo(this.bedtktid, this.openid,function(response){
+                if (response.errno == 0) {
+                    self.bedtkt = response.data;
+                }
+            })
             var url = api.get('sickbed.refuse');
             var params = {
                 openid: this.openid,
@@ -100,5 +120,19 @@
         padding: 10px 0px;
         text-decoration: none;
         color: #fff;
+    }
+    .patientinfo {
+        text-align: left;
+        font-size: 0px;
+        border: 1px solid #58B7FF;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    .patientinfo span {
+        font-size: 16px;
+        display: inline-block;
+    }
+    .patientinfo span.left {
+        width: 45%;
     }
 </style>

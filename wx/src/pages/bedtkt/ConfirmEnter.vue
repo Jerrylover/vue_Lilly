@@ -1,22 +1,22 @@
 <template>
     <div class="refuse-enter">
         <mt-header fixed title="发送入院通知">
-            <router-link to="/booksickbed" slot="left">
+            <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
         </mt-header>
         <div class="patientinfo">
             <div>
-                <span class="left">姓名:&nbsp;&nbsp;{{name}}</span>
-                <span>应住院日期:&nbsp;&nbsp;{{plan_date}}</span>
+                <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
+                <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
             </div>
             <div>
-                <span class="left">性别:&nbsp;&nbsp;{{sex}}</span>
-                <span>手机号:&nbsp;&nbsp;{{mobile}}</span>
+                <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
+                <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
             </div>
             <div>
-                <span class="left">年龄:&nbsp;&nbsp;{{age}}岁</span>
-                <span>近期居住地:&nbsp;&nbsp;{{address}}</span>
+                <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
+                <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
             </div>
         </div>
         <div>
@@ -63,18 +63,10 @@
                 content: '',
                 is_set_default: false,
                 bedtktid: '',
+                bedtkt: {},
                 pickerValue: '',
                 time: '',
                 startDate: '',
-
-                name: '',
-                plan_date: '',
-                sex: '',
-                mobile: '',
-                address: '',
-                age: '',
-                confirmdate: '',
-                patient_status: '',
             }
         },
         methods: {
@@ -118,14 +110,11 @@
 
             var queryString = this.$route.query;
             this.bedtktid = queryString.bedtktid;
-            this.name = queryString.name;
-            this.plan_date = queryString.plan_date;
-            this.sex = queryString.sex;
-            this.mobile = queryString.mobile;
-            this.address = queryString.address;
-            this.age = queryString.age;
-            this.confirmdate = queryString.confirmdate;
-            this.patient_status = queryString.patient_status;
+            common.getBedtktInfo(this.bedtktid, this.openid, function(response){
+                if (response.errno == 0) {
+                    self.bedtkt = response.data;
+                }
+            })
 
             var url = api.get('sickbed.pass');
             var params = {
