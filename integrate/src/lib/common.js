@@ -2,7 +2,7 @@ import cookie from './cookie.js'
 import api from '../config/api.js'
 import config from '../config/config.js'
 import util from '../lib/util.js'
-import './base64.js'
+// import './base64.js'
 
 export default {
     'isLogin': function() {
