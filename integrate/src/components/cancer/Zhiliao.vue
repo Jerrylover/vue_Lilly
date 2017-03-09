@@ -635,8 +635,11 @@ export default {
             }
             // var html = '<table class="table table-bordered"><tr><td width="20%">名称</td><td width="80%">程度</td></tr>';
             var html = '<table class="table mytable"><tbody>';
-            sideeffect_items.forEach(function(sideeffect_item) {
-                html += '<tr><td style="border-top:0;">' + sideeffect_item[0] + '</td><td style="border-top:0;">' + sideeffect_item[1] + '</td></tr>';
+            Object.keys(sideeffect_items).forEach(function(key1) {
+                var sideeffect_item = sideeffect_items[key1]
+                let a = sideeffect_item[0] || ''
+                let b =  sideeffect_item[1] || ''
+                html += '<tr><td style="border-top:0;">' + a + '</td><td style="border-top:0;">' + b + '</td></tr>';
             })
             html += '</tbody></table>';
             return html;

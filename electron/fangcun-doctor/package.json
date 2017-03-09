@@ -1,0 +1,26 @@
+{
+  "name": "fangcun_doctor",
+  "version": "1.0.0",
+  "description": "A doctor platform for FangCun",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:all": "electron-packager ./ 方寸医生管理端 --platform=all --out ../../../app --electron-version 1.4.14 --overwrite --icon=./src/img/logo.ico",
+    "build:mac": "electron-packager ./ 方寸医生管理端 --platform=darwin --out ../../../app --electron-version 1.4.14 --overwrite --icon=./src/img/logo.ico",
+    "build:win64": "electron-packager ./ 方寸医生管理端 --platform=win32 --arch=x64 --out ../../../app --electron-version 1.4.14 --overwrite --icon=./src/img/logo.ico",
+    "build:win32": "electron-packager ./ 方寸医生管理端 --platform=win32 --arch=ia32 --out ../../../app --electron-version 1.4.14 --overwrite --icon=./src/img/logo.ico"
+  },
+  "repository": "http://doctor.fangcunyisheng.com",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^1.4.14"
+  }
+}
