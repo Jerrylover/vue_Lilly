@@ -11,7 +11,7 @@
                                 </div>
                                 <div class="item-box-item" style="margin-top: 10px">
                                     <span class="left">性别: </span>
-                                    <span>{{patient.sex}}</span>
+                                    <span>{{patient.sexstr}}</span>
                                 </div>
                                 <div class="item-box-item">
                                     <span class="left">电话号码: </span>
@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="item-box-item">
                                     <span class="left">入组日期: </span>
-                                    <span>{{patient.entertime}}</span>
+                                    <span>{{patient.createday}}</span>
                                 </div>
                         </li>
                     </ul>
@@ -46,7 +46,7 @@
         methods: {
             goPatientPipeList: function(patient) {
                 console.log(patient);
-                this.$router.push({name: 'pipelist', params:{'patientid': patient.patientid}})
+                this.$router.push({name: 'patient-pipelist', params:{'patientid': patient.patientid}})
             },
             clickdiv: function() {
                 console.log('aaaaa');
@@ -72,6 +72,7 @@
                     if (response.errno == 0) {
                         var data = response.data;
                         self.patients = data.patients;
+                        console.log(self.patients);
                     }
                 })
                 
@@ -98,6 +99,7 @@
                         if (data.patients.length != 0) {
                             self.pagenum++;
                             self.patients = self.patients.concat(data.patients);
+                            console.log(self.patients);
                         }
                         self.flag =1;
                     }
@@ -114,7 +116,6 @@
 <style scoped>
     .body-container {
         background-color: #eee;
-        margin: 0px -8px 0px -8px;
         padding:  0px 0px 0px 0px;
         overflow-scrolling: touch;
         -webkit-overflow-scrolling: touch;

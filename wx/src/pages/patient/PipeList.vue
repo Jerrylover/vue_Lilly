@@ -29,6 +29,9 @@
                     </div>
                 </li>
             </ul>
+            <div style="position: none;margin-top: 200px; background-color: #fff">
+            <span v-if="pipes.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
+        </div>
         </div>
     </div>
 </template>

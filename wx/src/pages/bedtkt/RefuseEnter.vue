@@ -22,7 +22,7 @@
         <div>
             <p style="width: 80%; margin: auto">请填写拒绝患者入院的理由,该理由内容会发送至患者服务号中。可不填写。</p>
             <div style="width: 80%; margin: auto; text-align: left">
-                <textarea rows="20" style="border: 1px solid #ccc; width: 90%;padding: 10px;display: block; margin: auto;" v-model="content"></textarea>
+                <textarea rows="13" style="border: 1px solid #ccc; width: 90%;padding: 10px;display: block; margin: auto;" v-model="content"></textarea>
                 <div style="margin-top: 10px">
                     <div style="display: inline-block; line-height: 1.6; float: left">
                         <input id="defaultreason" type="checkbox" name="" v-model="is_set_default">
