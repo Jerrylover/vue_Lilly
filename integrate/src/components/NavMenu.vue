@@ -277,6 +277,32 @@ export default {
             icon: 'fa fa-pie-chart',
             isactive: false,
             submenus: [
+                {
+                    name: '患者',
+                    link: {name: 'statistic-patientnew'},
+                    isactive: false
+                },
+                {
+                    name: '生存率',
+                    link: {name: 'statistic-survivalrate'},
+                    isactive: false
+                },
+                {
+                    name: 'PFS',
+                    link: {name: 'statistic-pfs'},
+                    isactive: false
+                },
+                {
+                    name: '缓解率',
+                    link: {name: 'statistic-remissionrate'},
+                    isactive: false
+                },
+                {
+                    name: 'OS',
+                    link: {name: 'statistic-os'},
+                    isactive: false
+                },
+
 
             ]
         },

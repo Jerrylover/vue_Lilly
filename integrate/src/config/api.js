@@ -135,6 +135,10 @@ var urls = {
       'changenewjson': '/common/changenewjson',
       'uploadimage': '/picture/uploadimagepost',
       'uploadcase': '/common/wxpicmsgbatuploadcasepost',
+  },
+  statistic: {
+      newcnt: '/statistic/newcnt',
+      totalcnt: '/statistic/totalcnt'
   }
 }
 

@@ -345,7 +345,7 @@ span.title {
         lookFullAnswer: function(e, answer) {
             if (e.target.scrollHeight > e.target.clientHeight) {
                 var str = this.getContent(answer);
-                this.$alert(str, '完整内容')
+                // this.$alert(str, '完整内容')
             }
         },
         isFold: function(date) {

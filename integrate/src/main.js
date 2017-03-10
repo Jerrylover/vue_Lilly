@@ -9,7 +9,7 @@ import 'element-ui/lib/theme-default/index.css'
 import FcDate from './modules/FcDate.js'
 Vue.use(FcDate)
 
-import {Select, Message, MessageBox, DatePicker, Option, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip} from 'element-ui'
+import {Select, Message, MessageBox, DatePicker, Option, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip, Tabs, TabPane} from 'element-ui'
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(DatePicker)
@@ -18,6 +18,8 @@ Vue.use(MenuItem)
 Vue.use(MenuItemGroup)
 Vue.use(Submenu)
 Vue.use(Tooltip)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$message = Message;
