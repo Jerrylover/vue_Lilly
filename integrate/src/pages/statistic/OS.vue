@@ -58,6 +58,7 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import '../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -133,7 +134,7 @@ export default {
         },
         initAgeOs: function(data) {
             let domMain = document.getElementById('age-os')
-            this.ageOsChart = echarts.init(domMain)
+            this.ageOsChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -179,7 +180,7 @@ export default {
         },
         initGenderOs: function(data) {
             let domMain = document.getElementById('gender-os')
-            this.genderOsChart = echarts.init(domMain)
+            this.genderOsChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -187,7 +188,7 @@ export default {
                     x:'center'
                 },
                 tooltip : {
-                    trigger: 'axis',
+                    trigger: 'item',
                 },
                 legend: {
                     orient: 'horizontal',

@@ -40,6 +40,7 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import '../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -87,7 +88,7 @@ export default {
         },
         initPFS: function(data) {
             let domMain = document.getElementById('pfs')
-            this.pfsChart = echarts.init(domMain)
+            this.pfsChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -132,6 +133,11 @@ export default {
                 ],
                 series : [
                     {
+                        name: '全部',
+                        type: 'bar',
+                        data: [97, 100, 90, 88, 84, 33, 60, 160, 20, 48, 74, 53, 66, 39, 74, 180]
+                    },
+                    {
                         name: '男性',
                         type: 'bar',
                         data: [69, 70, 50, 34, 22, 18, 25, 90, 8, 18, 45, 66, 77, 22, 34, 88]
@@ -140,12 +146,7 @@ export default {
                         name: '女性',
                         type: 'bar',
                         data: [28, 30, 40, 54, 62, 15, 35, 70, 12, 28, 54, 33, 56, 19, 44, 98]
-                    },
-                    {
-                        name: '全部',
-                        type: 'bar',
-                        data: [97, 100, 90, 88, 84, 33, 60, 160, 20, 48, 74, 53, 66, 39, 74, 180]
-                    },
+                    }
                 ]
             }
 

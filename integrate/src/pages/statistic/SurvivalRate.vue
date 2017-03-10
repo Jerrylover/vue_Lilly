@@ -69,6 +69,7 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import '../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -168,7 +169,7 @@ export default {
         },
         initDiseaseSurvival: function(data) {
             let domMain = document.getElementById('disease-survival')
-            this.diseaseSurvivalChart = echarts.init(domMain)
+            this.diseaseSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -177,7 +178,7 @@ export default {
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c}"
+                    // formatter: "{a} <br/>{b} : {c}"
                 },
                 legend: {
                     orient: 'horizontal',
@@ -224,7 +225,7 @@ export default {
         },
         initGenderSurvival: function(data) {
             let domMain = document.getElementById('gender-survival')
-            this.genderSurvivalChart = echarts.init(domMain)
+            this.genderSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -233,7 +234,7 @@ export default {
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c}"
+                    // formatter: "{a} <br/>{b} : {c}"
                 },
                 legend: {
                     orient: 'horizontal',
@@ -281,7 +282,7 @@ export default {
         initAgeSurvival: function(data) {
             // delete data['全部']
             let domMain = document.getElementById('age-survival')
-            this.ageSurvivalChart = echarts.init(domMain)
+            this.ageSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
                 title: {
                     text: '',

@@ -17,7 +17,7 @@
     <transition name="transition-submenu">
         <div class="submenu-container" v-show="isShowSubMenu">
             <ul class="el-menu submenu">
-                <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in subMenuData" @click="clickSubMenu(index)">
+                <li class="el-menu-item submenu" :class="{'is-active': one.isactive}" v-for="(one, index) in subMenuData" @click="clickSubMenu(index)" v-show="isShowSubMenuItem(one)">
                     <span class="menu-text">
                         {{one.name}}
                     </span>
@@ -285,22 +285,26 @@ export default {
                 {
                     name: '生存率',
                     link: {name: 'statistic-survivalrate'},
-                    isactive: false
+                    isactive: false,
+                    show: 'cancer'
                 },
                 {
                     name: 'PFS',
                     link: {name: 'statistic-pfs'},
-                    isactive: false
+                    isactive: false,
+                    show: 'cancer'
                 },
                 {
                     name: '缓解率',
                     link: {name: 'statistic-remissionrate'},
-                    isactive: false
+                    isactive: false,
+                    show: 'cancer'
                 },
                 {
                     name: 'OS',
                     link: {name: 'statistic-os'},
-                    isactive: false
+                    isactive: false,
+                    show: 'cancer'
                 },
 
 
@@ -399,6 +403,16 @@ export default {
     },
   },
   methods: {
+    isShowSubMenuItem: function(menu) {
+        if (menu.show === 'cancer') {
+            var diseaseid = common.getDiseaseId()
+            if (common.isCancerDisease(diseaseid)) {
+                return true
+            }
+            return false
+        }
+        return true
+    },
     getPatientInfo: function() {
         // if (this.patientinfo == '') {
             var that = this

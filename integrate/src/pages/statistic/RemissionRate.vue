@@ -40,6 +40,7 @@ import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import '../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -56,7 +57,7 @@ export default {
             let series = [
                 {
                     name: '总缓解率',
-                    type: 'bar',
+                    type: 'line',
                     data: [33, 22, 44, 70, 50, 20, 8, 12]
                 },
                 {
@@ -88,7 +89,7 @@ export default {
         },
         initRemission: function(data) {
             let domMain = document.getElementById('remission')
-            this.remissionChart = echarts.init(domMain)
+            this.remissionChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '',
@@ -96,8 +97,8 @@ export default {
                     x:'center'
                 },
                 tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c}"
+                    trigger: 'axis',
+                    // formatter: "{a} <br/>{b} : {c}"
                 },
                 legend: {
                     orient: 'horizontal',
@@ -114,7 +115,7 @@ export default {
                 series : [
                     {
                         name: '总缓解率',
-                        type: 'bar',
+                        type: 'line',
                         data: [80, 70, 50, 80, 70, 20, 8, 12]
                     },
                     {

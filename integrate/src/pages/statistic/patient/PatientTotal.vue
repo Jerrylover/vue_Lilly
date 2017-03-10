@@ -39,10 +39,12 @@
 import api from '../../../config/api.js'
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import '../../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -68,7 +70,7 @@ export default {
             delete data['全部']
             var that = this
             let domMain = document.getElementById('disease-patient')
-            let myChart = echarts.init(domMain)
+            let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '按疾病分布',
@@ -118,7 +120,7 @@ export default {
         },
         initGenderPatient: function(data) {
             let domMain = document.getElementById('gender-patient')
-            let myChart = echarts.init(domMain)
+            let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
                     text: '按性别分布',
@@ -169,7 +171,6 @@ export default {
                 }
                 i++
             })
-            console.log('....', option)
             option.series = Object.keys(data).map(function(key) {
                 let one = data[key]
                 let obj = {}
@@ -186,22 +187,22 @@ export default {
         initAgePatient: function(data) {
             // delete data['全部']
             let domMain = document.getElementById('age-patient')
-            let myChart = echarts.init(domMain)
+            let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title: {
                     text: '按年龄分布',
                     x: 'center'
                 },
                 tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c}"
+                    trigger: 'axis',
+                    // formatter: "{a} <br/>{b} : {c}"
                 },
                 legend: {
                     orient: 'horizontal',
                     left: 'left',
                     data:[],
                     selected: {
-                        '全部': false
+                        // '全部': false
                     }
                 },
                 xAxis: {
@@ -222,7 +223,11 @@ export default {
                 let one = data[key]
                 let arr = {}
                 arr.name = key
-                arr.type = 'bar'
+                if (key == '全部') {
+                    arr.type = 'line'
+                } else {
+                    arr.type = 'bar'
+                }
                 let data1 =  Object.keys(one).map(function(key1) {
                     return one[key1]
                 })

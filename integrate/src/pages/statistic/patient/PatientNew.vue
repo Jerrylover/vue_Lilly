@@ -66,10 +66,12 @@
 <script>
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
 import api from '../../../config/api.js'
+import '../../../vendor/echart/theme/essos.js'
 
 export default {
     data: function() {
@@ -112,7 +114,7 @@ export default {
         initNewPatient: function() {
             var that = this
             let domMain = document.getElementById('new-patient-line')
-            let myChart = echarts.init(domMain)
+            let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title: {
                     text: '新增患者数',
@@ -124,22 +126,23 @@ export default {
                 },
                 tooltip: {
                     trigger: 'axis',
-                    formatter: function(params) {
-                        let str1 = params[0].name
-                        let str2 = ''
-                        let total = 0
-                        params.forEach(function(param) {
-                            total += Number(param.data)
-                            str2 += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + param.color + '"></span>' + param.seriesName + ': ' + param.data + '<br />'
-                        })
-                        let str = str1 + '&nbsp;&nbsp;总: ' + Math.round(total) + '<br />' + str2
-                        return str
-                    }
+                    // formatter: function(params) {
+                    //     let str1 = params[0].name
+                    //     let str2 = ''
+                    //     let total = 0
+                    //     params.forEach(function(param) {
+                    //         total += Number(param.data)
+                    //         str2 += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + param.color + '"></span>' + param.seriesName + ': ' + param.data + '<br />'
+                    //     })
+                    //     let str = str1 + '&nbsp;&nbsp;总: ' + Math.round(total) + '<br />' + str2
+                    //     return str
+                    // }
                     // formatter: "{b} <br/>{a0} : {c0}<br/>{a1} : {c1}<br/>{a2} : {c2}"
                 },
                 legend: {
                     data: [],
-                    y: 'bottom'
+                    orient: 'horizontal',
+                    left: 'left'
                 },
                 toolbox: {
                    show : true,
@@ -183,7 +186,7 @@ export default {
                     that.monthCnt = data.disease_day30_cnt['全部']
                     let sixmonthData = data.disease_six_month_cnt
                     let months = Object.keys(sixmonthData['全部'])
-                    delete sixmonthData['全部']
+                    // delete sixmonthData['全部']
                     let diseases = Object.keys(sixmonthData)
                     option.legend.data = diseases
                     option.xAxis[0].data = months
@@ -191,15 +194,19 @@ export default {
                         let one = sixmonthData[key]
                         let arr = {}
                         arr.name = key
-                        arr.type = 'bar'
-                        arr.stack = '癌症'
+                        if (key === '全部') {
+                            arr.type = 'line'
+                        } else {
+                            arr.type = 'bar'
+                        }
+                        // arr.stack = '癌症'
                         arr.data = Object.keys(one).map(function(key1) {
                             return one[key1]
                         })
                         return arr
 
                     })
-                    option.series.splice(3, 1)
+                    // option.series.splice(3, 1)
                     console.log('....option', option)
                     myChart.setOption(option);
                 }
