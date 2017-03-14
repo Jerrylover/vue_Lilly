@@ -152,8 +152,6 @@ export default {
     }
   },
   components: {
-    'visitHeader': require('../components/VisitHeader.vue'),
-    'navmenu': require('../components/NavMenu.vue'),
     'breadcrumb': require('../components/BreadCrumb.vue'),
   },
   computed: {

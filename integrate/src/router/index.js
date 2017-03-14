@@ -395,6 +395,62 @@ export default new Router({
     ]
     },
     {
+        path: '/statistic',
+        component: function(resolve) {
+            require(['../pages/statistic/patient/Patient.vue'], resolve)
+        },
+        children: [
+            {
+                path: 'patientnew',
+                name: 'statistic-patientnew',
+                meta: {auth: true},
+                component: function(resolve) {
+                  require(['../pages/statistic/patient/PatientNew.vue'], resolve);
+                }
+            },
+            {
+                path: 'patienttotal',
+                name: 'statistic-patienttotal',
+                meta: {auth: true},
+                component: function(resolve) {
+                  require(['../pages/statistic/patient/PatientTotal.vue'], resolve);
+                }
+            }
+        ]
+    },
+    {
+        path: '/statistic/survivalrate',
+        name: 'statistic-survivalrate',
+        component: function(resolve) {
+          require(['../pages/statistic/SurvivalRate.vue'], resolve);
+        }
+
+    },
+    {
+        path: '/statistic/pfs',
+        name: 'statistic-pfs',
+        component: function(resolve) {
+          require(['../pages/statistic/PFS.vue'], resolve);
+        }
+
+    },
+    {
+        path: '/statistic/remissionrate',
+        name: 'statistic-remissionrate',
+        component: function(resolve) {
+          require(['../pages/statistic/RemissionRate.vue'], resolve);
+        }
+
+    },
+    {
+        path: '/statistic/os',
+        name: 'statistic-os',
+        component: function(resolve) {
+          require(['../pages/statistic/OS.vue'], resolve);
+        }
+
+    },
+    {
         path: '*',
         redirect: '/'
     }
