@@ -12,7 +12,7 @@
                           <div class="panel-heading" style="padding:10px 10px">
                               不同疾病生存率比较
                           </div>
-                          <div class="panel-body" id="disease-survival" style="height:300px;">
+                          <div class="panel-body" id="disease-survival" style="height:500px;">
                           </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                               </div>
                               <div class="clearfix"></div>
                           </div>
-                          <div class="panel-body" id="gender-survival" style="height:300px;">
+                          <div class="panel-body" id="gender-survival" style="height:500px;">
                           </div>
                     </div>
                 </div>
@@ -178,7 +178,9 @@ export default {
                 },
                 tooltip : {
                     trigger: 'item',
-                    // formatter: "{a} <br/>{b} : {c}"
+                    formatter: function(param) {
+                        return param.name + '<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + param.color + '"></span>'+ param.seriesName + ' : '+ param.data+'%'
+                    }
                 },
                 legend: {
                     orient: 'horizontal',
@@ -189,39 +191,51 @@ export default {
                     }
                 },
                 xAxis: {
-                    data: ["胃癌", "肺癌", "癌症"]
+                    name: '疾病',
+                    data: ["胃癌", "肺癌", "癌症"]//todo
                 },
-                yAxis: {},
+                yAxis: [
+                    {
+                        name: '存活率',
+                        type: 'value',
+                        axisLabel: {
+                            show: true,
+                            interval: 'auto',
+                            formatter: "{value} %"
+                        }
+                    }
+                ],
                 series : [
                     {
                         name: '一年',
                         type: 'bar',
                         data: [80, 70, 50]
-                    },
-                    {
-                        name: '两年',
-                        type: 'bar',
-                        data: [20, 8, 12]
-                    },
-                    {
-                        name: '三年',
-                        type: 'bar',
-                        data: [55, 33, 23]
-                    },
-                    {
-                        name: '四年',
-                        type: 'bar',
-                        data: [20, 8, 10]
-                    },
-                    {
-                        name: '五年',
-                        type: 'bar',
-                        data: [2, 1, 0]
                     }
                 ]
             }
-
-            this.diseaseSurvivalChart.setOption(option)
+            var that = this
+            api.http({
+                url: 'statistic.survival',
+                data: {},
+                successCallback: function(d) {
+                    let data = d.data
+                    delete data.disease_rent['全部']
+                    option.xAxis.data = Object.keys(data.disease_rent)
+                    let i = 0
+                    option.series = option.legend.data.map(function(one) {
+                        i ++
+                        let obj = {}
+                        obj.name = one
+                        obj.type = 'bar'
+                        obj.data = Object.keys(data.disease_rent).map(function(key) {
+                            let one1 = data.disease_rent[key]
+                            return one1[i] - ''
+                        })
+                        return obj
+                    })
+                    that.diseaseSurvivalChart.setOption(option)
+                }
+            })
         },
         initGenderSurvival: function(data) {
             let domMain = document.getElementById('gender-survival')
@@ -245,7 +259,7 @@ export default {
                     }
                 },
                 xAxis: {
-                    data: ["男性", "女性", "未知"]
+                    data: ["男性", "女性"]
                 },
                 yAxis: {},
                 series : [

@@ -138,7 +138,8 @@ var urls = {
   },
   statistic: {
       newcnt: '/statistic/newcnt',
-      totalcnt: '/statistic/totalcnt'
+      totalcnt: '/statistic/totalcnt',
+      survival: '/statistic/survive'
   }
 }
 
