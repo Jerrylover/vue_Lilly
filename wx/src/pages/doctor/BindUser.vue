@@ -13,6 +13,12 @@
         </div>
         </template>
         <template v-if="isbind == 1">
+            <div class="doctorinfo">
+                <span>医生姓名:&nbsp;&nbsp;</span>
+                <span>{{doctor.name}}</span><br/>
+                <span>疾病:&nbsp;&nbsp;</span>
+                <span v-for="disease in doctor.disease_arr">{{disease.name}},</span>
+            </div>
             <img src="../../assets/bindsuccess.png" style="width: 100px; height: 100px; margin-top: 130px;"><br/>
             <span style="color: #1996ea; margin-top: 20px; display: block; font-size: 22px">已绑定成功</span>
             <a class="unbind-btn" href="javascript:" @click="unbindUser">解除绑定</a>
@@ -32,6 +38,7 @@
                 password: '',
                 path: '',
                 isbind: '',
+                doctor: {},
             }
         },
         methods: {
@@ -128,6 +135,7 @@
         beforeRouteEnter(to, from, next) {
             var self = this;
             var openid = '';
+            var isbind = '';
             openid = localStorage.getItem('_openid_');
             var url = api.get('user.isbind');
             var params = {
@@ -135,13 +143,23 @@
             }
             common.post(url, params, function(response){
                 if (response.errno == 0) {
-                    next(vm=>{
-                        vm.openid = openid;
-                        vm.isbind = response.data.isbind;
-                    });
+                    isbind = response.data.isbind;
                 }
             })
-            
+            var doctorInfoUrl = api.get('doctor.info');
+            var params = {
+                openid: openid,
+            }
+            common.post(doctorInfoUrl, params, function(response){
+                if (response.errno == 0) {
+                    console.log('doctor-info', response.data);
+                    next(vm => {
+                        vm.openid = openid;
+                        vm.isbind = isbind;
+                        vm.doctor = response.data.doctor;
+                    })
+                }
+            })
         }
     }
 </script>
@@ -165,5 +183,15 @@
         font-size: 18px;
         bottom:0px;
         left: 0px;
+    }
+    .doctorinfo {
+        margin: -60px -8px 0px -8px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #1996ea;
+        text-align: left;
+    }
+    .doctorinfo span {
+        color: #fff;
     }
 </style>

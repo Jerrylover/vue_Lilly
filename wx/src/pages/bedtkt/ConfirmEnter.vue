@@ -80,6 +80,8 @@
                 }else {
                     this.is_set_default = 0;
                 }
+                console.log(this.time)
+                // return ;
                 var url = api.get('sickbed.passjson');
                 var params = {
                     openid: this.openid,

@@ -37,6 +37,10 @@
             <span v-if="tktlist.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
         </div>
         </div>
+        <div style="background-color: red; padding: 40px; width: 300px;">
+            <span style="font-size: 10px;">你们好吗</span>
+            <span style="font-size: 2rem">我还好</span>
+        </div>
     </div>
 </template>
 <script>
