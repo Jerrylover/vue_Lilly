@@ -64,7 +64,10 @@ export default {
     data: function() {
         return {
             ageOs: '全部',
+            ageOsData: '',
             genderOs: '全部',
+            genderOsData: '',
+
             ageOschart: '',
             genderOsChart: ''
         }
@@ -74,65 +77,28 @@ export default {
     },
     methods: {
         genderOsChange: function(val) {
-            let series = [
-                {
-                    name: '发病到死亡',
-                    type: 'bar',
-                    data: [77, 44]
-                },
-                {
-                    name: '诊断到死亡',
-                    type: 'bar',
-                    data: [56, 38]
-                },
-                {
-                    name: '治疗到死亡',
-                    type: 'bar',
-                    data: [33, 22]
-                },
-            ]
-            this.genderOsChart.setOption({
-                series: series
-            })
+            this.genderOs = val;
+            this.initGenderOs(this.genderOsData);
         },
         ageOsChange: function(val) {
-            let series = [
-                {
-                    name: '发病到死亡',
-                    type: 'bar',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '诊断到死亡',
-                    type: 'bar',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '治疗到死亡',
-                    type: 'bar',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                }
-            ]
-            this.ageOsChart.setOption({
-                series: series
-            })
+            this.ageOs = val;
+            this.initAgeOs(this.ageOsData);
         },
         initAllCharts: function() {
             var that = this
             api.http({
-                url: 'statistic.totalcnt',
+                url: 'statistic.os',
                 data: {},
                 successCallback: function(d) {
                     let data = d.data
-                    that.initAgeOs()
-                    that.initGenderOs()
+                    that.ageOsData = data['age-OS'];
+                    that.genderOsData = data['sex-OS'];
+                    that.initAgeOs(that.ageOsData);
+                    that.initGenderOs(that.genderOsData);
                 }
             })
         },
-        initAgeOs: function(data) {
+        initAgeOs: function(ageOsData) {
             let domMain = document.getElementById('age-os')
             this.ageOsChart = echarts.init(domMain, 'essos')
             let option = {
@@ -148,7 +114,7 @@ export default {
                 legend: {
                     orient: 'horizontal',
                     left: 'left',
-                    data: ['发病到死亡', '诊断到死亡', '治疗到死亡'],
+                    data: ['诊断到死亡', '发病到死亡', '治疗到死亡'],
                     selected: {
                         '全部': false
                     }
@@ -176,9 +142,32 @@ export default {
                 ]
             }
 
+            var optionData = ageOsData[this.ageOs]
+            option.xAxis.data = Object.keys(optionData);
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                let obj = {};
+                obj.name = one;
+                obj.type = 'bar';
+                obj.data = Object.keys(optionData).map(function(key){
+                    /*更准确*/
+                    // if (one == '发病到死亡') {
+                    //     return optionData[key]['发病-死亡'];
+                    // }else if (one == '诊断到死亡') {
+                    //     return optionData[key]['诊断-死亡'];
+                    // }else {
+                    //     return optionData[key]['治疗-死亡'];
+                    // }
+                    /* 如下写法需要optin.legend.data和数据一一对应*/
+                    let one1 = optionData[key][Object.keys(optionData[key])[i]];
+                    return one1;
+                })
+                i++;
+                return obj;
+            })
             this.ageOsChart.setOption(option)
         },
-        initGenderOs: function(data) {
+        initGenderOs: function(genderOsData) {
             let domMain = document.getElementById('gender-os')
             this.genderOsChart = echarts.init(domMain, 'essos')
             let option = {
@@ -193,7 +182,7 @@ export default {
                 legend: {
                     orient: 'horizontal',
                     left: 'left',
-                    data: ['发病到死亡', '诊断到死亡', '治疗到死亡'],
+                    data: ['诊断到死亡', '发病到死亡', '治疗到死亡'],
                     selected: {
                         '全部': false
                     }
@@ -220,7 +209,31 @@ export default {
                     },
                 ]
             }
-
+            var optionData = genderOsData[this.genderOs];
+            console.log('initGenderOs',optionData);
+            option.xAxis.data = Object.keys(optionData);
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                console.log('one',one);
+                let obj = {};
+                obj.name = one;
+                obj.type = 'bar';
+                obj.data = Object.keys(optionData).map(function(key){
+                    /*精确方式*/
+                    // if (one == '发病到死亡') {
+                    //     return optionData[key]['发病-死亡'];
+                    // }else if (one == '诊断到死亡') {
+                    //     return optionData[key]['诊断-死亡'];
+                    // }else {
+                    //     return optionData[key]['治疗-死亡'];
+                    // }
+                    /* 此种返回数据的方法要求接口数据和option.legend.data顺序一致*/
+                    let one1 = optionData[key][Object.keys(optionData[key])[i]];
+                    return one1;
+                })
+                i++;
+                return obj;
+            })
             this.genderOsChart.setOption(option)
         }
     },

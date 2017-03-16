@@ -136,10 +136,13 @@ var urls = {
       'uploadimage': '/picture/uploadimagepost',
       'uploadcase': '/common/wxpicmsgbatuploadcasepost',
   },
-  statistic: {
-      newcnt: '/statistic/newcnt',
-      totalcnt: '/statistic/totalcnt',
-      survival: '/statistic/survive'
+  'statistic': {
+      'newcnt': '/statistic/newcnt',
+      'totalcnt': '/statistic/totalcnt',
+      'survival': '/statistic/survive',
+      'pfs': '/statistic/pfs',
+      'effect': '/statistic/effect',
+      'os': '/statistic/os',
   }
 }
 

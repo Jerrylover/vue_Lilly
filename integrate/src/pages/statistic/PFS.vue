@@ -47,6 +47,8 @@ export default {
         return {
             pfsDisease: '全部',
             pfsChart: '',
+
+            pfsData: {},
         }
     },
     components: {
@@ -54,39 +56,22 @@ export default {
     },
     methods: {
         pfsDiseaseChange: function(val) {
-            let series = [
-                {
-                    name: '男性',
-                    type: 'bar',
-                    data: [29, 70, 50, 14, 22, 18, 45, 90, 8, 18, 45, 66, 77, 22, 34, 88]
-                },
-                {
-                    name: '女性',
-                    type: 'bar',
-                    data: [88, 30, 40, 24, 62, 15, 25, 50, 12, 28, 54, 23, 56, 19, 44, 98]
-                },
-                {
-                    name: '全部',
-                    type: 'bar',
-                    data: [57, 100, 90, 58, 84, 33, 30, 160, 20, 48, 124, 53, 46, 39, 74, 180]
-                },
-            ]
-            this.pfsChart.setOption({
-                series: series
-            })
+            this.pfsDisease = val;
+            this.initPFS(this.pfsData);
         },
         initAllCharts: function() {
             var that = this
             api.http({
-                url: 'statistic.totalcnt',
+                url: 'statistic.pfs',
                 data: {},
                 successCallback: function(d) {
                     let data = d.data
-                    that.initPFS()
+                    that.pfsData = data;
+                    that.initPFS(that.pfsData);
                 }
             })
         },
-        initPFS: function(data) {
+        initPFS: function(pfsData) {
             let domMain = document.getElementById('pfs')
             this.pfsChart = echarts.init(domMain, 'essos')
             let option = {
@@ -135,21 +120,43 @@ export default {
                     {
                         name: '全部',
                         type: 'bar',
-                        data: [97, 100, 90, 88, 84, 33, 60, 160, 20, 48, 74, 53, 66, 39, 74, 180]
+                        data: [97, 100, 90, 88, 84, 33, 60, 160, 20]
                     },
                     {
                         name: '男性',
                         type: 'bar',
-                        data: [69, 70, 50, 34, 22, 18, 25, 90, 8, 18, 45, 66, 77, 22, 34, 88]
+                        data: [69, 70, 50, 34, 22, 18, 25, 90, 8]
                     },
                     {
                         name: '女性',
                         type: 'bar',
-                        data: [28, 30, 40, 54, 62, 15, 35, 70, 12, 28, 54, 33, 56, 19, 44, 98]
+                        data: [28, 30, 40, 54, 62, 15, 35, 70, 12]
                     }
                 ]
             }
+            var optionData = {};
+            var that = this;
+            Object.keys(pfsData).map(function(one){
+                optionData[one] = pfsData[one][that.pfsDisease]
+            })
+            console.log(optionData, '?????');
+            option.yAxis[0].data = Object.keys(optionData.pfs_all);
 
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                console.log('one', one);
+                var obj = {};
+                obj.name = one;
+                obj.type = 'bar';
+                console.log('keys',Object.keys(optionData[Object.keys(optionData)[i]]));
+                obj.data = Object.keys(optionData[Object.keys(optionData)[i]]).map(function(key){
+                    let one1 = optionData[Object.keys(optionData)[i]][key];
+                    return one1;
+                });
+                i++;
+                console.log(obj);
+                return obj;
+            })
             this.pfsChart.setOption(option)
         },
     },

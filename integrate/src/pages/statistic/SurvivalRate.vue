@@ -76,6 +76,11 @@ export default {
         return {
             genderDisease: '全部',
             ageDisease: '全部',
+
+            age_rent: {},
+            disease_rent: {},
+            sex_rent: {},
+
             diseaseSurvivalChart: '',
             genderSurvivalChart: '',
             ageSurvivalChart: '',
@@ -86,88 +91,31 @@ export default {
     },
     methods: {
         genderDiseaseChange: function(val) {
-            let series = [
-                    {
-                        name: '一年',
-                        type: 'bar',
-                        data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-                    },
-                    {
-                        name: '两年',
-                        type: 'bar',
-                        data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-                    },
-                    {
-                        name: '三年',
-                        type: 'bar',
-                        data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-                    },
-                    {
-                        name: '四年',
-                        type: 'bar',
-                        data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-                    },
-                    {
-                        name: '五年',
-                        type: 'bar',
-                        data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-                    }
-            ]
-            this.genderSurvivalChart.setOption({
-                series: series
-            })
+            this.genderDisease = val;
+            this.initGenderSurvival(this.sex_rent);
         },
         ageDiseaseChange: function(val) {
-            let series = [
-                {
-                    name: '一年',
-                    type: 'line',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '两年',
-                    type: 'line',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '三年',
-                    type: 'line',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '四年',
-                    type: 'line',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-                {
-                    name: '五年',
-                    type: 'line',
-                    data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)],
-                    smooth: true
-                },
-            ]
-            this.ageSurvivalChart.setOption({
-                series: series
-            })
+            this.ageDisease = val;
+            this.initAgeSurvival(this.age_rent);
         },
         initAllCharts: function() {
             var that = this
             api.http({
-                url: 'statistic.totalcnt',
+                url: 'statistic.survival',
                 data: {},
                 successCallback: function(d) {
                     let data = d.data
-                    that.initDiseaseSurvival()
-                    that.initGenderSurvival()
-                    that.initAgeSurvival()
+                    that.sex_rent = data.sex_rent;
+                    that.disease_rent = data.disease_rent;
+                    that.age_rent = data.age_rent;
+                    that.initDiseaseSurvival(that.disease_rent)
+                    that.initGenderSurvival(that.sex_rent)
+                    that.initAgeSurvival(that.age_rent)
                 }
             })
         },
-        initDiseaseSurvival: function(data) {
+        initDiseaseSurvival: function(disease_rent) {
+            var that = this
             let domMain = document.getElementById('disease-survival')
             this.diseaseSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
@@ -192,7 +140,8 @@ export default {
                 },
                 xAxis: {
                     name: '疾病',
-                    data: ["胃癌", "肺癌", "癌症"]//todo
+                    type: 'category',
+                    data: ['全部', '癌症', '肺癌', '胃癌']//todo
                 },
                 yAxis: [
                     {
@@ -213,31 +162,24 @@ export default {
                     }
                 ]
             }
-            var that = this
-            api.http({
-                url: 'statistic.survival',
-                data: {},
-                successCallback: function(d) {
-                    let data = d.data
-                    delete data.disease_rent['全部']
-                    option.xAxis.data = Object.keys(data.disease_rent)
-                    let i = 0
-                    option.series = option.legend.data.map(function(one) {
-                        i ++
-                        let obj = {}
-                        obj.name = one
-                        obj.type = 'bar'
-                        obj.data = Object.keys(data.disease_rent).map(function(key) {
-                            let one1 = data.disease_rent[key]
-                            return one1[i] - ''
-                        })
-                        return obj
-                    })
-                    that.diseaseSurvivalChart.setOption(option)
-                }
+            delete disease_rent['全部']
+            console.log('disease_rent',disease_rent);
+            option.xAxis.data = Object.keys(disease_rent)
+            let i = 0
+            option.series = option.legend.data.map(function(one) {
+                i++;
+                let obj = {}
+                obj.name = one
+                obj.type = 'bar'
+                obj.data = Object.keys(disease_rent).map(function(key) {
+                    let one1 = disease_rent[key]
+                    return one1[i] - ''
+                })
+                return obj
             })
+            that.diseaseSurvivalChart.setOption(option)
         },
-        initGenderSurvival: function(data) {
+        initGenderSurvival: function(sex_rent) {
             let domMain = document.getElementById('gender-survival')
             this.genderSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
@@ -248,7 +190,7 @@ export default {
                 },
                 tooltip : {
                     trigger: 'item',
-                    // formatter: "{a} <br/>{b} : {c}"
+                    formatter: ""
                 },
                 legend: {
                     orient: 'horizontal',
@@ -290,11 +232,23 @@ export default {
                     }
                 ]
             }
-
+            var optionData = sex_rent[this.genderDisease];
+            option.xAxis.data = Object.keys(optionData);
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                i++;
+                let obj = {};
+                obj.name = one;
+                obj.type = 'bar';
+                obj.data = Object.keys(optionData).map(function(key){
+                    let one1 = optionData[key];
+                    return one1[i];
+                })
+                return obj;
+            })
             this.genderSurvivalChart.setOption(option)
         },
-        initAgeSurvival: function(data) {
-            // delete data['全部']
+        initAgeSurvival: function(age_rent) {
             let domMain = document.getElementById('age-survival')
             this.ageSurvivalChart = echarts.init(domMain, 'essos')
             let option = {
@@ -315,7 +269,7 @@ export default {
                     }
                 },
                 xAxis: {
-                    data: ["10-20","21-30","31-40","41-50","51-60","61-70","71-80", "80+"]
+                    // data: ["10-20","21-30","31-40","41-50","51-60","61-70","71-80", "80+"]
                 },
                 yAxis: {},
                 series: [
@@ -351,6 +305,20 @@ export default {
                     },
                 ]
             }
+            var optionData = age_rent[this.ageDisease];
+            option.xAxis.data = Object.keys(optionData);
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                i++;
+                var obj = {};
+                obj.name = one;
+                obj.type = 'line';
+                obj.data = Object.keys(optionData).map(function(key){
+                    let one1 = optionData[key][i];
+                    return one1;
+                })
+                return obj;
+            })
             this.ageSurvivalChart.setOption(option)
         }
     },

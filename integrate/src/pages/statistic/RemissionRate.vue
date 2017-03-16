@@ -46,6 +46,8 @@ export default {
     data: function() {
         return {
             remission: '全部',
+            remissionData: '',
+
             remissionChart: ''
         }
     },
@@ -54,40 +56,23 @@ export default {
     },
     methods: {
         remissionChange: function(val) {
-            let series = [
-                {
-                    name: '总缓解率',
-                    type: 'line',
-                    data: [33, 22, 44, 70, 50, 20, 8, 12]
-                },
-                {
-                    name: '完全缓解率',
-                    type: 'bar',
-                    data: [80, 70, 50, 80, 70, 20, 8, 12]
-                },
-                {
-                    name: '部分缓解率',
-                    type: 'bar',
-                    data: [20, 8, 12, 80, 70, 50, 80, 70]
-                }
-            ]
-            this.remissionChart.setOption({
-                series: series
-            })
+            this.remission = val;
+            this.initRemission(this.remissionData);
         },
 
         initAllCharts: function() {
             var that = this
             api.http({
-                url: 'statistic.totalcnt',
+                url: 'statistic.effect',
                 data: {},
                 successCallback: function(d) {
                     let data = d.data
-                    that.initRemission()
+                    that.remissionData = data['缓解率'];
+                    that.initRemission(that.remissionData);
                 }
             })
         },
-        initRemission: function(data) {
+        initRemission: function(remissionData) {
             let domMain = document.getElementById('remission')
             this.remissionChart = echarts.init(domMain, 'essos')
             let option = {
@@ -130,6 +115,28 @@ export default {
                     }
                 ]
             }
+            var optionData = remissionData[this.remission];
+            option.xAxis.data = Object.keys(optionData);
+            let i = 0;
+            option.series = option.legend.data.map(function(one){
+                let obj = {};
+                obj.name = one;
+                obj.type = one == '总缓解率'? 'line': 'bar';
+                obj.data = Object.keys(optionData).map(function(key){
+                    // if (one == '总缓解率') {
+                    //     console.log(Object.keys(optionData[key]));
+                    //     return optionData[key]['all_hj'];
+                    // }else if (one == '完全缓解率') {
+                    //     return optionData[key]['wanquan_hj'];
+                    // }else {
+                    //     return optionData[key]['bufen_hj'];
+                    // }
+                    var one1 =optionData[key][Object.keys(optionData[key])[i]]
+                    return one1;
+                })
+                i++;
+                return obj;
+            })
 
             this.remissionChart.setOption(option)
         },
