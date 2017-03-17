@@ -94,7 +94,13 @@ export default {
                     }
                 },
                 xAxis: {
-                    data: ["IP", "TP", "EP", "PF", "FCR", "吉西他滨", "长春瑞滨+顺铂", "多烯紫杉醇+卡铂"]
+                    // nameGap: 40,
+                    // nameRotate: 15,
+                    axisLabel: {
+                        rotate: -25,
+                        interval: 0,
+                    }
+                    // data: ["IP", "TP", "EP", "PF", "FCR", "吉西他滨", "长春瑞滨+顺铂", "多烯紫杉醇+卡铂"]
                 },
                 yAxis: {},
                 series : [

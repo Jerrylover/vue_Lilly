@@ -25,7 +25,7 @@
         <div class="panel panel-default">
           <div class="panel-heading" style="padding:2px 10px">
               <div style="float:left;line-height:2.5">患者新增</div>
-              <div style="float:right">
+              <!-- <div style="float:right">
                     <el-date-picker
                           v-model="date"
                           type="daterange"
@@ -33,7 +33,7 @@
                           placeholder="选择日期范围"
                           :picker-options="pickerOptions2">
                         </el-date-picker>
-              </div>
+              </div> -->
               <div class="clearfix"></div>
           </div>
           <div class="panel-body" id="new-patient-line" style="height:400px">
@@ -155,13 +155,19 @@ export default {
                    }
                 },
                 calculable: true,
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: [],
-                        name: "月份"
-                    }
-                ],
+                xAxis: {
+                    axisLabel: {
+                        rotate: -25,
+                        interval: 0,
+                    },
+                    data:[
+                        {
+                            type: 'category',
+                            data: [],
+                            name: "月份"
+                        }
+                    ],
+                },
                 yAxis: {
                     type: 'value',
                     splitArea: { show: true },
@@ -189,7 +195,7 @@ export default {
                     // delete sixmonthData['全部']
                     let diseases = Object.keys(sixmonthData)
                     option.legend.data = diseases
-                    option.xAxis[0].data = months
+                    option.xAxis.data = months
                     option.series = Object.keys(sixmonthData).map(function(key) {
                         let one = sixmonthData[key]
                         let arr = {}

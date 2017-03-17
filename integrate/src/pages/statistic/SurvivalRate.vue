@@ -150,7 +150,8 @@ export default {
                         axisLabel: {
                             show: true,
                             interval: 'auto',
-                            formatter: "{value} %"
+                            formatter: "{value} %",
+                            rotate: 25,
                         }
                     }
                 ],

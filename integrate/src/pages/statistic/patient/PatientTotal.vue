@@ -73,7 +73,7 @@ export default {
             let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
-                    text: '按疾病分布',
+                    text: '',
                     subtext: '',
                     x:'center'
                 },
@@ -123,7 +123,7 @@ export default {
             let myChart = echarts.init(domMain, 'essos')
             let option = {
                 title : {
-                    text: '按性别分布',
+                    text: '',
                     subtext: '',
                     x:'center'
                 },
