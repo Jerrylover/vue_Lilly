@@ -378,7 +378,6 @@ module.exports = {
                 }
             }
         } else {
-            console.log(that.defaultdate);
             that.year = now.getFullYear();
             that.month = now.getMonth();
             that.day = now.getDate();

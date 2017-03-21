@@ -12,7 +12,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">姓名</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input name="patient-name" class="form-control" type="text" value="{{patientinfo.name}}" v-model="patientinfo.name">
+                                <input name="patient-name" class="form-control" type="text" v-model="patientinfo.name">
                             </div>
                             <div class="col-lg-1 col-sm-1 clearPadding">
                                 <span class="padding-5px" style="color:red;line-height:2.4">*</span>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bottom-dashed">
+                <div class="bottom-solid">
                     <div class="row padding-5px">
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3">出生地</label>
@@ -135,18 +135,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="bottom-solid">
+            </div>
+            <div>
+                <div class="bg-caption-padding"><a class="fa fa-plus-square-o" style="cursor: pointer; text-decoration: none" @click="moreOtherContacts"></a>备用联系人
+                </div>
+                <div v-for="item in patientinfo.other_contacts" class="bottom-dashed">
                     <div class="row padding-5px">
                         <div class="col-lg-4 col-sm-4">
-                            <label class="col-lg-3 col-sm-3">备用联系人</label>
+                            <div class="col-lg-3">
+                                <a class="fa fa-minus-square-o" style="text-decoration: none; cursor: pointer" @click="deleteOtherContacts($index)"></a>
+                                <label>姓名</label>
+                            </div>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input class="form-control" type="text" value="{{patientinfo.spare_contacts_name}}" v-model="patientinfo.other_contacts[0].name">
+                                <input class="form-control" type="text" value="{{patientinfo.spare_contacts_name}}" v-model="item.name">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
-                        <label class="col-lg-3 col-sm-3 clear-padding-left">关系</label>
+                            <label class="col-lg-3 col-sm-3 clear-padding-left">关系</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <select class="form-control clearMargin" value="{{patientinfo.spare_contacts_shipstr}}" v-model="patientinfo.other_contacts[0].shipstr">
+                                <select class="form-control clearMargin" value="{{patientinfo.spare_contacts_shipstr}}" v-model="item.shipstr">
                                     <option disabled="disabled" value="">请选择--</option>
                                     <option value="配偶">配偶</option>
                                     <option value="父子">父子</option>
@@ -163,7 +170,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3 clear-padding-left">手机</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input name="spare_contacts_mobile" class="form-control" type="text" value="{{patientinfo.spare_contacts_mobile}}" v-model="patientinfo.other_contacts[0].mobile">
+                                <input name="spare_contacts_mobile{{$index}}" class="form-control" type="text" value="{{patientinfo.spare_contacts_mobile}}" v-model="item.mobile">
                             </div>
                         </div>
                     </div>
@@ -633,7 +640,7 @@ module.exports = {
                         name: '',
                         mobile: '',
                         shipstr: '',
-                    }
+                    },
                 ],
                 past_other_history: '',
                 mobile: "", //电话号码
@@ -708,7 +715,6 @@ module.exports = {
 
                     if ($.trim(that.patientinfo.menstruation_history) != "") {
                         var menstruation_historyArr = that.patientinfo.menstruation_history.split('|');
-                        console.log(menstruation_historyArr);
                         if (menstruation_historyArr[0] != undefined) {
                             that.firstMenstruationAge = menstruation_historyArr[0];
                         } else {
@@ -772,21 +778,30 @@ module.exports = {
                             that.currentAddressProvinceIndex = i;
                         }
                     }
+                    if (!util.isObject(that.patientinfo.birth_place)) {
+                        that.patientinfo.birth_place = {provincestr: "", citystr: ''};
+                    }
+                    if (!util.isObject(that.patientinfo.address)) {
+                        that.patientinfo.address = {provincestr: '', citystr: ''};
+                    }
+
+                    if (!util.isArray(that.patientinfo.other_contacts)) {
+                        that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
+
+                    if (that.patientinfo.other_contacts.length == 0) {
+                        // console.log('444');
+                        that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
                 })
-            }
-            if (!util.isObject(that.patientinfo.birth_place)) {
-                that.patientinfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientinfo.address)) {
-                that.patientinfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientinfo.other_contacts)) {
-                that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
             }
         }
     },
     watch: {
-        'patientinfo.menstruationStopTime': function(vale, oldval) {}
+        'patientinfo.menstruationStopTime': function(vale, oldval) {},
+        'patientinfo.other_contacts': function(vale, oldval){
+            console.log('new--', vale, 'old---', oldval);
+        }
     },
     computed: {
         pagetitle: function() {
@@ -873,6 +888,20 @@ module.exports = {
         }
     },
     methods: {
+        moreOtherContacts: function() {
+            var obj = {
+                name: '',
+                shipstr: '',
+                mobile: '',
+            }
+            this.patientinfo.other_contacts.push(obj);
+            console.log(this.patientinfo.other_contacts);
+        },
+        deleteOtherContacts: function(index) {
+            if (this.patientinfo.other_contacts.length > 1) {
+                this.patientinfo.other_contacts.splice(index, 1);
+            }
+        },
         maleSelectClick: function() {
             this.patientinfo.sex = "1";
         },
@@ -954,11 +983,13 @@ module.exports = {
                 return;
             }
             //校验备用联系人手机号
-            if ( $.trim(this.patientinfo.other_contacts[0].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[0].mobile)) {
-                that.$dispatch('show-alert', "请输入正确的备用联系人号码", function() {
-                    $("input[name='spare_contacts_mobile']").focus();
-                });
-                return;
+            for (var i = 0; i < this.patientinfo.other_contacts.length; i++) {
+                if( $.trim(this.patientinfo.other_contacts[i].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[i].mobile)){
+                    that.$dispatch('show-alert', "请输入正确的备用联系人号码", function() {
+                        $("input[name='spare_contacts_mobile" + i + "']").focus();
+                    });
+                    return;
+                }
             }
 
             //全部提交字段，方便测试
@@ -979,6 +1010,7 @@ module.exports = {
             // console.log('other_contacts.name', this.patientinfo.other_contacts[0].name);
             // console.log('other_contacts.shipstr', this.patientinfo.other_contacts[0].shipstr);
             // console.log('other_contacts.mobile', this.patientinfo.other_contacts[0].mobile);
+            // console.log('other_contacts', this.patientinfo.other_contacts);
             // console.log('create_doc_date', this.patientinfo.create_doc_date);
             // console.log('past_main_history', this.past_main_history);
             // console.log('past_other_history', this.patientinfo.past_other_history);
@@ -986,7 +1018,7 @@ module.exports = {
             // console.log('menstruation_history', this.menstruation_history);
             // console.log('childbearing_history', this.childbearing_history);
             // console.log('allergy_history', this.patientinfo.allergy_history);
-
+            // return ;
             $.ajax({
                     url: api.get(httpurl),
                     type: 'POST',

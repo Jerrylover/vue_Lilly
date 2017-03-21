@@ -72,13 +72,18 @@
                         <td></td>
                         <td></td>
                     </tr>
+                </tr>
+                <tr>
+                    <tr class="bg-F5F6FA">
+                        <th colspan="6">备用联系人</th>
                     <tr>
-                        <td>备用联系人</td>
-                        <td>{{patientInfo.other_contacts[0].name}}</td>
+                    <tr v-for="item in patientInfo.other_contacts">
+                        <td>姓名</td>
+                        <td>{{item.name}}</td>
                         <td>关系</td>
-                        <td>{{patientInfo.other_contacts[0].shipstr}}</td>
+                        <td>{{item.shipstr}}</td>
                         <td>手机</td>
-                        <td>{{patientInfo.other_contacts[0].mobile}}</td>
+                        <td>{{item.mobile}}</td>
                     </tr>
                 </tr>
                 <tr>
