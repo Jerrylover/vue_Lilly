@@ -253,6 +253,7 @@ h4 {
             },
             changeTheDate: function(str) {
                 var self = this;
+                this.lasttimeselectindex = -1;
                 if (str.trim() == 'year') {
                     self.month = "01";
                 }
@@ -291,6 +292,7 @@ h4 {
                 }
             },
             shortcutChangeTheDate: function(increment) {
+                this.lasttimeselectindex = -1;
                 var self = this;
                 var month = Number(self.themonth) + increment;
                 if (Number(month)%12 == 0) {

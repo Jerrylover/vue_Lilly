@@ -611,6 +611,7 @@
                     if (response.errno == 0) {
                         self.$dispatch('show-popup', '保存并发送成功');
                         self.revisitrecord.issend = 1;
+                        self.revisitrecord = Object.assign({}, self.revisitrecord);
                     }else {
                         self.$dispatch('show-alert', response.errmsg);
                     }
