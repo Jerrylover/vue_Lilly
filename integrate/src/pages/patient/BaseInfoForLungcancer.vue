@@ -74,13 +74,18 @@
                         <td></td>
                         <td></td>
                     </tr>
+                </tr>
+                <tr>
+                    <tr class="bg-F5F6FA">
+                        <th colspan="6">备用联系人</th>
                     <tr>
-                        <td>备用联系人</td>
-                        <td>{{patientInfo.other_contacts[0].name}}</td>
+                    <tr v-for="item in patientInfo.other_contacts">
+                        <td>姓名</td>
+                        <td>{{item.name}}</td>
                         <td>关系</td>
-                        <td>{{patientInfo.other_contacts[0].shipstr}}</td>
+                        <td>{{item.shipstr}}</td>
                         <td>手机</td>
-                        <td>{{patientInfo.other_contacts[0].mobile}}</td>
+                        <td>{{item.mobile}}</td>
                     </tr>
                 </tr>
                 <tr>
@@ -612,29 +617,32 @@ export default {
                       that.patientInfo.sexinfo = "未知";
                       that.hideFemalePart = false;
                   }
-              }
+                    if (!util.isObject(that.patientInfo.birth_place)) {
+                        that.patientInfo.birth_place = {provincestr: "", citystr: ''};
+                    }
+                    if (!util.isObject(that.patientInfo.address)) {
+                        that.patientInfo.address = {provincestr: '', citystr: ''};
+                    }
+                    if (!util.isArray(that.patientInfo.other_contacts)) {
+                        that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
+                    if (that.patientInfo.other_contacts.length == 0) {
+                        that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
+                    if (!util.isObject(that.patientInfo.native_place)) {
+                        that.patientInfo.birth_place = {provincestr: '', citystr: ''};
+                    }
+                    if (!util.isObject(that.patientInfo.blood_type)) {
+                        that.patientInfo.blood_type = {first: '', second: ''};
+                    }
+                    if (!util.isObject(that.patientInfo.self_history)) {
+                        that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
+                    }
+                    if (!util.isObject(that.patientInfo.smoke_history)) {
+                        that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
+                    }
+                }
             })
-            if (!util.isObject(that.patientInfo.birth_place)) {
-                that.patientInfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientInfo.address)) {
-                that.patientInfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientInfo.other_contacts)) {
-                that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-            }
-            if (!util.isObject(that.patientInfo.native_place)) {
-                that.patientInfo.birth_place = {provincestr: '', citystr: ''};
-            }
-            if (!util.isObject(that.patientInfo.blood_type)) {
-                that.patientInfo.blood_type = {first: '', second: ''};
-            }
-            if (!util.isObject(that.patientInfo.self_history)) {
-                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-            if (!util.isObject(that.patientInfo.smoke_history)) {
-                that.patientInfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
         },
         initPage: function() {
             var patientname = libpatient.getPatientName(this.patientid)

@@ -59,13 +59,18 @@
                         <td>邮箱</td>
                         <td>{{patientInfo.email}}</td>
                     </tr>
+                </tr>
+                <tr>
+                    <tr class="bg-F5F6FA">
+                        <th colspan="6">备用联系人</th>
                     <tr>
-                        <td>备用联系人</td>
-                        <td>{{patientInfo.other_contacts[0].name}}</td>
+                    <tr v-for="item in patientInfo.other_contacts">
+                        <td>姓名</td>
+                        <td>{{item.name}}</td>
                         <td>关系</td>
-                        <td>{{patientInfo.other_contacts[0].shipstr}}</td>
+                        <td>{{item.shipstr}}</td>
                         <td>手机</td>
-                        <td>{{patientInfo.other_contacts[0].mobile}}</td>
+                        <td>{{item.mobile}}</td>
                     </tr>
                 </tr>
                 <tr>
@@ -478,92 +483,95 @@ export default {
                 that.fetchWxUser();
             }
             api.http({
-              url: 'patient.patientinfo',
-              data: {
-                  patientid: that.patientid,
-                  dg_group: that.dg_group,
-              },
-              successCallback: function(d) {
-                  var patientInfo = d.data;
-                  that.patientname = patientInfo.name;
-                  that.patientInfo = patientInfo;
-                  //既往病史信息处理
-                  // console.log(that.patientInfo.past_main_history, "=======", that.patientInfo.past_other_history);
-                  if ($.trim(that.patientInfo.past_main_history) != undefined) {
-                      var index = that.patientInfo.past_main_history.indexOf('+');
-                      var other = '';
-                      var past_main_history = "";
-                      if (index > -1) {
-                          other = that.patientInfo.past_main_history.substring(index + 1, that.patientInfo.past_main_history.length);
-                          past_main_history = that.patientInfo.past_main_history.substring(0, index);
-                          that.patientInfo.past_main_history = past_main_history.replace(/\|/g, ',') + ',' + other;
-                      }else {
-                          that.patientInfo.past_main_history = that.patientInfo.past_main_history.replace(/\|/g, ",");
-                      }
-                  }
-                  if (that.patientInfo.sex == 1) {
-                      that.patientInfo.sexinfo = "男";
-                      that.hideFemalePart = true;
-                  } else if (that.patientInfo.sex == 2) {
-                      that.patientInfo.sexinfo = "女";
-                      that.hideFemalePart = false;
-                      if ($.trim(that.patientInfo.menstruation_history) != "") {
-                          var menstruationArr = that.patientInfo.menstruation_history.split("|");
-                          if (menstruationArr[0] != undefined) {
-                              that.patientInfo.firstMenstruationAge = menstruationArr[0];
-                          } else {
-                              that.patientInfo.firstMenstruationAge = " ";
-                          }
+                url: 'patient.patientinfo',
+                data: {
+                    patientid: that.patientid,
+                    dg_group: that.dg_group,
+                },
+                successCallback: function(d) {
+                    var patientInfo = d.data;
+                    that.patientname = patientInfo.name;
+                    that.patientInfo = patientInfo;
+                    //既往病史信息处理
+                    // console.log(that.patientInfo.past_main_history, "=======", that.patientInfo.past_other_history);
+                    if ($.trim(that.patientInfo.past_main_history) != undefined) {
+                        var index = that.patientInfo.past_main_history.indexOf('+');
+                        var other = '';
+                        var past_main_history = "";
+                        if (index > -1) {
+                            other = that.patientInfo.past_main_history.substring(index + 1, that.patientInfo.past_main_history.length);
+                            past_main_history = that.patientInfo.past_main_history.substring(0, index);
+                            that.patientInfo.past_main_history = past_main_history.replace(/\|/g, ',') + ',' + other;
+                        }else {
+                            that.patientInfo.past_main_history = that.patientInfo.past_main_history.replace(/\|/g, ",");
+                        }
+                    }
+                    if(that.patientInfo.sex == 1) {
+                        that.patientInfo.sexinfo = "男";
+                        that.hideFemalePart = true;
+                    } else if (that.patientInfo.sex == 2) {
+                        that.patientInfo.sexinfo = "女";
+                        that.hideFemalePart = false;
+                        if ($.trim(that.patientInfo.menstruation_history) != "") {
+                            var menstruationArr = that.patientInfo.menstruation_history.split("|");
+                            if (menstruationArr[0] != undefined) {
+                                that.patientInfo.firstMenstruationAge = menstruationArr[0];
+                            } else {
+                                that.patientInfo.firstMenstruationAge = " ";
+                            }
 
-                          if (menstruationArr[1] != undefined && menstruationArr[1] == '正常') {
-                              that.patientInfo.menstruationStatus = menstruationArr[1];
-                              that.patientInfo.menstruationPeriod = menstruationArr[2]+ "天/" + menstruationArr[3]+ "天";
-                          } else if(menstruationArr[1] != undefined && menstruationArr[1] == '停经'){
-                              that.patientInfo.menstruationStatus = menstruationArr[1];
-                              if (menstruationArr[2] != undefined && menstruationArr[2] == "生理性") {
-                                  that.patientInfo.menstruationStopPicked = menstruationArr[2];
-                                  that.patientInfo.menstruationStopTime = menstruationArr[3] + '岁';
-                              }else if(menstruationArr[2] != undefined && menstruationArr[2] == '病理性') {
-                                  that.patientInfo.menstruationStopPicked = menstruationArr[2];
-                                  that.patientInfo.menstruationStopReason = menstruationArr[3];
-                              }
-                          }
-                      }
-                      if ($.trim(that.patientInfo.childbearing_history) != "") {
-                          var childbirthString = that.patientInfo.childbearing_history.split("|");
-                          if (childbirthString[0] != undefined && $.trim(childbirthString[0]) != "" && childbirthString[1] != undefined && $.trim(childbirthString[1]) != "") {
-                              that.patientInfo.childbirth = "孕" + childbirthString[0] + "产" + childbirthString[1];
-                          } else {
-                              that.patientInfo.childbirth = " ";
-                          }
+                            if (menstruationArr[1] != undefined && menstruationArr[1] == '正常') {
+                                that.patientInfo.menstruationStatus = menstruationArr[1];
+                                that.patientInfo.menstruationPeriod = menstruationArr[2]+ "天/" + menstruationArr[3]+ "天";
+                            } else if(menstruationArr[1] != undefined && menstruationArr[1] == '停经'){
+                                that.patientInfo.menstruationStatus = menstruationArr[1];
+                                if (menstruationArr[2] != undefined && menstruationArr[2] == "生理性") {
+                                    that.patientInfo.menstruationStopPicked = menstruationArr[2];
+                                    that.patientInfo.menstruationStopTime = menstruationArr[3] + '岁';
+                                }else if(menstruationArr[2] != undefined && menstruationArr[2] == '病理性') {
+                                    that.patientInfo.menstruationStopPicked = menstruationArr[2];
+                                    that.patientInfo.menstruationStopReason = menstruationArr[3];
+                                }
+                            }
+                        }
+                        if ($.trim(that.patientInfo.childbearing_history) != "") {
+                            var childbirthString = that.patientInfo.childbearing_history.split("|");
+                            if (childbirthString[0] != undefined && $.trim(childbirthString[0]) != "" && childbirthString[1] != undefined && $.trim(childbirthString[1]) != "") {
+                                that.patientInfo.childbirth = "孕" + childbirthString[0] + "产" + childbirthString[1];
+                            } else {
+                                that.patientInfo.childbirth = " ";
+                            }
 
-                          if (childbirthString[2] != undefined) {
-                              that.patientInfo.pregnantTime = childbirthString[2];
-                          } else {
-                              that.patientInfo.pregnantTime = " ";
-                          }
+                            if (childbirthString[2] != undefined) {
+                                that.patientInfo.pregnantTime = childbirthString[2];
+                            } else {
+                                that.patientInfo.pregnantTime = " ";
+                            }
 
-                          if (childbirthString[3] != undefined) {
-                              that.patientInfo.childbirthTime = childbirthString[3];
-                          } else {
-                              that.patientInfo.childbirthTime = " ";
-                          }
-                      }
-                  } else if (that.patientInfo.sex == 0) {
-                      that.patientInfo.sexinfo = "未知";
-                      that.hideFemalePart = false;
-                  }
-              }
+                            if (childbirthString[3] != undefined) {
+                                that.patientInfo.childbirthTime = childbirthString[3];
+                            } else {
+                                that.patientInfo.childbirthTime = " ";
+                            }
+                        }
+                    } else if (that.patientInfo.sex == 0) {
+                        that.patientInfo.sexinfo = "未知";
+                        that.hideFemalePart = false;
+                    }
+                    if (!util.isObject(that.patientInfo.birth_place)) {
+                        that.patientInfo.birth_place = {provincestr: "", citystr: ''};
+                    }
+                    if (!util.isObject(that.patientInfo.address)) {
+                        that.patientInfo.address = {provincestr: '', citystr: ''};
+                    }
+                    if (!util.isArray(that.patientInfo.other_contacts)) {
+                        that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
+                    if (that.patientInfo.other_contacts.lengt == 0) {
+                        that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                    }
+                }
             })
-            if (!util.isObject(that.patientInfo.birth_place)) {
-                that.patientInfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientInfo.address)) {
-                that.patientInfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientInfo.other_contacts)) {
-                that.patientInfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-            }
         },
         goPatient: function() {
             var diseaseId = common.getDiseaseId();

@@ -199,18 +199,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="bottom-solid">
+            </div>
+            <div>
+                <div class="bg-caption-padding"><a class="fa fa-plus-square-o" style="cursor: pointer; text-decoration: none" @click="moreOtherContacts"></a>备用联系人
+                </div>
+                <div v-for="(item, index) in patientinfo.other_contacts" class="bottom-dashed">
                     <div class="row padding-5px">
                         <div class="col-lg-4 col-sm-4">
-                            <label class="col-lg-3 col-sm-3">备用联系人</label>
+                            <div class="col-lg-3">
+                                <a class="fa fa-minus-square-o" style="text-decoration: none; cursor: pointer" @click="deleteOtherContacts(index)"></a>
+                                <label>姓名</label>
+                            </div>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input class="form-control" type="text" v-model="patientinfo.other_contacts[0].name">
+                                <input class="form-control" type="text" v-model="item.name">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3 clear-padding-left">关系</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <select class="form-control clearMargin" v-model="patientinfo.other_contacts[0].shipstr">
+                                <select class="form-control clearMargin" v-model="item.shipstr">
                                     <option disabled="disabled" value="">请选择--</option>
                                     <option value="配偶">配偶</option>
                                     <option value="父子">父子</option>
@@ -227,7 +234,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3 clear-padding-left">手机</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input name="other_contacts_mobile" class="form-control" type="text" v-model="patientinfo.other_contacts[0].mobile">
+                                <input :name="'spare_contacts_mobile' + index" class="form-control" type="text" v-model="item.mobile">
                             </div>
                         </div>
                     </div>
@@ -997,6 +1004,20 @@ export default {
         'breadcrumb': require('../../components/BreadCrumb.vue')
     },
     methods: {
+        moreOtherContacts: function() {
+            var obj = {
+                name: '',
+                shipstr: '',
+                mobile: '',
+            }
+            this.patientinfo.other_contacts.push(obj);
+            console.log(this.patientinfo.other_contacts);
+        },
+        deleteOtherContacts: function(index) {
+            if (this.patientinfo.other_contacts.length > 1) {
+                this.patientinfo.other_contacts.splice(index, 1);
+            }
+        },
         getFamilyDiseases: function() {
             var family_history = [];
             var that = this;
@@ -1145,25 +1166,22 @@ export default {
                 return;
             }
             //校验备用联系人手机号
-            if ($.trim(this.patientinfo.other_contacts[0].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[0].mobile)) {
-                this.$message({
-                  showClose: true,
-                  message: '请输入正确的备用联系人号码',
-                  type: 'error',
-                  onClose: () => {
-                      $("input[name='spare_contacts_mobile']").focus();
-                  }
-                });
-                return;
+            for (var i = 0; i < this.patientinfo.other_contacts.length; i++) {
+                if( $.trim(this.patientinfo.other_contacts[i].mobile) != "" && !rule.checkPhone(this.patientinfo.other_contacts[i].mobile)){
+                    this.$message({
+                        showClose: true,
+                        message: '请输入正确的备用联系人号码',
+                        type: 'error',
+                        onClose: () => {
+                            $("input[name='spare_contacts_mobile"+i+"']").focus();
+                        }
+                    })
+                    return;
+                }
             }
 
             this.patientinfo.smoke_history.second = this.environment_touch_checkbox.join(',');
             this.patientinfo.smoke_history.fourth = this.smoke_one + "," + this.smoke_two + "," + this.smoke_three;
-
-            // console.log('smoke_history', this.patientinfo.smoke_history);
-            // console.log('self_history', this.patientinfo.self_history);
-            // console.log('past_main_history', this.past_main_history);
-            // console.log('past_other_history', this.patientinfo.past_other_history);
 
             var family_history = this.getFamilyDiseases();
 
@@ -1415,36 +1433,38 @@ export default {
             }
             if (this.isModify()) {
                 api.http({
-                  url: 'patient.patientinfo',
-                  data: {
-                      patientid: that.patientid,
-                  },
-                  successCallback: function(d) {
-                      that.handleSuccessData(that, d);
-                  }
+                    url: 'patient.patientinfo',
+                    data: {
+                        patientid: that.patientid,
+                    },
+                    successCallback: function(d) {
+                        that.handleSuccessData(that, d);
+                        if (!util.isObject(that.patientinfo.birth_place)) {
+                            that.patientinfo.birth_place = {provincestr: "", citystr: ''};
+                        }
+                        if (!util.isObject(that.patientinfo.address)) {
+                            that.patientinfo.address = {provincestr: '', citystr: ''};
+                        }
+                        if (!util.isArray(that.patientinfo.other_contacts)) {
+                            that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                        }
+                        if (!util.isObject(that.patientinfo.native_place)) {
+                            that.patientinfo.birth_place = {provincestr: '', citystr: ''};
+                        }
+                        if (!util.isObject(that.patientinfo.blood_type)) {
+                            that.patientinfo.blood_type = {first: '', second: ''};
+                        }
+                        if (!util.isObject(that.patientinfo.self_history)) {
+                            that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
+                        }
+                        if (!util.isObject(that.patientinfo.smoke_history)) {
+                            that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
+                        }
+                        if (that.patientinfo.other_contacts.length == 0) {
+                            that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
+                        }
+                    }
                 })
-            }
-
-            if (!util.isObject(that.patientinfo.birth_place)) {
-                that.patientinfo.birth_place = {provincestr: "", citystr: ''};
-            }
-            if (!util.isObject(that.patientinfo.address)) {
-                that.patientinfo.address = {provincestr: '', citystr: ''};
-            }
-            if (!util.isArray(that.patientinfo.other_contacts)) {
-                that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-            }
-            if (!util.isObject(that.patientinfo.native_place)) {
-                that.patientinfo.birth_place = {provincestr: '', citystr: ''};
-            }
-            if (!util.isObject(that.patientinfo.blood_type)) {
-                that.patientinfo.blood_type = {first: '', second: ''};
-            }
-            if (!util.isObject(that.patientinfo.self_history)) {
-                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
-            }
-            if (!util.isObject(that.patientinfo.smoke_history)) {
-                that.patientinfo.self_history = {first: '', second: '', third: '', fourth: ''};
             }
         }
 
