@@ -4,7 +4,7 @@
             <mt-search v-model="patient_name" :show="true" v-on:keyup.13.native="doSearch">
                 <div class="body-container">
                     <ul v-infinite-scroll="loadMore" :infinite-scroll-disabled="true" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
-                        <li class="item-box" v-for="patient in patients" @click="goPatientPipeList(patient)">
+                        <li class="item-box" v-for="patient in patients" @touchstart="goPatientDetail(patient)">
                                 <div class="item-box-header">
                                     <span>{{patient.name}}</span>
                                     <span style="float: right">{{patient.disease_name}}</span>
@@ -44,9 +44,9 @@
             }
         },
         methods: {
-            goPatientPipeList: function(patient) {
+            goPatientDetail: function(patient) {
                 console.log(patient);
-                this.$router.push({name: 'patient-pipelist', params:{'patientid': patient.patientid}})
+                this.$router.push({name: 'patient-main', params:{'patientid': patient.patientid}})
             },
             clickdiv: function() {
                 console.log('aaaaa');

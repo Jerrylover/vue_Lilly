@@ -36,7 +36,7 @@
                                 <th width="30%">{{revisittkt.patient.agestr}}</td>
                             </tr>
                             <tr>
-                                <td colspan="3" style="text-align:left">期望解决的问题:&nbsp;&nbsp;&nbsp;{{revisittkt.patient_content}}</td>
+                                <td colspan="3" style="text-align:left"><div>就诊卡号:&nbsp;&nbsp;&nbsp;{{revisittkt.patientcardno}}</div><div>期望解决的问题:&nbsp;&nbsp;&nbsp;{{revisittkt.patient_content}}</div></td>
                             </tr>
                         </table>
                     </div>
@@ -85,8 +85,8 @@
                     if (response.errno == 0) {
                         var data = response.data;
                         self.days = data.days;
-                        self.days = [];
-                        console.log(self.days);
+                        // self.days = [];
+                        // console.log(self.days);
                     }
                 })
             },
@@ -124,6 +124,7 @@
         watch: {
             'selected': function(newValue, oldValue){
                 var self = this;
+                console.log('newvalue:', newValue, '------oldvalue:', oldValue);
                 if (newValue == 3) {
                     this.showSchedule = true;
                     var url = api.get('appointment.schedulelist');

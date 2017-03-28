@@ -25,6 +25,7 @@ var urls = {
     },
     'bedtkt': {
         'info': '/bedtkt/info',
+        'patienthistory': '/bedtkt/patienthistory',
     },
     'appointment': {
         'list': '/revisittkt/list',
@@ -32,7 +33,8 @@ var urls = {
     },
     'patient': {
         'list': '/patient/list',
-        'info': '/patient/info'
+        'info': '/patient/info',
+        'allinfo': '/patient/allinfo', 
     },
     'doctor': {
         'config': '/doctor/config',

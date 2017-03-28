@@ -16,7 +16,7 @@ router.push({
 })
 router.beforeEach((to, from, next) => {
     var openid = to.query.openid;
-    console.log(openid);
+    // console.log(openid);
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }
@@ -24,6 +24,7 @@ router.beforeEach((to, from, next) => {
     queryString = encodeURIComponent(queryString);
     common.checkOpenid(queryString);
     if (to.meta.requireBind === true) {
+        console.log('22222');
         var status = common.checkLoginSync(queryString);
         if (status === true) {
             next();
@@ -32,6 +33,7 @@ router.beforeEach((to, from, next) => {
             next({name: 'doctor-bind'});
         }
     }else {
+        console.log(22222);
         next();
     }
 })

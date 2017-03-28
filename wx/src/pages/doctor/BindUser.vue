@@ -115,6 +115,22 @@
             },
             clickPassword: function() {
                 this.errmsg = '';
+            },
+            getDoctorInfo: function() {
+                var doctorInfoUrl = api.get('doctor.info');
+                var params = {
+                    openid: openid,
+                }
+                common.post(doctorInfoUrl, params, function(response){
+                    if (response.errno == 0) {
+                        console.log('doctor-info', response.data);
+                        next(vm => {
+                            vm.openid = openid;
+                            vm.isbind = isbind;
+                            vm.doctor = response.data.doctor;
+                        })
+                    }
+                })
             }
         },
         watch: {
@@ -132,7 +148,7 @@
                 console.log('hahaha');
             }
         },
-        beforeRouteEnter(to, from, next) {
+        created: function() {
             var self = this;
             var openid = '';
             var isbind = '';
@@ -144,23 +160,33 @@
             common.post(url, params, function(response){
                 if (response.errno == 0) {
                     isbind = response.data.isbind;
-                }
-            })
-            var doctorInfoUrl = api.get('doctor.info');
-            var params = {
-                openid: openid,
-            }
-            common.post(doctorInfoUrl, params, function(response){
-                if (response.errno == 0) {
-                    console.log('doctor-info', response.data);
-                    next(vm => {
-                        vm.openid = openid;
-                        vm.isbind = isbind;
-                        vm.doctor = response.data.doctor;
-                    })
+                    console.log('isbind', isbind);
+                    if (isbind == 1) {
+                        this.getDoctorInfo();
+                    }
                 }
             })
         }
+        // beforeRouteEnter(to, from, next) {
+        //     var self = this;
+        //     var openid = '';
+        //     var isbind = '';
+        //     openid = localStorage.getItem('_openid_');
+        //     var url = api.get('user.isbind');
+        //     var params = {
+        //         openid: openid,
+        //     }
+        //     common.post(url, params, function(response){
+        //         if (response.errno == 0) {
+        //             isbind = response.data.isbind;
+        //             console.log('isbind', isbind);
+        //             if (isbind == 1) {
+        //                 this.getDoctorInfo();
+        //             }
+        //         }
+        //     })
+            
+        // }
     }
 </script>
 <style scoped>

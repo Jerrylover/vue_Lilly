@@ -44,6 +44,16 @@ module.exports =
         component: Patient,
         children: [
             {
+                path: ':patientid/main',
+                name: 'patient-main',
+                component: resolve => require(['../pages/patient/PatientMain.vue'], resolve)
+            },
+            {
+                path: ':patientid/baseinfo',
+                name: 'patient-baseinfo',
+                component: resolve => require(['../pages/patient/BaseInfo.vue'], resolve)
+            },
+            {
                 path: ':patientid/pipelist',
                 name: 'patient-pipelist',
                 component: resolve => require(['../pages/patient/PipeList.vue'], resolve)
@@ -71,6 +81,11 @@ module.exports =
                 path: 'list',
                 name: 'bedtkt-list',
                 component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
+            },
+            {
+                path: ':patientid/patienthistory',
+                name: 'bedtkt-patienthistory',
+                component: resolve => require(['../pages/bedtkt/PatientHistory.vue'], resolve)
             },
             {
                 path: 'historylist',
