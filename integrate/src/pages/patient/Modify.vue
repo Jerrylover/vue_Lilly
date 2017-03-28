@@ -755,9 +755,6 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
         'breadcrumb': require('../../components/BreadCrumb.vue'),
         calendar: function(resolve) {
             require(['../../components/calendar.vue'], resolve);
@@ -933,61 +930,58 @@ export default {
             // console.log('childbearing_history', this.childbearing_history);
             // console.log('allergy_history', this.patientinfo.allergy_history);
 
-            $.ajax({
-                    url: api.get(httpurl),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: this.patientid,
-                        name: this.patientinfo.name,
-                        out_case_no: this.patientinfo.out_case_no,
-                        sex: this.patientinfo.sex,
-                        birthday: this.patientinfo.birthday,
-                        nation: this.patientinfo.nation,
-                        career: this.patientinfo.career,
-                        prcrid: this.patientinfo.prcrid,
-                        marry_status: this.patientinfo.marry_status,
-                        address: this.patientinfo.address,
-                        birth_place: this.patientinfo.birth_place,
-                        mobile: this.patientinfo.mobile,
-                        email: this.patientinfo.email,
-                        other_contacts: this.patientinfo.other_contacts,
-                        create_doc_date: this.patientinfo.create_doc_date,
-                        past_main_history: this.past_main_history,
-                        past_other_history: this.patientinfo.past_other_history,
-                        family_history: this.patientinfo.family_history,
-                        menstruation_history: this.menstruation_history,
-                        childbearing_history: this.childbearing_history,
-                        allergy_history: this.patientinfo.allergy_history,
-                    },
-                })
-                .done(function(response) {
-                    var data = response.data;
-                    if (response.errno != 0 && response.errno != -10) {
-                        that.$message({
-                          showClose: true,
-                          message: response.errmsg,
-                          type: 'error',
-                          onClose: () => {
-                              $("input[name='out-case-no']").focus();
-                          }
-                        });
-                    } else {
-                        that.$message({
-                          showClose: true,
-                          message: '保存成功',
-                          type: 'success',
-                          duration: 1500,
-                          onClose: () => {
-                              if (typeof data.patientid != ``) {
-                                  that.$router.push({
-                                      path: '/patient/' + data.patientid + '/baseinfo'
-                                  })
-                              }
-                          }
-                        });
+            api.http({
+              url: httpurl,
+              data: {
+                  patientid: this.patientid,
+                  name: this.patientinfo.name,
+                  out_case_no: this.patientinfo.out_case_no,
+                  sex: this.patientinfo.sex,
+                  birthday: this.patientinfo.birthday,
+                  nation: this.patientinfo.nation,
+                  career: this.patientinfo.career,
+                  prcrid: this.patientinfo.prcrid,
+                  marry_status: this.patientinfo.marry_status,
+                  address: this.patientinfo.address,
+                  birth_place: this.patientinfo.birth_place,
+                  mobile: this.patientinfo.mobile,
+                  email: this.patientinfo.email,
+                  other_contacts: this.patientinfo.other_contacts,
+                  create_doc_date: this.patientinfo.create_doc_date,
+                  past_main_history: this.past_main_history,
+                  past_other_history: this.patientinfo.past_other_history,
+                  family_history: this.patientinfo.family_history,
+                  menstruation_history: this.menstruation_history,
+                  childbearing_history: this.childbearing_history,
+                  allergy_history: this.patientinfo.allergy_history,
+              },
+              successCallback: function(d) {
+                  var data = d.data;
+                  that.$message({
+                    showClose: true,
+                    message: '保存成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                        if (typeof data.patientid != ``) {
+                            that.$router.push({
+                                path: '/patient/' + data.patientid + '/baseinfo'
+                            })
+                        }
                     }
-                })
+                  });
+              },
+              errorCallback: function(d) {
+                  that.$message({
+                    showClose: true,
+                    message: d.errmsg,
+                    type: 'error',
+                    onClose: () => {
+                        $("input[name='out-case-no']").focus();
+                    }
+                  });
+              }
+            })
         },
         selectChangeForBirthPlaceProvince: function(e) {
             this.currentBirthPlaceProvinceIndex = e.target.selectedIndex -1;
@@ -1035,127 +1029,126 @@ export default {
                 }
             }
             if (that.isModify()) {
-                $.ajax({
-                    url: api.get('patient.patientinfo'),
-                    type: "post",
-                    dataType: 'json',
+                api.http({
+                    url: 'patient.patientinfo',
                     data: {
                         patientid: that.patientid,
-                    }
-                }).done(function(response) {
-                    that.patientinfo = response.data;
-                    if (that.patientinfo.birthday == '0000-00-00') {
-                        that.patientinfo.birthday = '';
-                    }
-                    if (that.patientinfo.create_doc_date == '0000-00-00') {
-                        that.patientinfo.create_doc_date = '';
-                    }
-                     if (that.patientinfo.firstMenstruationAge == '0000-00-00') {
-                        that.patientinfo.firstMenstruationAge = '';
-                    }
-                    if ($.trim(that.patientinfo.past_main_history) != "") {
-                        var other_input  = '';
-                        var index = that.patientinfo.past_main_history.indexOf("+");
-                        if (index > -1) {
-                            that.other_input_checkbox = true;
-                            that.other_input = that.patientinfo.past_main_history.substring(index + 1, that.patientinfo.past_main_history.length);
-                        }else {
-                            that.other_input_checkbox = false;
-                            that.other_input = "";
+                    },
+                    successCallback: function(d) {
+                        that.patientinfo = d.data;
+                        if (that.patientinfo.birthday == '0000-00-00') {
+                            that.patientinfo.birthday = '';
                         }
-                        index = index > -1 ? index : that.patientinfo.past_main_history.length;
-                        var tempString = that.patientinfo.past_main_history.substring(0, index);
-                        var arr = tempString.split("|");
-                        that.past_main_history_checkboxs = arr;
-                    }
-
-                    for (var i = 0; i < provinceAndCityList.length; i++) {
-                        if (provinceAndCityList[i].province == that.patientinfo.provincestr) {
-                            that.currentProvinceIndex = i-1;
-                            break;
+                        if (that.patientinfo.create_doc_date == '0000-00-00') {
+                            that.patientinfo.create_doc_date = '';
                         }
-                    }
-
-                    if ($.trim(that.patientinfo.menstruation_history) != "") {
-                        var menstruation_historyArr = that.patientinfo.menstruation_history.split('|');
-                        console.log(menstruation_historyArr);
-                        if (menstruation_historyArr[0] != undefined) {
-                            that.firstMenstruationAge = menstruation_historyArr[0];
-                        } else {
-                            that.firstMenstruationAge = " ";
+                         if (that.patientinfo.firstMenstruationAge == '0000-00-00') {
+                            that.patientinfo.firstMenstruationAge = '';
                         }
-                        if (menstruation_historyArr[1] != undefined) {
-                            that.menstruationStatus = menstruation_historyArr[1];
-                            if (that.menstruationStatus == '正常') {
-                                that.menstruationNormalClick();
+                        if ($.trim(that.patientinfo.past_main_history) != "") {
+                            var other_input  = '';
+                            var index = that.patientinfo.past_main_history.indexOf("+");
+                            if (index > -1) {
+                                that.other_input_checkbox = true;
+                                that.other_input = that.patientinfo.past_main_history.substring(index + 1, that.patientinfo.past_main_history.length);
                             }else {
-                                that.menstruationStopClick();
+                                that.other_input_checkbox = false;
+                                that.other_input = "";
                             }
-                        } else {
-                            that.menstruationStatus = " ";
+                            index = index > -1 ? index : that.patientinfo.past_main_history.length;
+                            var tempString = that.patientinfo.past_main_history.substring(0, index);
+                            var arr = tempString.split("|");
+                            that.past_main_history_checkboxs = arr;
                         }
 
-                        if (menstruation_historyArr[2] != undefined && menstruation_historyArr[1] == '正常') {
-                            that.menstruationHoldOnDays = menstruation_historyArr[2];
-                            that.menstruationPeriod = menstruation_historyArr[3];
-                        } else if (menstruation_historyArr[2] != undefined && menstruation_historyArr[1] == "停经"){
-                            that.picked1 = menstruation_historyArr[2];
-                            if (menstruation_historyArr[2] == '生理性') {
-                                that.menstruationStopTime = menstruation_historyArr[3];
-                            }else if(menstruation_historyArr[2] == '病理性') {
-                                that.menstruationStopReason = menstruation_historyArr[3];
+                        for (var i = 0; i < provinceAndCityList.length; i++) {
+                            if (provinceAndCityList[i].province == that.patientinfo.provincestr) {
+                                that.currentProvinceIndex = i-1;
+                                break;
                             }
                         }
-                    }
-                    if ($.trim(that.patientinfo.childbearing_history) != "") {
-                        var childbearing_historyArr = that.patientinfo.childbearing_history.split('|');
 
-                        if (childbearing_historyArr[0] != undefined) {
-                            that.pregnantTimes = childbearing_historyArr[0];
-                        } else {
-                            that.childbirth = " ";
+                        if ($.trim(that.patientinfo.menstruation_history) != "") {
+                            var menstruation_historyArr = that.patientinfo.menstruation_history.split('|');
+                            console.log(menstruation_historyArr);
+                            if (menstruation_historyArr[0] != undefined) {
+                                that.firstMenstruationAge = menstruation_historyArr[0];
+                            } else {
+                                that.firstMenstruationAge = " ";
+                            }
+                            if (menstruation_historyArr[1] != undefined) {
+                                that.menstruationStatus = menstruation_historyArr[1];
+                                if (that.menstruationStatus == '正常') {
+                                    that.menstruationNormalClick();
+                                }else {
+                                    that.menstruationStopClick();
+                                }
+                            } else {
+                                that.menstruationStatus = " ";
+                            }
+
+                            if (menstruation_historyArr[2] != undefined && menstruation_historyArr[1] == '正常') {
+                                that.menstruationHoldOnDays = menstruation_historyArr[2];
+                                that.menstruationPeriod = menstruation_historyArr[3];
+                            } else if (menstruation_historyArr[2] != undefined && menstruation_historyArr[1] == "停经"){
+                                that.picked1 = menstruation_historyArr[2];
+                                if (menstruation_historyArr[2] == '生理性') {
+                                    that.menstruationStopTime = menstruation_historyArr[3];
+                                }else if(menstruation_historyArr[2] == '病理性') {
+                                    that.menstruationStopReason = menstruation_historyArr[3];
+                                }
+                            }
                         }
-                        if (childbearing_historyArr[1] != undefined) {
-                            that.childbirthTimes = childbearing_historyArr[1];
-                        } else {
-                            that.childbirthTimes = " ";
+                        if ($.trim(that.patientinfo.childbearing_history) != "") {
+                            var childbearing_historyArr = that.patientinfo.childbearing_history.split('|');
+
+                            if (childbearing_historyArr[0] != undefined) {
+                                that.pregnantTimes = childbearing_historyArr[0];
+                            } else {
+                                that.childbirth = " ";
+                            }
+                            if (childbearing_historyArr[1] != undefined) {
+                                that.childbirthTimes = childbearing_historyArr[1];
+                            } else {
+                                that.childbirthTimes = " ";
+                            }
+
+                            if (childbearing_historyArr[2] != undefined) {
+                                that.pregnantTime = childbearing_historyArr[2];
+                            } else {
+                                that.pregnantTime = " ";
+                            }
+
+                            if (childbearing_historyArr[3] != undefined) {
+                                that.childbirthTime = childbearing_historyArr[3];
+                            } else {
+                                that.childbirthTime = " ";
+                            }
+                        }
+                        //处理二个地区的二级数据
+                        for (var i = 0; i < provinceAndCityList.length; i++) {
+                            if (provinceAndCityList[i].province == that.patientinfo.birth_place.provincestr) {
+                                that.currentBirthPlaceProvinceIndex = i;
+                            }
+                            if (provinceAndCityList[i].province == that.patientinfo.address.provincestr) {
+                                that.currentAddressProvinceIndex = i;
+                            }
                         }
 
-                        if (childbearing_historyArr[2] != undefined) {
-                            that.pregnantTime = childbearing_historyArr[2];
-                        } else {
-                            that.pregnantTime = " ";
+                        if (!util.isObject(that.patientinfo.birth_place)) {
+                            that.patientinfo.birth_place = {provincestr: "", citystr: ''};
+                        }
+                        if (!util.isObject(that.patientinfo.address)) {
+                            that.patientinfo.address = {provincestr: '', citystr: ''};
                         }
 
-                        if (childbearing_historyArr[3] != undefined) {
-                            that.childbirthTime = childbearing_historyArr[3];
-                        } else {
-                            that.childbirthTime = " ";
+                        if (!util.isArray(that.patientinfo.other_contacts)) {
+                            that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
                         }
-                    }
-                    //处理二个地区的二级数据
-                    for (var i = 0; i < provinceAndCityList.length; i++) {
-                        if (provinceAndCityList[i].province == that.patientinfo.birth_place.provincestr) {
-                            that.currentBirthPlaceProvinceIndex = i;
+
+                        if (that.patientinfo.other_contacts.length == 0) {
+                            that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
                         }
-                        if (provinceAndCityList[i].province == that.patientinfo.address.provincestr) {
-                            that.currentAddressProvinceIndex = i;
-                        }
-                    }
-
-                    if (!util.isObject(that.patientinfo.birth_place)) {
-                        that.patientinfo.birth_place = {provincestr: "", citystr: ''};
-                    }
-                    if (!util.isObject(that.patientinfo.address)) {
-                        that.patientinfo.address = {provincestr: '', citystr: ''};
-                    }
-
-                    if (!util.isArray(that.patientinfo.other_contacts)) {
-                        that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
-                    }
-
-                    if (that.patientinfo.other_contacts.length == 0) {
-                        that.patientinfo.other_contacts = [{name: '', shipstr: '', mobile: ''}];
                     }
                 })
             }

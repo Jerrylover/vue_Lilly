@@ -121,6 +121,7 @@ export default {
         Bus.$emit('page-click', page)
         var query = {}
         for (var i in this.$route.query) {
+          if (i == 'fc_token') continue
           query[i] = this.$route.query[i]
         }
         query.pagenum = page;

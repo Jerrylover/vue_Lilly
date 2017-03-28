@@ -4,6 +4,7 @@ import util from '../lib/util.js'
 import cookie from '../lib/cookie.js'
 import common from '../lib/common.js'
 import Bus from '../lib/bus.js'
+import md5 from 'md5'
 
 var urls = {
     'user': {
@@ -196,6 +197,22 @@ export default {
             return false
         }
         var urlString = this.get(url)
+
+        //为每次提交添加一个随机值，防止CSRF攻击
+        var fc_token = cookie.get('fc_token') || ''
+        if (!fc_token) {
+            fc_token = md5(Math.random())
+            var d = new Date()
+            var hour = new Date(d.getTime() + 3600 * 1000).getHours()
+            var s = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + hour + ':' + d.getMinutes() + ':' + d.getSeconds()
+
+            cookie.set('fc_token', fc_token, {
+                expires: s,
+                domain: config.domain,
+                path: '/'
+            })
+        }
+        data.fc_token = fc_token
 
         $.ajax({
             url: urlString,

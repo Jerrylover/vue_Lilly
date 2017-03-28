@@ -1,4 +1,5 @@
 <template>
+<!--暂时不用-->
     <app-header></app-header>
     <div class="container-fluid content">
         <div class="row">
@@ -106,24 +107,17 @@
         methods: {
             fetchData: function() {
                 var self = this;
-                $.ajax({
-                    url: api.get('patient.medicalpic'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        patientid: self.patientid,
-                    }
-                }).done(function(response) {
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.tags = data.tags;
-                        self.wxpicmsgs = data.wxpicmsgs;
-                        self.patient = data.patient;
-                        console.log(data);
-                        console.log(self.wxpicmsgs);
-                    }else {
-                        self.$dispatch('show-alert', response.errmsg);
-                    }
+                api.http({
+                  url: 'patient.medicalpic',
+                  data: {
+                    patientid: self.patientid
+                  },
+                  successCallback: function(d) {
+                      var data = response.data;
+                      self.tags = data.tags;
+                      self.wxpicmsgs = data.wxpicmsgs;
+                      self.patient = data.patient;
+                  }
                 })
             },
             deletePicture: function(index) {

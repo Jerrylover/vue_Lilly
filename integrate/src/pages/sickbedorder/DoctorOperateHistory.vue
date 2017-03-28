@@ -69,7 +69,7 @@
                     <th>性别</th>
                     <th>年龄</th>
                     <th>手机号</th>
-                    <th>诊断</th>
+                    <th class="col-sm-5">诊断</th>
                     <th>所在省份</th>
                     <th>操作日期</th>
                     <th>预约日期</th>
@@ -82,7 +82,7 @@
                     <td>{{patient.name}}</td>
                     <td>{{patient.sex}}</td>
                     <td>{{patient.age}}</td>
-                    <td>{{patient.mobile}}</td>
+                    <td>{{patient.mobile | filterMobile}}</td>
                     <td>{{patient.complication}}</td>
                     <td>{{patient.provincestr}}</td>
                     <td>{{patient.notify_date}}</td>
@@ -147,25 +147,20 @@
         methods: {
             fetchData: function(){
                 var self = this;
-                $.ajax({
-                    url: api.get('sickbedorder.operatehistorylist'),
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        fromdate: self.fromdate,
-                        todate: self.todate,
-                        sex: self.sex,
-                        patient_name: self.patient_name,
-                        result_type: self.result_type,
-                    }
-                }).done(function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        self.total = data.total - '';
-                        self.bedtkts = data.bedtkts;
-                    }else {
-                        self.$dispatch('show-alert', response.errmsg);
-                    }
+                api.http({
+                  url: 'sickbedorder.operatehistorylist',
+                  data: {
+                      fromdate: self.fromdate,
+                      todate: self.todate,
+                      sex: self.sex,
+                      patient_name: self.patient_name,
+                      result_type: self.result_type,
+                  },
+                  successCallback: function(d) {
+                    var data = d.data;
+                    self.total = data.total - '';
+                    self.bedtkts = data.bedtkts;
+                  }
                 })
             },
             doSearch: function(e) {
@@ -173,6 +168,7 @@
                 var self = this;
                 var query = {}
                 for (var i in this.$route.query) {
+                  if (i == 'fc_token') continue
                   query[i] = this.$route.query[i]
                 }
                 query.fromdate = this.fromdate;
@@ -208,6 +204,11 @@
                 }
                 this.fetchData();
             },
+        },
+        filters: {
+            filterMobile: function(val) {
+                return val.replace(/\;/g, '')
+            }
         },
         created: function() {
             this.initPage()
