@@ -120,9 +120,6 @@ export default {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'), //头组件
-        'visitHeader': require('../../components/VisitHeader.vue'),
-        'appFooter': require('../../components/Footer.vue'), //尾组件
         'navmenu': require('../../components/NavMenu.vue'),
         'breadcrumb': require('../../components/BreadCrumb.vue'),
         'fcmenu': function(resolve) {

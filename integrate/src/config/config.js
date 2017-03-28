@@ -6,7 +6,7 @@ var domain = 'fangcunyisheng.com';
 if (process.env.NODE_ENV === 'development') {
     host = '//admin.fangcunhulian.cn';
 
-    dev = '?dev_user=fanghanwen&display=json';
+    dev = '?dev_user=chenshigang&display=json';
     domain = 'localhost';
     // domain = '192.168.1.108'
 } else if (process.env.NODE_ENV == 'testing') {

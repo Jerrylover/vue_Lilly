@@ -275,9 +275,6 @@ span.title {
         }
     },
     components: {
-        'appHeader': require('../../components/Header.vue'),
-        'appFooter': require('../../components/Footer.vue'),
-        'visitHeader': require('../../components/VisitHeader.vue'),
         'breadcrumb': require('../../components/BreadCrumb.vue'),
     },
     methods: {

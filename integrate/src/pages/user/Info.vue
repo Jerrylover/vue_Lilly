@@ -58,17 +58,15 @@ export default {
     methods: {
         fetchAssistant: function() {
             var that = this;
-            $.ajax({
-                url: api.get('user.info'),
-                type: 'POST',
-                dataType: 'json',
-                data: {
-
-                },
-            }).done(function(d) {
-                if (d.data) {
-                    that.myuser = d.data;
-                }
+            api.http({
+              url: 'user.info',
+              data: {
+              },
+              successCallback: function(d) {
+                  if (d.data) {
+                      that.myuser = d.data;
+                  }
+              }
             })
         },
     },

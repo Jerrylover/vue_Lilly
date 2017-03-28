@@ -111,6 +111,7 @@
 <script>
     import api from '../../config/api.js';
     import libpatient from '../../lib/patient.js'
+    import util from '../../lib/util.js'
     export default {
         data: function() {
             return {
@@ -208,7 +209,9 @@
                   successCallback: function(d) {
                       var data = d.data;
                       self.patient = data;
-                      self.sendtoopenid = self.patient.users[0].openid;
+                      if (util.isArray(self.patient.users)) {
+                           self.sendtoopenid = self.patient.users[0].openid;
+                      }
                   }
                 })
                 api.http({
@@ -217,7 +220,7 @@
                     patientid: self.patientid,
                   },
                   successCallback: function(d) {
-                      self.pipelist = d.data.list;
+                      self.pipelist = d.data.list || [];
                       for (var i = 0; i < self.pipelist.length; i++) {
                           self.pipelist[i].responseData = '';
                           self.pipelist[i].response = false;

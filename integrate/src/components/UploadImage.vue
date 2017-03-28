@@ -1,4 +1,5 @@
 <template>
+<!--暂时不用-->
 <div class="row" style="margin:0;padding-bottom:10px;margin-bottom:10px;border:1px solid #ccc;">
     <div style="margin-bottom: 20px">
         <input type="file" @change="onFileChange" multiple style="display: none;">
