@@ -63,6 +63,7 @@
             var self = this;
             var openid = localStorage.getItem('_openid_');
             var patientid = this.$route.params.patientid;
+            console.log('patientid',patientid);
             var url = api.get('patient.info');
             var params = {
                 openid: openid,

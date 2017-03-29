@@ -1,5 +1,5 @@
 <template>
-    <div class="book-sick-bed" style="background-color: #ddd; margin: 8px 0px;">
+    <div class="book-sick-bed" style="background-color: #ddd; margin: 8px -8px;">
         <mt-header fixed title="住院预约详情">
             <!-- <router-link to="/" slot="left">
                 <mt-button icon="back">返回</mt-button>
@@ -11,7 +11,7 @@
             --><a href="javascript:" :class="['navbar', {'selected': active=='female'}]" @click="clickFemale">女性患者</a>
         </div>
         <div style="margin-top: 90px;">
-        <div v-for="tkt in tktlist" style="text-align: left; background-color: #fff; padding: 5px; margin-bottom: 10px;" class="patientinfo">
+        <div v-for="tkt in tktlist" style="text-align: left; background-color: #fff; padding: 5px; margin-bottom: 5px;" class="patientinfo" @touchstart="enterBedtktMain(tkt)">
             <div>
                 <span class="left">姓名:&nbsp;&nbsp;{{tkt.name}}</span>
                 <span>应住院日期:&nbsp;&nbsp;{{tkt.plan_date}}</span>
@@ -24,22 +24,19 @@
                 <span class="left">年龄:&nbsp;&nbsp;{{tkt.age}}岁</span>
                 <span>近期居住地:&nbsp;&nbsp;{{tkt.address}}</span>
             </div>
-            <div class="doperation">
-                <a href="javascript:" style="background-color: #f06500" @click="clickRefuseBook(tkt)">拒绝入院</a><!--
-            --><a href="javascript:" style="background-color: #4799ff" @click="clickConfirmEnter(tkt)">确认入院</a><!--
-            --><a v-if="tkt.patient_status == 0" href="javascript:" style="background-color: #00ccff" @click="clickSendMsg(tkt)">发送入院通知</a><!--
-            --><a v-if="tkt.patient_status == 2" href="javascript:" style="background-color: #4bcc00" @click="clickPatientConfirmCanEnter(tkt)">患者确认可入院</a><!--
-            --><a v-if="tkt.patient_status == 3" href="javascript:" style="background-color: #f06500" @click="clickPatientRefuse(tkt)">患者无法入院</a><!--
-            --><a v-if="tkt.patient_status == 1" href="javascript:" style="background-color: #99cc00" @click="clickWaitPatientConfirm(tkt)">患者待确认</a>
-            </div>
+            <span>入院确认:</span>
+            <!-- <div class="doperation" style="font-size:0px;font-size: 0rem;">
+                <a href="javascript:" style="background-color: #f06500" @click="clickRefuseBook(tkt)">拒绝入院</a>
+                <a href="javascript:" style="background-color: #4799ff" @click="clickConfirmEnter(tkt)">确认入院</a>
+                <a v-if="tkt.patient_status == 0" href="javascript:" style="background-color: #00ccff" @click="clickSendMsg(tkt)">发送入院通知</a>
+                <a v-if="tkt.patient_status == 2" href="javascript:" style="background-color: #4bcc00" @click="clickPatientConfirmCanEnter(tkt)">患者确认可入院</a>
+                <a v-if="tkt.patient_status == 3" href="javascript:" style="background-color: #f06500" @click="clickPatientRefuse(tkt)">患者无法入院</a>
+                <a v-if="tkt.patient_status == 1" href="javascript:" style="background-color: #99cc00" @click="clickWaitPatientConfirm(tkt)">患者待确认</a>
+            </div> -->
         </div>
         <div style="position: none;margin-top: 200px; background-color: #fff">
             <span v-if="tktlist.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
         </div>
-        </div>
-        <div style="background-color: red; padding: 40px; width: 300px;">
-            <span style="font-size: 10px;">你们好吗</span>
-            <span style="font-size: 2rem">我还好</span>
         </div>
     </div>
 </template>
@@ -121,6 +118,9 @@
                 this.$router.push({
                     name: 'bedtkt-historylist',
                 })
+            },
+            enterBedtktMain: function(tkt) {
+                this.$router.push({name: 'bedtkt-main', params: {'bedtktid': tkt.id}, query: {'patientid': tkt.patientid}});
             }
         },
         created(){
@@ -136,6 +136,7 @@
                     self.tktlist_male = data.tktlist_male;
                     self.tktlist_female = data.tktlist_female;
                     self.tktlist = self.tktlist_male;
+                    console.log(self.tktlist);
                 }
             })
         }
@@ -167,6 +168,8 @@
     }
     .doperation a {
         display: inline-block;
+        font-size: 16px;
+        font-size: 1.6rem;
         padding: 5px 0px;
         text-align: center;
         color: #fff;

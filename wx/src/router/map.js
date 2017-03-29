@@ -83,6 +83,16 @@ module.exports =
                 component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
             },
             {
+                path: ':bedtktid/main',
+                name: 'bedtkt-main',
+                component: resolve => require(['../pages/bedtkt/BedtktMain.vue'], resolve)
+            },
+            {
+                path: ':bedtktid/applicationinfomation',
+                name: 'bedtkt-applicationinfomation',
+                component: resolve => require(['../pages/bedtkt/ApplicationInformation.vue'], resolve)
+            },
+            {
                 path: ':patientid/patienthistory',
                 name: 'bedtkt-patienthistory',
                 component: resolve => require(['../pages/bedtkt/PatientHistory.vue'], resolve)

@@ -117,18 +117,15 @@
                 this.errmsg = '';
             },
             getDoctorInfo: function() {
+                var self = this;
                 var doctorInfoUrl = api.get('doctor.info');
                 var params = {
-                    openid: openid,
+                    openid: this.openid,
                 }
                 common.post(doctorInfoUrl, params, function(response){
                     if (response.errno == 0) {
                         console.log('doctor-info', response.data);
-                        next(vm => {
-                            vm.openid = openid;
-                            vm.isbind = isbind;
-                            vm.doctor = response.data.doctor;
-                        })
+                        self.doctor = response.data.doctor;
                     }
                 })
             }
@@ -150,19 +147,17 @@
         },
         created: function() {
             var self = this;
-            var openid = '';
-            var isbind = '';
-            openid = localStorage.getItem('_openid_');
+            self.openid = localStorage.getItem('_openid_');
             var url = api.get('user.isbind');
             var params = {
-                openid: openid,
+                openid: self.openid,
             }
             common.post(url, params, function(response){
                 if (response.errno == 0) {
-                    isbind = response.data.isbind;
-                    console.log('isbind', isbind);
-                    if (isbind == 1) {
-                        this.getDoctorInfo();
+                    self.isbind = response.data.isbind;
+                    console.log('isbind', self.isbind);
+                    if (self.isbind == 1) {
+                        self.getDoctorInfo();
                     }
                 }
             })
