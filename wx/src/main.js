@@ -20,22 +20,22 @@ router.beforeEach((to, from, next) => {
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }
-    var queryString = window.location.search;
-    queryString = encodeURIComponent(queryString);
-    common.checkOpenid(queryString);
-    if (to.meta.requireBind === true) {
-        console.log('22222');
-        var status = common.checkLoginSync(queryString);
-        if (status === true) {
-            next();
-        }else {
-            console.log('test');
-            next({name: 'doctor-bind'});
-        }
-    }else {
-        console.log(22222);
-        next();
-    }
+    // var queryString = window.location.search;
+    // queryString = encodeURIComponent(queryString);
+    // common.checkOpenid(queryString);
+    // if (to.meta.requireBind === true) {
+    //     console.log('22222');
+    //     var status = common.checkLoginSync(queryString);
+    //     if (status === true) {
+    //         next();
+    //     }else {
+    //         console.log('test');
+    //         next({name: 'doctor-bind'});
+    //     }
+    // }else {
+    //     next();
+    // }
+    next();
 })
 new Vue({
   router,

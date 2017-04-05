@@ -16,36 +16,36 @@
         </div>
         <div class="currstatus" style="text-align: left; margin-top: 5px;">
             <span>最新状态</span>
-            <div :style="{border: bedtkt.color,borderWidth: '1px', borderStyle: 'solid'}" style="text-align: left; border-radius: 4px; margin-top: 10px; padding: 10px 10px 10px 0px; box-sizing: border-box">
-                <span :style="{backgroundColor: bedtkt.color}" style="color: #fff; padding: 5px 15px 5px 5px; box-sizing: border-box; border-top-right-radius: 18px; border-bottom-right-radius: 18px; display: inline-block">{{bedtkt.title}}</span>
+            <div :style="{borderColor: '#'+bedtkt.lastlog_color,borderWidth: '1px', borderStyle: 'solid'}" style="text-align: left; border-radius: 4px; margin-top: 10px; padding: 10px 10px 10px 0px; box-sizing: border-box" @click="clickLastStatus">
+                <span :style="{backgroundColor: '#'+bedtkt.lastlog_color}" style="color: #fff; padding: 5px 15px 5px 5px; box-sizing: border-box; border-top-right-radius: 18px; border-bottom-right-radius: 18px; display: inline-block">{{bedtkt.lastlog_title}}</span>
                 <div style="padding: 10px">
-                    <span v-html="bedtkt.content"></span>
+                    <p v-html="contentHandle(bedtkt.lastlog_content)"></p>
                 </div>
             </div>
         </div>
         <div class="operation" style="margin-top: 30px;">
             <div class="line">
-                <div @touchstart="clickApplicationInformation">
+                <div @click="clickApplicationInformation">
                     <img src="../../../static/baseinfo.png">
                     <span>入院资料</span>
                 </div>
-                <div @touchstart="clickPatientDetail">
+                <div @click="clickPatientDetail">
                     <img src="../../../static/user.png">
                     <span>患者详情</span>
                 </div>
             </div>
-            <div class="line">
-                <div style="width: 99%" @touchstart="clickSendMsg">
+            <div class="line" v-if="bedtkt.is_open != '0'">
+                <div style="width: 99%" @click="clickSendMsg">
                     <img src="../../../static/chat.png">
                     <span>询问患者是否可以入院</span>
                 </div>
             </div>
-            <div class="line">
-                <div @touchstart="clickConfirmEnter" style="border-color: #379a1f">
+            <div class="line" v-if="bedtkt.is_open != '0'">
+                <div @click="clickConfirmEnter" style="border-color: #379a1f">
                     <img src="../../../static/confirm.png">
                     <span>确认入院</span>
                 </div>
-                <div @touchstart="clickRefuseEnter" style="border-color: #d5743b">
+                <div @click="clickRefuseEnter" style="border-color: #d5743b">
                     <img src="../../../static/refuse.png">
                     <span>拒绝患者入院</span>
                 </div>
@@ -54,13 +54,17 @@
     </div>
 </template>
 <script>
+    import api from '../../config/api.js'
+    import common from '../../lib/common.js'
     module.exports = {
         data: function() {
             return {
+                openid: '',
                 patientid: '',
                 bedtktid: '',
 
                 bedtkt: {
+                    is_open: '0',
                     name: '111111111',
                     sex: '222222222',
                     mobile: '19234323455;12343231234',
@@ -70,14 +74,25 @@
             }
         },
         created: function() {
+            var self = this;
+            this.openid = localStorage.getItem('_openid_');
             this.bedtktid = this.$route.params.bedtktid;
             this.patientid = this.$route.query.patientid;
+            var url = api.get('bedtkt.one');
+            var params = {
+                bedtktid: this.bedtktid,
+                openid: this.openid,
+            }
+            common.post(url, params, function(response){
+                console.log(response);
+                self.bedtkt = response.data.bedtkt;
+            })
         },
         methods: {
             clickApplicationInformation: function() {
                 this.$router.push({
                     name: 'bedtkt-applicationinfomation', 
-                    query:{
+                    params:{
                         bedtktid: this.bedtktid,
                     }
                 })
@@ -94,7 +109,7 @@
                 this.$router.push({
                     name: 'patient-main',
                     params:{
-                        patientid: this.patientid,
+                        patientid: this.bedtkt.patientid,
                     }
                 })
             },
@@ -113,12 +128,29 @@
                         bedtktid: this.bedtktid,
                     }
                 })
+            },
+            clickLastStatus: function() {
+                this.$router.push({
+                    name: 'bedtktlog-list',
+                    query:{
+                        bedtktid: this.bedtktid,
+                    }
+                })
+            },
+            contentHandle: function(content) {
+                if (typeof content != 'undefined' && content != null) {
+                    return content.replace(/\n/g, '<br/>');
+                }
             }
+        },
+        mounted: function() {
+            document.title = "患者预约";
         }
     }
 </script>
 <style scoped>
     .patientinfo {
+        font-size: 14px;
         background-color: #1996ea;
         margin: -60px -8px 0px -8px;
         text-align: left;

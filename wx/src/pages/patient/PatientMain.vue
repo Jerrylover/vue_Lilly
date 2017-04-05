@@ -6,13 +6,18 @@
             <span>{{patient.agestr}}</span>
             <span>{{patient.disease_name}}</span>
         </div>
-        <div class="doing" style="padding: 10px 10px 10px 0px; border: 1px solid #ccc; margin-top: 10px;">
+        <div v-if="patient.service.bedtktid != '0' || patient.service.revisittktid != '0'" class="doing" style="padding: 10px 10px 10px 0px; border: 1px solid #ccc; margin-top: 10px; text-align: left">
             <div style="text-align: left; padding: 5px; padding-left: 0px;">
-                <span style="background-color: green; color: #fff; padding: 5px 10px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;">进行中</span>
+                <span style="background-color: #379a1f;color: #fff; padding: 5px 15px 5px 5px; box-sizing: border-box; border-top-right-radius: 18px; border-bottom-right-radius: 18px; display: inline-block">进行中</span>
             </div>
-            <div>
-                
+            <div style="padding: 5px;" v-if="patient.service.bedtktid != '0'">
+                <span style="padding: 5px 0px; display: inline-block">住院预约</span>
+                <a style="float: right; padding: 5px 5px; text-decoration: none" href="javascript:" @touchstart="clickBedtktInfo">查看</a>
             </div>
+            <!-- <div style="padding: 5px;" v-if="patient.service.revisittktid != '0'">
+                <span style="padding: 5px 0px; display: inline-block">复诊预约</span>
+                <a style="float: right; padding: 5px 5px; text-decoration: none" href="javascript:" @touchstart="clickRevisittktInfo">查看</a>
+            </div> -->
         </div>
         <div class="info" style="width: 100%">
             <div>
@@ -27,17 +32,6 @@
             </div>
             <div style="clear: both;"></div>
             <div>
-                <div @touchstart="clickRevisittkt(patient.id)">
-                    <img src="../../../static/revisittkt.png">
-                    <span>复诊预约</span>
-                </div>
-                <div @touchstart="clickChat(patient.id)">
-                    <img src="../../../static/chat.png">
-                    <span>诊后交流</span>
-                </div>
-            </div>
-            <div style="clear: both;"></div>
-            <div>
                 <div @touchstart="clickPaper(patient.id)">
                     <img src="../../../static/paper1.png" style="width: 64px">
                     <span>量表</span>
@@ -45,6 +39,17 @@
                 <div @touchstart="clickData(patient.id)">
                     <img src="../../../static/data.png">
                     <span>数据查询</span>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div>
+                <!-- <div @touchstart="clickRevisittkt(patient.id)">
+                    <img src="../../../static/revisittkt.png">
+                    <span>复诊预约</span>
+                </div> -->
+                <div @touchstart="clickChat(patient.id)" style="width: 100%; text-align: center">
+                    <img src="../../../static/chat.png">
+                    <span style="text-align: left; float: none; position: relative; top: -20px;">诊后交流</span>
                 </div>
             </div>
         </div>
@@ -56,7 +61,12 @@
     module.exports = {
         data: function() {
             return {
-                patient: '',
+                patient: {
+                    service: {
+                        bedtktid: "0",
+                        revisittktid: "0",
+                    }
+                },
             }
         },
         created: function() {
@@ -77,6 +87,9 @@
             })
 
         },
+        mounted: function() {
+            document.title = "患者详情";
+        },
         methods: {
             clickBaseInfo: function(patientid) {
                 console.log(patientid);
@@ -90,15 +103,17 @@
 
             },
             clickChat: function(patientid) {
-
+                this.$router.push({name: 'patient-pipelist', params: {'patientid': patientid}});
             },
             clickPaper: function(patientid) {
-
+                this.$router.push({name: 'paper-tpllist4onepatient', query: {'patientid': patientid}});
             },
             clickData: function(patientid) {
-
+                this.$router.push({name: 'revisitrecord-list', query: {'patientid': patientid}});
             },
-
+            clickBedtktInfo: function() {
+                this.$router.push({name: 'bedtktlog-list', params: {'bedtktid': this.patient.service.bedtktid}});
+            },
         }
 
     }

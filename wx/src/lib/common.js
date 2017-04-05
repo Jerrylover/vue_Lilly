@@ -116,7 +116,7 @@ module.exports = {
     },
     getBedtktInfo: function(bedtktid, openid, f){
         // var api = require('../config/api.js');
-        var url = api.get('bedtkt.info');
+        var url = api.get('bedtkt.one');
         var params = {
             bedtktid: bedtktid,
             openid: openid,

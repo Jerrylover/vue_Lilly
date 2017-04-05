@@ -125,6 +125,18 @@ module.exports =
         ]
     },
     {
+        path: '/bedtktlog',
+        name: 'bedtktlog',
+        component: EmptyTemplate,
+        children: [
+            {
+                path: ':bedtktid/list',
+                name: 'bedtktlog-list',
+                component: resolve => require(['../pages/bedtkt/BedtktlogList.vue'], resolve)
+            }
+        ]
+    },
+    {
         path: '/revisittkt',
         name: 'revisittkt',
         component: EmptyTemplate,
@@ -134,6 +146,40 @@ module.exports =
                 name: 'revisittkt-list',
                 component: resolve => require(['../pages/revisittkt/Appointment.vue'], resolve)
             }
+        ]
+    },
+    {
+        path: '/paper',
+        name: 'paper',
+        component: EmptyTemplate,
+        children: [
+            {
+                path: 'tpllist4onepatient',
+                name: 'paper-tpllist4onepatient',
+                component: resolve => require(['../pages/paper/PaperTplList.vue'], resolve)
+            },
+            {
+                path: ':papertplid/list',
+                name: 'paper-list',
+                component: resolve => require(['../pages/paper/PaperList.vue'], resolve)
+            },
+            {
+                path: ':paperid/one',
+                name: 'paper-one',
+                component: resolve => require(['../pages/paper/PaperOne.vue'], resolve)
+            },
+        ]
+    },
+    {
+        path: '/revisitrecord',
+        name: 'revisitrecord',
+        component: EmptyTemplate,
+        children: [
+            {
+                path: 'list',
+                name: 'revisitrecord-list',
+                component: resolve => require(['../pages/revisitrecord/RevisitRecordList.vue'], resolve)
+            },
         ]
     },
     {

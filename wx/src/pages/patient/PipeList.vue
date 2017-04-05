@@ -158,6 +158,9 @@
                     }
                 })
             }
+        },
+        mounted: function() {
+            document.title = "医助交流";
         }
     }
 </script>

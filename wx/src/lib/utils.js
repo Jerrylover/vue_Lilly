@@ -48,5 +48,10 @@ module.exports = {
     'isLeapYear': function(year) {
         // var value = Number(year);
         // if (value ) {}
+    },
+    contentHandle: function(content) {
+        if (typeof content != 'undefined' && content != null) {
+            return content.replace(/\n/g, '<br/>');
+        }
     }
 }

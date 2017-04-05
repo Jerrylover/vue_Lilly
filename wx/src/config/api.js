@@ -24,8 +24,12 @@ var urls = {
         // ''
     },
     'bedtkt': {
+        'one': '/bedtkt/one',
         'info': '/bedtkt/info',
         'history4onepatient': '/bedtkt/history4onepatient',
+    },
+    'bedtktlog': {
+        'list': '/bedtktlog/list',
     },
     'appointment': {
         'list': '/revisittkt/list',
@@ -41,6 +45,14 @@ var urls = {
         'info': '/doctor/info',
         'modifypwdjson': '/doctor/modifypwdjson',
         'configpost': '/doctor/configpost',
+    },
+    'paper': {
+        'tpllist4onepatient': '/papertpl/list4onepatient',
+        'list': '/paper/list',
+        'one': '/paper/one',
+    },
+    'revisitrecord': {
+        'list': '/revisitrecord/list4onepatient'
     }
 }
 

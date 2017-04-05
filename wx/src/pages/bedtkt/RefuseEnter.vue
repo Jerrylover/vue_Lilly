@@ -1,10 +1,10 @@
 <template>
     <div class="refuse-enter">
-        <mt-header fixed title="拒绝入院">
+        <!-- <mt-header fixed title="拒绝入院">
             <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
         <div class="patientinfo">
             <div>
                 <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
@@ -64,23 +64,26 @@
                 }else {
                     this.is_set_default = 0;
                 }
-                var url = api.get('sickbed.refusejson');
-                var params = {
-                    openid: this.openid,
-                    content: this.content,
-                    is_set_default: this.is_set_default,
-                    bedtktid: this.bedtktid,
-                }
-                console.log(params);
-                common.post(url, params, function(response){
-                    if (response.errno == 0) {
-                        let instance = self.$toast('操作成功!');
-                        setTimeout(() => {
-                            instance.close();
-                            self.$router.go(-1);
-                        }, 2000);
+                this.$messagebox.confirm('一旦拒绝患者将无法撤回,请再次确认').then(action => {
+                    var url = api.get('sickbed.refusejson');
+                    var params = {
+                        openid: this.openid,
+                        content: this.content,
+                        is_set_default: this.is_set_default,
+                        bedtktid: this.bedtktid,
                     }
-                })
+                    common.post(url, params, function(response){
+                        if (response.errno == 0) {
+                            let instance = self.$toast('操作成功!');
+                            setTimeout(() => {
+                                instance.close();
+                                self.$router.go(-1);
+                            }, 2000);
+                        }
+                    })
+                }, cancel => {
+
+                });
 
             }
         },
@@ -91,7 +94,7 @@
             this.bedtktid = queryString.bedtktid;
             common.getBedtktInfo(this.bedtktid, this.openid,function(response){
                 if (response.errno == 0) {
-                    self.bedtkt = response.data;
+                    self.bedtkt = response.data.bedtkt;
                 }
             })
             var url = api.get('sickbed.refuse');
@@ -110,6 +113,9 @@
             '$route': function(to, from) {
 
             }
+        },
+        mounted: function() {
+            document.title = "拒绝患者入院";
         }
     }
 </script>
@@ -121,7 +127,7 @@
         text-decoration: none;
         color: #fff;
     }
-    .patientinfo {
+    /*.patientinfo {
         text-align: left;
         font-size: 0px;
         border: 1px solid #58B7FF;
@@ -134,5 +140,19 @@
     }
     .patientinfo span.left {
         width: 45%;
+    }*/
+    .patientinfo {
+        font-size: 14px;
+        background-color: #1996ea;
+        margin: -60px -8px 0px -8px;
+        text-align: left;
+    }
+    .patientinfo .left {
+        width: 40%;
+    }
+    .patientinfo span {
+        display: inline-block;
+        color: #fff;
+        padding: 5px 10px;
     }
 </style>

@@ -1,10 +1,10 @@
 <template>
     <div class="refuse-enter">
-        <mt-header fixed title="发送入院通知">
+        <!-- <mt-header fixed title="发送入院通知">
             <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
         <div class="patientinfo">
             <div>
                 <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
@@ -80,26 +80,27 @@
                 }else {
                     this.is_set_default = 0;
                 }
-                console.log(this.time)
-                // return ;
-                var url = api.get('sickbed.passjson');
-                var params = {
-                    openid: this.openid,
-                    content: this.content,
-                    thedate: this.time,
-                    is_set_default: this.is_set_default,
-                    bedtktid: this.bedtktid,
-                }
-                common.post(url, params, function(response){
-                    if (response.errno == 0) {
-                        let instance = self.$toast('操作成功!');
-                        setTimeout(() => {
-                            instance.close();
-                            self.$router.go(-1);
-                        }, 2000);
+                this.$messagebox.confirm('一旦发送入院通知将不能撤回请确认').then(action => {
+                    var url = api.get('sickbed.passjson');
+                    var params = {
+                        openid: this.openid,
+                        content: this.content,
+                        thedate: this.time,
+                        is_set_default: this.is_set_default,
+                        bedtktid: this.bedtktid,
                     }
-                })
+                    common.post(url, params, function(response){
+                        if (response.errno == 0) {
+                            let instance = self.$toast('操作成功!');
+                            setTimeout(() => {
+                                instance.close();
+                                self.$router.go(-1);
+                            }, 2000);
+                        }
+                    })
+                }, cancel => {
 
+                });
             },
             clickTimeInput: function() {
                 this.$refs.picker.open();
@@ -114,7 +115,7 @@
             this.bedtktid = queryString.bedtktid;
             common.getBedtktInfo(this.bedtktid, this.openid, function(response){
                 if (response.errno == 0) {
-                    self.bedtkt = response.data;
+                    self.bedtkt = response.data.bedtkt;
                 }
             })
 
@@ -137,6 +138,9 @@
             'pickerValue': function(newValue, oldValue) {
                 this.time = newValue.getFullYear() + '-' + (newValue.getMonth() + 1) + '-' + newValue.getDate();
             }
+        },
+        mounted: function() {
+            document.title = "确认入院";
         }
     }
 </script>
@@ -148,7 +152,7 @@
         text-decoration: none;
         color: #fff;
     }
-    .patientinfo {
+    /*.patientinfo {
         text-align: left;
         font-size: 0px;
         border: 1px solid #58B7FF;
@@ -161,5 +165,19 @@
     }
     .patientinfo span.left {
         width: 45%;
+    }*/
+    .patientinfo {
+        font-size: 14px;
+        background-color: #1996ea;
+        margin: -60px -8px 0px -8px;
+        text-align: left;
+    }
+    .patientinfo .left {
+        width: 40%;
+    }
+    .patientinfo span {
+        display: inline-block;
+        color: #fff;
+        padding: 5px 10px;
     }
 </style>

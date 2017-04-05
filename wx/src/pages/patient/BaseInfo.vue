@@ -8,7 +8,22 @@
                 <a class="aforclick" href="javascript:" style="text-decoration: none;float: right; padding: 5px" @touchstart="changeLabelStatus">{{labelStatusText}}</a>
             </div>
         </div>
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 10px;" v-for="(group, index) in groups">
+            <div style="text-align: left">
+                <h4>{{group.title}}</h4>
+                <div style="display: inline-block; float: right; line-height: 2">
+                    <img class="openorclose" src="../../../static/close.png" width="23" height="23" style="padding: 5px;" @touchstart="openOrClose($event, group, index)">
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <table class="table" v-show="group.openstatus">
+                <tr v-for="item in group.items">
+                    <td width="40%">{{item.title}}</td>
+                    <td>{{item.value}}</td>
+                </tr>
+            </table>
+        </div>
+        <!-- <div style="margin-top: 10px;">
             <div style="text-align: left">
                 <h4>基本资料</h4>
                 <div style="display: inline-block; float: right; line-height: 2">
@@ -268,7 +283,7 @@
                     <td>1111</td>
                 </tr>
             </table>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -277,22 +292,10 @@
     module.exports = {
         data: function() {
             return {
+                groups:[],
+
                 labelStatusText: '收起全部',
                 labelStatus: 1,
-
-                status: {
-                    baseinfo: true,
-                    other_contacts: true,
-                    out_case_info: true,
-                    disease_history: true,
-                    family_history: true,
-                    self_history: true,
-                    smoke_history: true,
-                    menstruation_history: true,
-                    birth_history: true,
-                    alergy_history: true,
-                    other: true,
-                },
 
                 patient: {
                     name: '张三',
@@ -314,23 +317,25 @@
                     $("img").each(function(index, ele){
                         ele.src = '../../../static/close.png';
                     })
-                    Object.keys(that.status).map(function(one){
-                        that.status[one] = true;
+                    this.groups.map(function(one){
+                        one.openstatus = true;
                     })
                 }else {
                     console.log('yyyy');
                     $("img").each(function(index, ele){
                         ele.src = '../../../static/open.png';
                     })
-                    Object.keys(that.status).map(function(one){
-                        that.status[one] = false;
+                    this.groups.map(function(one){
+                        one.openstatus = false;
                     })
                 }
             },
-            openOrClose: function(e, itemname){
-                console.log('e:',e, '---itemname:', itemname);
-                this.status[itemname] = !this.status[itemname];
-                if (this.status[itemname]) {
+            openOrClose: function(e, group, index){
+                console.log(index);
+                console.log(group);
+                group.openstatus = !group.openstatus;
+                this.$set(this.groups, index, group);
+                if (group.openstatus) {
                     e.srcElement.src = '../../../static/close.png';
                 }else {
                     e.srcElement.src = '../../../static/open.png';
@@ -338,6 +343,7 @@
             },
         },
         created: function() {
+            var self = this;
             var openid = localStorage.getItem('_openid_');
             var patientid = this.$route.params.patientid;
             var url = api.get('patient.allinfo');
@@ -346,9 +352,14 @@
                 patientid: patientid,
             }
             common.post(url, params, function(response){
-                // console.log('3333');
-                console.log(response);
+                self.groups = response.data.info_arr;
+                self.groups.map(function(one){
+                    one.openstatus = true;
+                })
             })
+        },
+        mounted: function() {
+            document.title = "基本资料";
         }
     }
 </script>

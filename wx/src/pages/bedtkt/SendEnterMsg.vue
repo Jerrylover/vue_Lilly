@@ -1,10 +1,24 @@
 <template>
     <div class="SendEnterMsg">
-        <mt-header fixed title="发送入院通知">
+        <!-- <mt-header fixed title="发送入院通知">
             <router-link to="/bedtkt/list" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
-        </mt-header>
+        </mt-header> -->
+        <!-- <div class="patientinfo">
+            <div>
+                <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
+                <span>应住院日期:&nbsp;&nbsp;{{bedtkt.plan_date}}</span>
+            </div>
+            <div>
+                <span class="left">性别:&nbsp;&nbsp;{{bedtkt.sex}}</span>
+                <span>手机号:&nbsp;&nbsp;{{bedtkt.mobile}}</span>
+            </div>
+            <div>
+                <span class="left">年龄:&nbsp;&nbsp;{{bedtkt.age}}岁</span>
+                <span>近期居住地:&nbsp;&nbsp;{{bedtkt.address}}</span>
+            </div>
+        </div> -->
         <div class="patientinfo">
             <div>
                 <span class="left">姓名:&nbsp;&nbsp;{{bedtkt.name}}</span>
@@ -26,7 +40,7 @@
         </div>
         <div class="footer" style="position: fixed; bottom: 0px; width: 100%;left: 0px">
             <a class="cn-btn-cancel" href="javascript:" style="width: 50%" @click="clickCancel">取消</a><!--
-            --><a class="cn-btn-confirm" href="javascript:" style="width:50%" @click="clickConfirm">发送确认通知</a>
+            --><a class="cn-btn-confirm" href="javascript:" style="width:50%" @click="clickConfirm">询问患者</a>
         </div>
         <template>
             <mt-datetime-picker
@@ -66,7 +80,8 @@
             common.getBedtktInfo(self.bedtktid, self.openid, function(response){
                 if (response.errno == 0) {
                     var data = response.data;
-                    self.bedtkt = data;
+                    self.bedtkt = data.bedtkt;
+                    console.log(self.bedtkt);
                 }
             })
 
@@ -78,22 +93,26 @@
             },
             clickConfirm: function() {
                 var self = this;
-                var url = api.get('sickbed.senddate');
-                var params = {
-                    openid: this.openid,
-                    bedtktid: this.bedtktid,
-                    thedate: this.thedate,
-                }
-                common.post(url, params, function(response){
-                    if (response.errno == 0) {
-                        var data = response.data;
-                        let instance = self.$toast('通知发送成功!');
-                        setTimeout(() => {
-                            instance.close();
-                            self.$router.go(-1);
-                        }, 2000);
+                this.$messagebox.confirm('请再次确认是否发送询问患者通知').then(action => {
+                    var url = api.get('sickbed.senddate');
+                    var params = {
+                        openid: this.openid,
+                        bedtktid: this.bedtktid,
+                        thedate: this.thedate,
                     }
-                })
+                    common.post(url, params, function(response){
+                        if (response.errno == 0) {
+                            var data = response.data;
+                            let instance = self.$toast('通知发送成功!');
+                            setTimeout(() => {
+                                instance.close();
+                                self.$router.go(-1);
+                            }, 2000);
+                        }
+                    })
+                }, cancel => {
+
+                });
             },
             clickTimeInput: function() {
                 this.$refs.picker.open();
@@ -103,6 +122,9 @@
             'pickerValue': function(newValue, oldValue){
                 this.thedate = newValue.getFullYear() + '-' + (newValue.getMonth() + 1) + '-' + newValue.getDate();
             }
+        },
+        mounted: function() {
+            document.title = "询问患者可否入院";
         }
     }
 </script>
@@ -115,6 +137,19 @@
         color: #fff;
     }
     .patientinfo {
+        background-color: #1996ea;
+        margin: -60px -8px 0px -8px;
+        text-align: left;
+    }
+    .patientinfo .left {
+        width: 40%;
+    }
+    .patientinfo span {
+        display: inline-block;
+        color: #fff;
+        padding: 5px 10px;
+    }
+    /*.patientinfo {
         text-align: left;
         font-size: 0px;
         border: 1px solid #58B7FF;
@@ -128,5 +163,5 @@
     }
     .patientinfo span.left {
         width: 45%;
-    }
+    }*/
 </style>

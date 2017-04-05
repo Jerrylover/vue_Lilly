@@ -5,11 +5,15 @@
                 <span>{{patient.name}}&nbsp;&nbsp;&nbsp;{{patient.sexstr}}&nbsp;&nbsp;&nbsp;{{patient.agestr}}&nbsp;&nbsp;&nbsp;{{patient.disease}}</span>
             </div>
         </div>
-        <div v-for="bedtkt in bedtktlist" :style="{border: bedtkt.color,borderWidth: '1px', borderStyle: 'solid'}" style="text-align: left; border-radius: 4px; margin-top: 10px; padding: 10px 10px 10px 0px; box-sizing: border-box" @touchstart="clickItem(bedtkt)">
-            <span :style="{backgroundColor: bedtkt.color}" style="color: #fff; padding: 5px 15px 5px 5px; box-sizing: border-box; border-top-right-radius: 18px; border-bottom-right-radius: 18px; display: inline-block">{{bedtkt.title}}</span>
+        <div v-for="bedtkt in bedtktlist" :style="{borderColor: '#'+bedtkt.lastlog_color,borderWidth: '1px', borderStyle: 'solid'}" style="text-align: left; border-radius: 4px; margin-top: 10px; padding: 10px 10px 10px 0px; box-sizing: border-box" @touchstart="clickItem(bedtkt)">
+            <span :style="{backgroundColor: '#'+bedtkt.lastlog_color}" style="color: #fff; padding: 5px 15px 5px 5px; box-sizing: border-box; border-top-right-radius: 18px; border-bottom-right-radius: 18px; display: inline-block;
+            ">{{bedtkt.lastlog_title}}</span>
             <div style="padding: 10px">
-                <span v-html="bedtkt.content"></span>
+                <span v-html="bedtkt.lastlog_content"></span>
             </div>
+        </div>
+        <div class="noData" v-if="bedtktlist.length == 0">
+            <span>该患者暂无约住院记录。</span>
         </div>
     </div>
 </template>
@@ -22,11 +26,14 @@
                 patient: '',
                 bedtktlist: [
                     {
+                        lastlog_color: '#ccc',
+                        lastlog_title: '开玩笑',
                         content: 'hahahahahaah123',
                         title: '已拒绝',
                         color: 'blue',
                     },
                     {
+                        lastlog_color: '#ccc',
                         content: 'hahahahahaah123',
                         title: '已拒绝',
                         color: 'blue',
@@ -55,12 +62,26 @@
                 console.log(self.bedtktlist);
             })
         },
+        mounted: function() {
+            document.title = "住院预约记录";
+        },
         methods: {
-            clickItem: function() {
-
+            clickItem: function(bedtkt) {
+                this.$router.push({name: 'bedtkt-main', params: {'bedtktid': bedtkt.id}});
+            }
+        },
+        filters: {
+            filterColor: function(val) {
+                console.log('1111111');
+                return 'red';
             }
         }
     }
 </script>
 <style scoped>
+    .noData {
+        position: absolute;
+        width: 100%;
+        top: 40%;
+    }
 </style>

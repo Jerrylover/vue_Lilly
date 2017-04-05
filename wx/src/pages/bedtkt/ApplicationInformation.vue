@@ -4,21 +4,49 @@
             <a href="javascript:" :class="{'active': active == 'hospitalization'}" @touchstart="clickHospitalization">住院证</a>
             <a href="javascript:" :class="{'active': active == 'bloodtest'}" @touchstart="clickBloodtest">血常规</a>
         </div>
-        <div>
-            <img src="../../../static/refuse.png">
+        <div class="body">
+            <template v-if="active == 'hospitalization'">
+                <div v-for="bedtktpic in bedtktpictures">
+                    <img :src="bedtktpic" style="width: 80%">
+                </div>
+            </template>
+            <template v-if="active == 'bloodtest'">
+                <div v-for="wxpic in wxpics">
+                    <img :src="wxpic" style="width: 80%">
+                </div>
+            </template>
         </div>
     </div>
 </template>
 <script>
+    import api from '../../config/api.js';
+    import common from '../../lib/common.js';
     module.exports = {
         data: function() {
             return {
-                active: 'bloodtest',
+                bedtktid: '',
+                active: 'hospitalization',
+
+                bedtktpictures:[],
+                wxpics:[],
             }
         },
         created: function() {
-            var bedtktid = this.$route.params.bedtktid;
+            var self = this;
+            this.bedtktid = this.$route.params.bedtktid;
             var openid = localStorage.getItem('_openid_');
+            var url = api.get('bedtkt.info');
+            var params = {
+                bedtktid: this.bedtktid,
+                openid: openid,
+            }
+            common.post(url, params, function(response){
+                console.log(response);
+                self.bedtktpictures = response.data.bedtktpictures;
+                self.wxpics = response.data.wxpics;
+                // console.log(self.bedtktpictures);
+            })
+
         },
         methods: {
             clickHospitalization: function() {
@@ -27,6 +55,9 @@
             clickBloodtest: function() {
                 this.active = 'bloodtest';
             }
+        },
+        mounted: function() {
+            document.title = "申请资料";
         }
     }
 </script>
@@ -49,5 +80,8 @@
     .header .active {
         color: #fff;
         background-color: #1996ea;
+    }
+    .body {
+        margin-top: 10px;
     }
 </style>

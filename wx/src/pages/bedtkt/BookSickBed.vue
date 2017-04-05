@@ -11,7 +11,7 @@
             --><a href="javascript:" :class="['navbar', {'selected': active=='female'}]" @click="clickFemale">女性患者</a>
         </div>
         <div style="margin-top: 90px;">
-        <div v-for="tkt in tktlist" style="text-align: left; background-color: #fff; padding: 5px; margin-bottom: 5px;" class="patientinfo" @touchstart="enterBedtktMain(tkt)">
+        <div v-for="tkt in tktlist" style="text-align: left; background-color: #fff; padding: 5px; margin-bottom: 5px;" class="patientinfo" @click="enterBedtktMain(tkt)">
             <div>
                 <span class="left">姓名:&nbsp;&nbsp;{{tkt.name}}</span>
                 <span>应住院日期:&nbsp;&nbsp;{{tkt.plan_date}}</span>
@@ -24,7 +24,7 @@
                 <span class="left">年龄:&nbsp;&nbsp;{{tkt.age}}岁</span>
                 <span>近期居住地:&nbsp;&nbsp;{{tkt.address}}</span>
             </div>
-            <span>入院确认:</span>
+            <span>入院确认:&nbsp;&nbsp;{{tkt.patient_status_desc}}</span>
             <!-- <div class="doperation" style="font-size:0px;font-size: 0rem;">
                 <a href="javascript:" style="background-color: #f06500" @click="clickRefuseBook(tkt)">拒绝入院</a>
                 <a href="javascript:" style="background-color: #4799ff" @click="clickConfirmEnter(tkt)">确认入院</a>
@@ -139,6 +139,9 @@
                     console.log(self.tktlist);
                 }
             })
+        },
+        mounted: function() {
+            document.title="住院预约";
         }
     }
 </script>

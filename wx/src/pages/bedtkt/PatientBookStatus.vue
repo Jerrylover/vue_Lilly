@@ -68,7 +68,7 @@
                 if (response.errno == 0) {
                     var data = response.data;
                     console.log(response);
-                    self.bedtkt = data;
+                    self.bedtkt = data.bedtkt;
                     switch (Number(self.bedtkt.patient_status)){
                     case 1:
                     case 2:
@@ -94,6 +94,20 @@
         color: #fff;
     }
     .patientinfo {
+        font-size: 14px;
+        background-color: #1996ea;
+        margin: -60px -8px 0px -8px;
+        text-align: left;
+    }
+    .patientinfo .left {
+        width: 40%;
+    }
+    .patientinfo span {
+        display: inline-block;
+        color: #fff;
+        padding: 5px 10px;
+    }
+    /*.patientinfo {
         text-align: left;
         font-size: 0px;
         border: 1px solid #58B7FF;
@@ -106,5 +120,5 @@
     }
     .patientinfo span.left {
         width: 45%;
-    }
+    }*/
 </style>

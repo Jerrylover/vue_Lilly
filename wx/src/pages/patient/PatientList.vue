@@ -4,7 +4,7 @@
             <mt-search v-model="patient_name" :show="true" v-on:keyup.13.native="doSearch">
                 <div class="body-container">
                     <ul v-infinite-scroll="loadMore" :infinite-scroll-disabled="true" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
-                        <li class="item-box" v-for="patient in patients" @touchstart="goPatientDetail(patient)">
+                        <li class="item-box" v-for="patient in patients" @click="goPatientDetail(patient)">
                                 <div class="item-box-header">
                                     <span>{{patient.name}}</span>
                                     <span style="float: right">{{patient.disease_name}}</span>
@@ -109,6 +109,10 @@
         created: function() {
             this.openid = localStorage.getItem('_openid_');
             this.fetchData();
+        },
+        mounted: function() {
+            console.log('xxxxxx');
+            document.title="患者列表";
         }
 
     }
@@ -117,7 +121,9 @@
     .body-container {
         background-color: #eee;
         padding:  0px 0px 0px 0px;
-        overflow-scrolling: touch;
+        /*overflow-scrolling: touch;*/
+        /*-webkit-overflow-scrolling: touch;*/
+        overflow: auto;
         -webkit-overflow-scrolling: touch;
     }
     .item-box {
