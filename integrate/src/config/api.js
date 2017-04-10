@@ -43,7 +43,9 @@ var urls = {
         'removetag': '/common/wxpicmsgremovetagrefjson',
         'medicalpic': '/common/wxpicmsglist',
         'paperlist': '/paper/list',
-        'paperone': '/paper/one'
+        'paperone': '/paper/one',
+        'updatepatienttagpost': '/patient/updatepatienttagpost',
+        'updateremarkdoctorpost': '/patient/updateremarkdoctorpost',
     },
     'revisitrecord': {
         'addzhusu': '/revisitrecord/addzhusu',
@@ -144,6 +146,14 @@ var urls = {
       'pfs': '/statistic/pfs',
       'effect': '/statistic/effect',
       'os': '/statistic/os',
+  },
+  'patienttagtpl': {
+    'list': '/patienttagtpl/list',
+    'addpost': '/patienttagtpl/addpost',
+    'modifypost': '/patienttagtpl/modifypost',
+    'one': '/patienttagtpl/modify',
+    'deletepost': '/patienttagtpl/deletepost',
+    'posmodifypost': '/patienttagtpl/posmodifypost',
   }
 }
 

@@ -46,6 +46,13 @@
                         <option value="2">女</option>
                     </select>
                 </div>
+                <div style="float:right;padding-left:15px;">
+                    <select class="form-control" id="selectGender" v-model="filterTag" @change="tagChange">
+                        <option value="0" disabled hidden>选择标签</option>
+                        <option value="-1">全部</option>
+                        <option v-for="patienttagtpl in patienttagtpllist" :value="patienttagtpl.id">{{patienttagtpl.name}}</option>
+                    </select>
+                </div>
             </div>
         </div>
         <table class="table table-bordered table-hover fctable mg-t-10">
@@ -55,8 +62,8 @@
                     <th>病历号</th>
                     <th>性别</th>
                     <th>年龄</th>
-                    <th>首发时间</th>
-                    <th>病程</th>
+                    <th>标签</th>
+                    <th>备注</th>
                     <th>上次就诊时间</th>
                     <th width="20%">诊断</th>
                     <th v-if="diseaseCount > 1">疾病</th>
@@ -70,8 +77,8 @@
                     <td>{{patient.out_case_no}}</td>
                     <td>{{patient.sex}}</td>
                     <td>{{patient.age}}</td>
-                    <td>{{patient.first_happen_date}}</td>
-                    <td>{{patient.bingcheng}}</td>
+                    <td>{{patient.patienttagstr}}</td>
+                    <td>{{patient.remark_doctor}}</td>
                     <td>{{patient.last_revisitrecord_date}}</td>
                     <td>{{patient.complication}}</td>
                     <td v-if="diseaseCount > 1">{{patient.diseasename}}</td>
@@ -128,9 +135,12 @@ export default {
             total: 0,
             patient_name: '', //搜索词
             auditcnt: 0,
+            filterTag: 0,
             filterGender: 0,
             filterBindWx: 0,
             filterDiseaseid: 0,
+
+            patienttagtpllist: [],
         }
     },
     computed: {
@@ -171,6 +181,7 @@ export default {
                   self.total = data.total - '';
                   self.patient_name = data.patient_name;
                   self.auditcnt = data.auditcnt;
+                  self.patienttagtpllist = data.patienttagtpllist;
               }
             })
         },
@@ -188,6 +199,9 @@ export default {
         doSearch: function() {
             var query = {
                 patient_name: this.patient_name
+            }
+            if (this.filterTag != -1 && this.filterTag != 0) {
+                query.patienttagtplid = this.filterTag;
             }
             if (this.filterGender != -1 && this.filterGender != 0) {
                 query.sex = this.filterGender;
@@ -271,10 +285,16 @@ export default {
             this.filterGender = query.sex || 0
             this.filterBindWx = query.isbindwx || 0
             this.filterDiseaseid = query.diseaseid || 0
+            this.filterTag = query.patienttagtplid || 0
             this.fetchData()
         },
         genderChange: function() {
+            console.log(this.filterGender);
+            // return ;
             this.doSearch()
+        },
+        tagChange: function() {
+            this.doSearch();
         },
         bindWxChange: function() {
             this.doSearch()

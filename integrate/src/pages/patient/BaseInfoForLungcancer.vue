@@ -17,6 +17,30 @@
         <div class="page-content">
             <table class="table table-bordered">
                 <tbody>
+                    <tr>
+                        <th colspan="2">标签
+                            <a href="javascript:" class="btn btn-default btn-sm btn-success" style="float: right" @click="showTagModal">打标签</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a href="javascript:" style="margin-right: 10px;" class="btn btn-default btn-sm btn-success" v-for="tag in patientInfo.patienttaglist">{{tag}}</a>
+                        </td>
+                    </tr>
+                    <tr class="bg-F5F6FA">
+                        <th colspan="2">备注信息
+                            <a href="javascript:" class="btn btn-default btn-sm btn-success" style="float: right" @click="showRemarkDoctorModal">编辑备注</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td width="10%">备注</td>
+                        <td>{{patientInfo.remark_doctor}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-bordered">
+                <tbody>
                 <tr>
                     <tr id="baseinfohead" class="bg-F5F6FA">
                         <th colspan="6">基本信息
@@ -193,7 +217,7 @@
                         <td colspan="5">{{patientInfo.allergy_history}}</td>
                     </tr>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <tr class="bg-F5F6FA">
                         <th colspan="6">其他</th>
                     </tr>
@@ -201,9 +225,47 @@
                         <td>其他</td>
                         <td colspan="5">{{patientInfo.remark_doctor}}</td>
                     </tr>
-                </tr>
-            </tbody>
+                </tr> -->
+                </tbody>
             </table>
+            <modal :show="showTag" width="800px">
+                <div slot="header">
+                    <span v-if="patientInfo.patienttagtpllist.length != 0" class="header-span">打标签</span>
+                    <span v-if="patientInfo.patienttagtpllist.length == 0" class="header-span">提示</span>
+                    <i class="fa fa-times-circle fa-lg" @click.stop="closeTagModal"></i>
+                </div>
+                <div slot="body">
+                    <div v-for="tagtpl in patientInfo.patienttagtpllist" style="display: inline-block; margin-right: 30px">
+                        <div class="checkbox checkbox-inline checkbox-info">
+                            <input :id="tagtpl.id" type="checkbox" name="" :value="tagtpl.id" v-model="patienttagtplids">
+                            <label :for="tagtpl.id">{{tagtpl.name}}</label>
+                        </div>
+                    </div>
+                    <div v-if="patientInfo.patienttagtpllist.length == 0">
+                        暂无标签,请先前往 设置->设置标签->新建标签 页面进行添加标签操作.
+                    </div>
+                </div>
+                <div slot="footer">
+                    <div class="text-right">
+                        <a v-if="patientInfo.patienttagtpllist.length != 0" class="btn btn-primary" @click.stop="updatetagpost" style="margin-right:20px;">提交</a>
+                        <a v-if="patientInfo.patienttagtpllist.length == 0" class="btn btn-primary" @click.stop="closeTagModal" style="margin-right:20px;">确定</a>
+                    </div>
+                </div>
+            </modal>
+            <modal :show="showRemarkDoctor" width="400px">
+                <div slot="header">
+                    <span class="header-span">备注</span>
+                    <i class="fa fa-times-circle fa-lg" @click.stop="closeRemarkDoctorModal"></i>
+                </div>
+                <div slot="body">
+                    <textarea rows="5" style="width: 100%; padding: 15px" placeholder="请输入备注信息" v-model="remark_doctor"></textarea>
+                </div>
+                <div slot="footer">
+                    <div class="text-right">
+                        <a class="btn btn-primary" @click.stop="updateremarkdoctorpost" style="margin-right:20px;">提交</a>
+                    </div>
+                </div>
+            </modal>
         </div>
     <div id="modal">
     <modal :show="showModal" width="800px">
@@ -321,6 +383,13 @@ import Bus from '../../lib/bus.js'
 export default {
     data: function() {
         return {
+            showTag: false,
+            patienttagtplids: [],
+            patienttags: [],
+
+            showRemarkDoctor: false,
+            remark_doctor: '',
+
             breadcrumbData: [
                 {
                     name: '患者列表',
@@ -354,6 +423,7 @@ export default {
                 nation: "",
                 career: "",
                 prcrid: "",
+                patienttagtpllist: [],
                 marry_status: "",
                 blood_type: {
                     first: '',
@@ -449,6 +519,60 @@ export default {
                 str += one.disease + ' ' + one.content + '<br />';
             }
             return str;
+        },
+        'showTagModal': function() {
+            this.showTag = true;
+        },
+        'showRemarkDoctorModal': function() {
+            this.showRemarkDoctor = true;
+        },
+        'closeRemarkDoctorModal': function() {
+            this.showRemarkDoctor = false;
+        },
+        'closeTagModal': function() {
+            this.showTag = false;
+        },
+        'updatetagpost': function() {
+            console.log(this.patienttagtplids);
+            var self = this;
+            api.http({
+                url: 'patient.updatepatienttagpost',
+                data: {
+                    patientid: this.patientInfo.id,
+                    patienttagtplids: this.patienttagtplids
+                },
+                successCallback: function(d) {
+                    console.log(d);
+                    self.patientInfo.patienttaglist = d.data.patienttaglist;
+                    self.showTag = false;
+                    self.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '标签设置成功'
+                    });
+                }
+            })
+        },
+        'updateremarkdoctorpost': function() {
+            var self = this;
+            api.http({
+                url: 'patient.updateremarkdoctorpost',
+                data: {
+                    patientid: this.patientInfo.id,
+                    remark_doctor: this.remark_doctor,
+                },
+                successCallback: function(d){
+                    self.showRemarkDoctor = false;
+                    self.patientInfo.remark_doctor = self.remark_doctor;
+                    self.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '备注修改成功'
+                    });
+                }
+            })
         },
         'clickBind': function() {
             if (this.isbindwx) {
@@ -551,6 +675,8 @@ export default {
                   var patientInfo = d.data;
                   that.patientInfo = patientInfo;
                   that.patientname = that.patientInfo.name;
+                  that.patienttagtplids = patientInfo.patienttagtplids;
+                  that.remark_doctor = patientInfo.remark_doctor;
 
                   if ($.trim(that.patientInfo.past_main_history) != '') {
                       var index = that.patientInfo.past_main_history.indexOf('+');

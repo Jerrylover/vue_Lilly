@@ -385,6 +385,30 @@ export default new Router({
           }
         },
         {
+          path: 'taglist',
+          name: 'user-taglist',
+          meta: {auth:true},
+          component: function(resolve) {
+            require(['../pages/user/TagList.vue'], resolve);
+          }
+        },
+        {
+          path: 'tagadd',
+          name: 'user-tagadd',
+          meta: {auth: true},
+          component: function(resolve) {
+            require(['../pages/user/TagAddOrModify.vue'], resolve);
+          }
+        },
+        {
+          path: 'tagmodify',
+          name: 'user-tagmodify',
+          meta: {auth: true},
+          component: function(resolve) {
+            require(['../pages/user/TagAddOrModify.vue'], resolve);
+          }
+        },
+        {
           path: 'modifypassword',
           name: 'user-modifypassword',
           meta: {auth: true},

@@ -330,6 +330,11 @@ export default {
                     isactive: false,
                 },
                 {
+                    name: '设置标签',
+                    link: {name: 'user-taglist'},
+                    isactive: false,
+                },
+                {
                     name: '修改密码',
                     link: {name: 'user-modifypassword'},
                     isactive: false,
