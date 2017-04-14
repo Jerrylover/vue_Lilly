@@ -188,7 +188,13 @@ module.exports =
         component: resolve => require(['../pages/doctor/error.vue'], resolve)
     },
     {
+        path: '/',
+        name: 'empty',
+        // redirect: '/error',
+        component: resolve => require(['../pages/doctor/Empty.vue'], resolve),
+    },
+    {
         path: '*',
         redirect: '/error',
-    },
+    }
 ]

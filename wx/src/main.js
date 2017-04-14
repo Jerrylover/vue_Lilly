@@ -11,24 +11,31 @@ Vue.use(Mint)
 
 var common = require('./lib/common.js')
 
-router.push({
-    '*': '/bind',
-})
 router.beforeEach((to, from, next) => {
     var openid = to.query.openid;
     // openid = "o-t1HwYYHu7YGr1KRLq87DeDfAq0"; //测试数据上线前注释
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }
+
+    //兼容ios8以下 #后会被截掉的BUG
     var queryString = window.location.search;
-    // if (to.name != 'error') {
-        console.log(window.location.href);
-        sessionStorage.setItem('_href_', window.location.href); 
-    // }
+    var fcqxurltemp = queryString.substring(1, queryString.length);
+    var queryArr = [];
+    queryArr = fcqxurltemp.split('&');
+    var obj = {};
+    queryArr = queryArr.map(function(one){
+        var arr = one.split('=');
+        obj[arr[0]] = arr[1];
+    })
+    if (obj['fcqxtargeturl'] != undefined && to.name == 'empty') {
+        next({path: obj['fcqxtargeturl']});
+    }
+    
+    sessionStorage.setItem('_href_', window.location.href); 
     queryString = encodeURIComponent(queryString);
     common.checkOpenid(queryString);
     if (to.meta.requireBind === true) {
-        console.log('22222');
         var status = common.checkLoginSync(queryString);
         if (status === true) {
             next();

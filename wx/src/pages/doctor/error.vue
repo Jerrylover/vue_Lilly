@@ -1,17 +1,17 @@
 <template>
     <div>
-        <span>{{errmsg}}网页发生错误，请稍后再试</span>
+        <span>{{errmsg}}</span>
     </div>
 </template>
 <script>
     export default {
         data: function() {
             return {
-                errmsg: '错误',
+                errmsg: '页面消失不见了，请联系技术人员。',
             }
         },
         created: function() {
-            this.errmsg = sessionStorage.getItem('_href_');
+            // this.errmsg = sessionStorage.getItem('_href_');
         },
         mounted: function() {
             console.log('22222');
