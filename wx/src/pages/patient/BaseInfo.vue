@@ -317,6 +317,7 @@
                     $("img").each(function(index, ele){
                         ele.src = '../../../static/close.png';
                     })
+                    console.log('111111');
                     this.groups.map(function(one){
                         one.openstatus = true;
                     })

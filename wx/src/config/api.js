@@ -53,6 +53,15 @@ var urls = {
     },
     'revisitrecord': {
         'list': '/revisitrecord/list4onepatient'
+    },
+    'pushmsg': {
+        'sendmsg2onepatient': "/pushmsg/sendmsg2onepatient",
+    },
+    'picture': {
+        'addjson': '/picture/addjson',
+    },
+    'wxpicmsgmgr': {
+        'sendpic2onepatient': '/wxpicmsgmgr/sendpic2onepatient',
     }
 }
 

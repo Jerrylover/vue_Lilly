@@ -183,7 +183,12 @@ module.exports =
         ]
     },
     {
+        path: '/error',
+        name: 'error',
+        component: resolve => require(['../pages/doctor/error.vue'], resolve)
+    },
+    {
         path: '*',
-        redirect: '/doctor/bind',
+        redirect: '/error',
     },
 ]

@@ -4,7 +4,9 @@ var domain = 'fangcunyisheng.com';
 if (process.env.NODE_ENV === 'development') {
     host = 'http://dwx.fangcunhulian.cn/api';
     dev = '?dev_user=xuzhe&display=json';
-    domain = '192.168.1.108';
+    // domain = '192.168.1.108';
+    // domain = 'localhost';
+    domain = '192.168.1.111';
 }else if (process.env.NODE_ENV === 'testing') {
     host = 'http://dwx.fangcunhulian.com/api';
     domain = 'fangcunhulian.cn';

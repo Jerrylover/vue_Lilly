@@ -1,11 +1,11 @@
 <template>
-    <div class="pipe-list" style="margin-top: -50px;">
+    <div class="pipe-list" style="margin-top:-60px;">
         <!-- <mt-header fixed title="医助交流">
             <router-link :to="{name: 'active-patient', query: {'thedate':thedate}}" slot="left">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
         </mt-header> -->
-        <div class="body">
+        <div class="body" @click="clickBody">
             <div style="margin: 5px; padding: 5px;border-radius: 4px; text-align: left">
                 <span>{{patient.name}}&nbsp;&nbsp;{{patient.sexstr}}&nbsp;&nbsp;{{patient.agestr}}</span>
             </div>
@@ -30,16 +30,38 @@
                 </li>
             </ul>
             <div style="position: none;margin-top: 200px; background-color: #fff">
-            <span v-if="pipes.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
+                <span v-if="pipes.length == 0" style="margin-top:400px;width:80%; background-color: #fcf8e3; padding: 15px">暂无数据</span>
+            </div>
         </div>
+        <div style="width: 100%; height: 100%; margin-left: -8px; box-sizing: border-box">
+            <div id="footer" style="position: absolute;bottom: 0px; width: 100%; background-color: #ddd; text-align: left;padding: 5px 0px">
+                <div style="margin-left: 10px">
+                    <input type="text" name="" style="padding: 8px;width: 85%; border-radius: 4px; border: none; box-sizing:border-box;vertical-align: middle; font-size: 16px" v-model="content" @focus="doSomething" v-on:keyup.13="sendMsg">
+                    <img src="../../../static/more.png" style="width: 35px; vertical-align: middle; margin: auto" @touchstart="clickMoreType">
+                </div>
+                <div v-if="moreType" style="border-top: 1px solid #ccc; margin-top: 10px;padding-top: 10px;margin:0px 10px;">
+                    <!-- <a href="javascript:" class="a-input-file a-input-file-picbg">
+                        <input class="input-file" type="file"  name="imgfile" value="浏览"/>
+                    </a> -->
+                    <a href="javascript:" class="a-input-file a-input-file-photobg">
+                        <input id="input-pic-file" class="input-file" type="file"  name="imgfile" value="浏览" @click="uploadImg" />
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
     import api from '../../config/api.js'
+    import common from '../../lib/common.js'
+    import lodash from 'lodash'
     module.exports = {
         data: function() {
             return {
+                content: '',
+
+                moreType: false,
+
                 thedate: '',
                 openid: '',
                 filter: 'all',
@@ -57,6 +79,22 @@
                 ]
             }
         },
+        created: function() {
+            var windowHeight = $(window).height(); //浏览器当前的高度
+            var self = this;
+            
+            var currHeight = 0;
+            var resizeTimer = null;
+            function handleWindow() {
+                currHeight = $(window).height();
+                if (currHeight < windowHeight) {
+                    self.input = currHeight;
+                }
+                self.input = currHeight;
+            };
+            var func1 = lodash.debounce(handleWindow, 400);
+            $(window).on('resize', func1);
+        },
         beforeRouteEnter(to, from, next) {
             var openid = localStorage.getItem('_openid_');
             var thedate = to.query.thedate;
@@ -72,6 +110,7 @@
             }).done(function(response){
                 if (response.errno == 0) {
                     var data = response.data;
+                    console.log(data.patient);
                     next(vm => {
                         vm.pipes = data.pipes;
                         vm.patient = data.patient;
@@ -82,6 +121,103 @@
             })
         },
         methods: {
+            uploadImg: function(e) {
+                // var files = e.target.files || e.dataTransfer.files;
+                // if (!files.length) {
+                //     console.log('111111');
+                //     return;
+                // }
+                var self = this;
+                var url = api.get('picture.addjson');
+                var inputfile = $('#input-pic-file');
+                inputfile.fileupload({
+                    url:url,
+                    formData:{
+                    },
+                    dataType:"json",
+                    // add: function(e,result){
+                        // $(".picBox-upload-" + bindtype).show();
+                        // result.submit();
+                    // },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.errno == 0) {
+                            self.uploadImgId(response.data.pictureid);
+                        }
+                    }
+                });
+            },
+            uploadImgId: function(pictureid) {
+                var self = this;
+                var url = api.get('wxpicmsgmgr.sendpic2onepatient');
+                var params = {
+                    openid: this.openid,
+                    patientid: this.patient.patientid,
+                    pictureid: pictureid,
+                }
+                common.post(url, params, function(response){
+                    console.log(response);
+                    if (response.errno == 0) {
+                        let instance = self.$toast('发送成功');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
+                        self.content = '';
+                        self.moreType = false;
+                        self.fetchData();
+                        $('input').blur();
+                        $(".body").animate({
+                            scrollTop: 0,
+                        }, 0);
+                    }
+                })
+            },
+            sendMsg: function() {
+                var self = this;
+                if (this.content.trim() == '') {
+                    $('input').blur();
+                    return ;
+                }
+                var url = api.get('pushmsg.sendmsg2onepatient');
+                var params = {
+                    openid: this.openid,
+                    content: this.content,
+                    patientid: this.patient.patientid,
+                }
+                common.post(url, params, function(response){
+                    if (response.errno == 0) {
+                        let instance = self.$toast('发送成功');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
+                        self.content = '';
+                        self.fetchData();
+                        $('input').blur();
+                        $(".body").animate({
+                            scrollTop: 0,
+                      }, 0);
+                    }
+                })
+            },
+            clickBody: function() {
+                $('input').blur();
+            },
+            doSomething: function() {
+                // console.log('1111111');
+                // var self = this;
+                // setTimeout(function(){
+                //     // self.input = $('.body').scrollTop();
+                //     // self.input = $('#footer').offset().top;
+                //     // self.input += ' ' + $('#footer').height();
+                //     // self.input += ' ' + $(window).scrollTop();
+                //     // var height = $(window).innerHeight();
+                //     // self.input += ' ' + height;
+                //     $('#footer').css('position', 'fixed').css('bottom', '0px');
+                // },200)
+            },
+            clickMoreType: function() {
+                this.moreType = !this.moreType;
+            },
             clickAll: function() {
                 if ($.trim(this.filter) == "all") {
                     return ;
@@ -165,6 +301,18 @@
     }
 </script>
 <style scoped>
+    /*.pipe-list {
+        width: 100%;
+        height: 100%;
+    }*/
+    .body {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        margin-left: -8px;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
     .pipe-from-audit {
         border: 1px solid #ccc;
         border-radius: 0px;
@@ -211,5 +359,29 @@
     .filterArea a.filterActive {
         background-color: #17a0ff;
         color: #fff;
+    }
+    a.a-input-file{
+        display:inline-block; 
+        width:50px; 
+        height:50px; 
+        background-color:#ccc; 
+        border: 1px solid #bbb;
+        position:relative; 
+        overflow:hidden;
+    }
+    .a-input-file-picbg {
+        background-image: url('../../../static/picture.png');
+        background-repeat: no-repeat;
+    }
+    .a-input-file-photobg {
+        background-image: url('../../../static/photo.png');
+        background-repeat: no-repeat;
+    }
+    .input-file {
+        position:absolute;
+        right:0; top:0;
+        font-size:100px;
+        opacity:0;
+        filter:alpha(opacity=0);
     }
 </style>
