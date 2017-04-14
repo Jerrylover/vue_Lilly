@@ -16,17 +16,12 @@ router.push({
 })
 router.beforeEach((to, from, next) => {
     var openid = to.query.openid;
-    // console.log(openid);
-    openid = "o-t1HwYYHu7YGr1KRLq87DeDfAq0";
+    // openid = "o-t1HwYYHu7YGr1KRLq87DeDfAq0"; //测试数据上线前注释
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }
     var queryString = window.location.search;
-    console.log(window.location.href);
-    // if(to.name != 'error') {
-        console.log('YYYYYYYY');
-        sessionStorage.setItem('_href_', window.location.href);
-    // }
+    // sessionStorage.setItem('_href_', window.location.href); 
     queryString = encodeURIComponent(queryString);
     common.checkOpenid(queryString);
     if (to.meta.requireBind === true) {

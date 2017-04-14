@@ -7,7 +7,6 @@ Vue.use(VueRouter)
 Vue.filter('booleanFormat', require('./filters/booleanFormatter'));
 Vue.filter('percentageFormat', require('./filters/percentageFormatter'));
 Vue.filter('byteFormat', require('./filters/byteFormatter'));
-// Vue.filter('timestampFormat', require('./filters/timestampFormatter'));
 
 require('./lib/string.js')
 require('./vendor/font-awesome/css/font-awesome.min.css')

@@ -40,9 +40,6 @@
                     <img src="../../../static/more.png" style="width: 35px; vertical-align: middle; margin: auto" @touchstart="clickMoreType">
                 </div>
                 <div v-if="moreType" style="border-top: 1px solid #ccc; margin-top: 10px;padding-top: 10px;margin:0px 10px;">
-                    <!-- <a href="javascript:" class="a-input-file a-input-file-picbg">
-                        <input class="input-file" type="file"  name="imgfile" value="浏览"/>
-                    </a> -->
                     <a href="javascript:" class="a-input-file a-input-file-photobg">
                         <input id="input-pic-file" class="input-file" type="file"  name="imgfile" value="浏览" @click="uploadImg" />
                     </a>
@@ -122,11 +119,6 @@
         },
         methods: {
             uploadImg: function(e) {
-                // var files = e.target.files || e.dataTransfer.files;
-                // if (!files.length) {
-                //     console.log('111111');
-                //     return;
-                // }
                 var self = this;
                 var url = api.get('picture.addjson');
                 var inputfile = $('#input-pic-file');
@@ -135,10 +127,6 @@
                     formData:{
                     },
                     dataType:"json",
-                    // add: function(e,result){
-                        // $(".picBox-upload-" + bindtype).show();
-                        // result.submit();
-                    // },
                     success: function(response) {
                         console.log(response);
                         if (response.errno == 0) {
@@ -301,10 +289,6 @@
     }
 </script>
 <style scoped>
-    /*.pipe-list {
-        width: 100%;
-        height: 100%;
-    }*/
     .body {
         height: 100%;
         width: 100%;
