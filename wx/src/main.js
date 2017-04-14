@@ -21,7 +21,10 @@ router.beforeEach((to, from, next) => {
         localStorage.setItem('_openid_', openid);
     }
     var queryString = window.location.search;
-    // sessionStorage.setItem('_href_', window.location.href); 
+    // if (to.name != 'error') {
+        console.log(window.location.href);
+        sessionStorage.setItem('_href_', window.location.href); 
+    // }
     queryString = encodeURIComponent(queryString);
     common.checkOpenid(queryString);
     if (to.meta.requireBind === true) {

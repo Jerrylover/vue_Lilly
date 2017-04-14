@@ -189,6 +189,6 @@ module.exports =
     },
     {
         path: '*',
-        redirect: '/doctor/bind',
+        redirect: '/error',
     },
 ]

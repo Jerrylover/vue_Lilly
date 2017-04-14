@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span>{{errmsg}}</span>
+        <span>{{errmsg}}网页发生错误，请稍后再试</span>
     </div>
 </template>
 <script>
@@ -14,30 +14,17 @@
             this.errmsg = sessionStorage.getItem('_href_');
         },
         mounted: function() {
+            console.log('22222');
+            
         },
         watch: {
-            '$router': function() {
-                console.log(this.$router);
+            '$route': function(to, from) {
+                console.log('11111');
+                console.log(to);
+                this.errmsg = sessionStorage.getItem('_href_');
             }
         },
         beforeRouteEnter(to, from, next) {
-            // var self = this;
-            // var openid = '';
-            // var isbind = '';
-            // openid = localStorage.getItem('_openid_');
-            // var url = api.get('user.isbind');
-            // var params = {
-            //     openid: openid,
-            // }
-            // common.post(url, params, function(response){
-            //     if (response.errno == 0) {
-            //         isbind = response.data.isbind;
-            //         console.log('isbind', isbind);
-            //         if (isbind == 1) {
-            //             this.getDoctorInfo();
-            //         }
-            //     }
-            // })
             next();
         }
     }
