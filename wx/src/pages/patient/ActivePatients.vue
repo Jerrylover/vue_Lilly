@@ -46,7 +46,7 @@
             goPipe: function(item) {
                 var self = this;
                 this.$router.push({
-                    name: 'pipelist',
+                    name: 'patient-pipelist',
                     params: {
                         patientid: item.patient.patientid,
                     },
