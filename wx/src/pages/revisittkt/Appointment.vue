@@ -31,9 +31,9 @@
                     <div v-for="revisittkt in day.revisittkts" style="margin: 20px 0px">
                         <table style="text-align: center; width:100%; border: 1px solid #ccc; border-collapse: collapse">
                             <tr>
-                                <th width="30%">{{revisittkt.patient.name}}</td>
-                                <th width="40%">{{revisittkt.patient.sexstr}}</td>
-                                <th width="30%">{{revisittkt.patient.agestr}}</td>
+                                <th width="30%">{{revisittkt.patient.name}}</th>
+                                <th width="40%">{{revisittkt.patient.sexstr}}</th>
+                                <th width="30%">{{revisittkt.patient.agestr}}</th>
                             </tr>
                             <tr>
                                 <td colspan="3" style="text-align:left"><div>就诊卡号:&nbsp;&nbsp;&nbsp;{{revisittkt.patientcardno}}</div><div>期望解决的问题:&nbsp;&nbsp;&nbsp;{{revisittkt.patient_content}}</div></td>
