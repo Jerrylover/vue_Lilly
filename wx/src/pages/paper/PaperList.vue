@@ -1,6 +1,6 @@
 <template>
     <div class="paperlist">
-        <div class="paper-item" v-for="paper in papers" @touchstart="clickPaperItem(paper)">
+        <div class="paper-item" v-for="paper in papers" @click="clickPaperItem(paper)">
             {{paper.thedate}}
         </div>
         <div class="noData" v-if="papers.length == 0">

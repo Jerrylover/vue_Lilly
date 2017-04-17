@@ -1,30 +1,30 @@
 <template>
     <div class="patientlist">
-        <div style="position: fixed; top: 0px; left: 0px; width: 100%">
+        <div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
             <mt-search v-model="patient_name" :show="true" v-on:keyup.13.native="doSearch">
-                <div class="body-container">
-                    <ul v-infinite-scroll="loadMore" :infinite-scroll-disabled="true" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
-                        <li class="item-box" v-for="patient in patients" @click="goPatientDetail(patient)">
-                                <div class="item-box-header">
-                                    <span>{{patient.name}}</span>
-                                    <span style="float: right">{{patient.disease_name}}</span>
-                                </div>
-                                <div class="item-box-item" style="margin-top: 10px">
-                                    <span class="left">性别: </span>
-                                    <span>{{patient.sexstr}}</span>
-                                </div>
-                                <div class="item-box-item">
-                                    <span class="left">电话号码: </span>
-                                    <span>{{patient.mobile}}</span>
-                                </div>
-                                <div class="item-box-item">
-                                    <span class="left">入组日期: </span>
-                                    <span>{{patient.createday}}</span>
-                                </div>
-                        </li>
-                    </ul>
-                </div>
             </mt-search>
+        </div>
+        <div class="body-container">
+            <ul v-infinite-scroll="loadMore" :infinite-scroll-disabled="true" infinite-scroll-distance="10" infinite-scroll-immediate-check="false" style="list-style-type: none; padding:0px">
+                <li class="item-box" v-for="patient in patients" @click="goPatientDetail(patient)">
+                    <div class="item-box-header">
+                        <span>{{patient.name}}</span>
+                        <span style="float: right">{{patient.disease_name}}</span>
+                    </div>
+                    <div class="item-box-item" style="margin-top: 10px">
+                        <span class="left">性别: </span>
+                        <span>{{patient.sexstr}}</span>
+                    </div>
+                    <div class="item-box-item">
+                        <span class="left">电话号码: </span>
+                        <span>{{patient.mobile}}</span>
+                    </div>
+                    <div class="item-box-item">
+                        <span class="left">入组日期: </span>
+                        <span>{{patient.createday}}</span>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -118,13 +118,16 @@
     }
 </script>
 <style scoped>
+    .mint-search {
+        height: 52px;
+    }
     .body-container {
         background-color: #eee;
         padding:  0px 0px 0px 0px;
         /*overflow-scrolling: touch;*/
         /*-webkit-overflow-scrolling: touch;*/
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
+        /*overflow: auto;*/
+        /*-webkit-overflow-scrolling: touch;*/
     }
     .item-box {
         background-color: #fff;

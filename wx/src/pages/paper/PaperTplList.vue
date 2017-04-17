@@ -1,6 +1,6 @@
 <template>
     <div class="papertpllist">
-        <div class="paper-item" v-for="papertpl in papertpls" @touchstart="clickPaperTplItem(papertpl)">
+        <div class="paper-item" v-for="papertpl in papertpls" @click="clickPaperTplItem(papertpl)">
             <div>
                 <span style="font-weight: bold">量表名称:&nbsp;{{papertpl.title}}</span>
                 <span class="paper-cnt">{{papertpl.paper_cnt}}份</span>

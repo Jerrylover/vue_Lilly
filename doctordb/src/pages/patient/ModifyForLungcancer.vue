@@ -194,39 +194,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="bottom-solid">
-                    <div class="row padding-5px">
-                        <div class="col-lg-4 col-sm-4">
-                            <label class="col-lg-3 col-sm-3">备用联系人</label>
-                            <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input class="form-control" type="text" v-model="patientinfo.other_contacts[0].name">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4">
-                            <label class="col-lg-3 col-sm-3 clear-padding-left">关系</label>
-                            <div class="col-lg-8 col-sm-8 clearPadding">
-                                <select class="form-control clearMargin" v-model="patientinfo.other_contacts[0].shipstr">
-                                    <option disabled="disabled" value="">请选择--</option>
-                                    <option value="配偶">配偶</option>
-                                    <option value="父子">父子</option>
-                                    <option value="父女">父女</option>
-                                    <option value="母子">母子</option>
-                                    <option value="母女">母女</option>
-                                    <option value="兄弟姐妹">兄弟姐妹</option>
-                                    <option value="祖孙">祖孙</option>
-                                    <option value="朋友">朋友</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4">
-                            <label class="col-lg-3 col-sm-3 clear-padding-left">手机</label>
-                            <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input name="other_contacts_mobile" class="form-control" type="text" v-model="patientinfo.other_contacts[0].mobile">
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
             <div>
                 <div class="bg-caption-padding"><a class="fa fa-plus-square-o" style="cursor: pointer; text-decoration: none" @click="moreOtherContacts"></a>备用联系人
