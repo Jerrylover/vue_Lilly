@@ -1,14 +1,14 @@
-var host = 'http://hezuo.fangcunyisheng.com/api';
+var host = '//hezuo.fangcunyisheng.com/api';
 var dev = '?display=json';
 var domain = 'fangcunyisheng.com';
 if (process.env.NODE_ENV === 'development') {
-    host = 'https://hezuo.fangcunyisheng.com/api';
+    host = '//hezuo.fangcunyisheng.com/api';
     dev = '?dev_user=taoxiaojin&display=json';
     domain = '192.168.1.135';
     // domain = 'localhost';
     // domain = '192.168.1.111';
 }else if (process.env.NODE_ENV === 'testing') {
-    host = 'http://dwx.fangcunhulian.com/api';
+    host = '//dwx.fangcunhulian.com/api';
     domain = 'fangcunhulian.cn';
 }
 
