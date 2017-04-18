@@ -1,15 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import routes from './map.js'
 
 Vue.use(Router)
+// console.log(routes)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Hello',
-      component: Hello
-    }
-  ]
-})
+// import Hello from 'components/Hello'
+
+// export default new Router({
+//   routes: [
+//     {
+//       path: '/',
+//       name: 'Hello',
+//       component: Hello
+//     }
+//   ]
+// })
+export default new Router({routes})

@@ -1,6 +1,6 @@
-# hezuo
+# fe-doctor-wx
 
-> for third
+> A Vue.js project
 
 ## Build Setup
 
