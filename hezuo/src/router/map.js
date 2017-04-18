@@ -7,7 +7,7 @@ const Patient = {
 const EmptyTemplate = {
     template: '<router-view></router-view>',
 }
-module.exports = 
+module.exports =
 [
     {
         path: '/doctor/',
@@ -190,8 +190,14 @@ module.exports =
     {
         path: '/',
         name: 'empty',
-        // redirect: '/error',
-        component: resolve => require(['../pages/doctor/Empty.vue'], resolve),
+        component: Patient,
+        children: [
+            {
+                path: '/',
+                name: 'patient-list',
+                component: resolve => require(['../pages/patient/PatientList.vue'], resolve)
+            }
+        ]
     },
     {
         path: '*',

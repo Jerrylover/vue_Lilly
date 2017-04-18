@@ -40,6 +40,7 @@ router.beforeEach((to, from, next) => {
             next({name: 'doctor-bind'});
         }
     }else {
+        console.log('test1');
         next();
     }
 })
