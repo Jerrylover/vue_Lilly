@@ -17,8 +17,8 @@ router.beforeEach((to, from, next) => {
     if (typeof openid != 'undefined' &&  openid != null && openid != '') {
         localStorage.setItem('_openid_', openid);
     }
-
     //兼容ios8以下 #后会被截掉的BUG
+    console.log('beforeEach', to);
     var queryString = window.location.search;
     var fcqxurltemp = queryString.substring(1, queryString.length);
     var queryArr = [];
@@ -28,6 +28,7 @@ router.beforeEach((to, from, next) => {
         var arr = one.split('=');
         obj[arr[0]] = arr[1];
     })
+    console.log(queryArr, '22222', obj);
     if (obj['fcqxtargeturl'] != undefined && to.name == 'empty') {
         next({path: obj['fcqxtargeturl']});
     }
