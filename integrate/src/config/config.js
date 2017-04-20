@@ -8,7 +8,8 @@ if (process.env.NODE_ENV === 'development') {
 
     dev = '?dev_user=fanghanwen&display=json';
     // domain = 'localhost';
-    domain = '192.168.1.108'
+    // domain = '192.168.1.108'
+    domain = '192.168.1.111'
 } else if (process.env.NODE_ENV == 'testing') {
     host = '//doctor.fangcunhulian.cn/api';
     domain = 'fangcunhulian.cn'
