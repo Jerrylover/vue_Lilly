@@ -77,7 +77,31 @@
                             <span>复诊日期:&nbsp;&nbsp;&nbsp;{{revisitdate}}</span>
                         </div>
                     </div>
-                    <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 30px 0px; padding: 10px">
+                    <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 10px 0px; padding: 10px">
+                        <div class="row" style="margin: 0px">
+                            <div class="col-sm-2" style="width:17px">
+                                <img src="../../assets/item.png">
+                            </div>
+                            <div class="col-sm-2">
+                                <span>预约途径</span>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 15px 0px 10px 0px">
+                            <div class="col-sm-4" style="padding: 5px 15px 5px 15px">
+                                <input id="checkboxfangcun" name="yuyue_platform" type="radio" value="fangcun" v-model="yuyue_platform">
+                                <label for="checkboxfangcun" style="font-size: 16px; cursor: pointer;line-height:1.1">方寸医生</label>
+                            </div>
+                            <div class="col-sm-4" style="padding: 5px 15px 5px 15px">
+                                <input id="checkboxxieheapp" name="yuyue_platform" type="radio" value="xieheapp" v-model="yuyue_platform">
+                                <label for="checkboxxieheapp" style="font-size: 16px; cursor: pointer;line-height:1.1">协和App</label>
+                            </div>
+                            <div class="col-sm-4" style="padding: 5px 15px 5px 15px">
+                                <input id="114" type="radio" name="yuyue_platform" value="114" v-model="yuyue_platform">
+                                <label for="114" style="font-size: 16px; cursor: pointer;line-height:1.1">114平台</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 10px 0px; padding: 10px">
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-2" style="width:17px">
                                 <img src="../../assets/item.png">
@@ -107,7 +131,7 @@
                                 <img src="../../assets/item.png">
                             </div>
                             <div class="col-sm-10">
-                                <span style="font-size: 16px">复诊日期:&nbsp;&nbsp;&nbsp;{{revisittkt.thedate}}</span>
+                                <span style="font-size: 16px">复诊日期:&nbsp;&nbsp;&nbsp;{{revisittkt.thedate}}&nbsp;&nbsp;&nbsp;{{revisittkt.yuyue_platform | yuyue_platformFilter}}</span>
                             </div>
                         </div>
                         <div class="row" style="margin: 0px 0px 40px 0px; padding: 0px 0px 0px 15px">
@@ -141,6 +165,42 @@ h4 {
     border-bottom: 3px solid #4893ef;
     padding-bottom: 1px;
 }
+
+
+.demo1 input[type='radio'],.demo1 input[type="checkbox"]{
+    display:none; 
+}
+.demo1 label:before{
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #3797fc;
+}
+.demo1 input[type='radio'] + label:before{
+     border-radius: 8px;
+}
+.demo1 input[type='checkbox'] + label:before{
+     border-radius: 3px;
+}
+.demo1 input[type='radio']:checked+label:before{
+    content: "\2022";
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+    line-height: 19px;
+}
+.demo1 input[type='checkbox']:checked+label:before{
+    content: "\2713";
+    font-size: 15px;
+    color: #f3f3f3;
+    text-align: center;
+    line-height: 17px;
+}
 </style>
 <script>
     import api from '../../config/api.js';
@@ -148,6 +208,8 @@ h4 {
     module.exports = {
         data: function() {
             return {
+                yuyue_platform: 'fangcun',
+
                 patientid: '',
                 patientname: '',
                 year: '2016',
@@ -201,6 +263,7 @@ h4 {
                         if (data.revisittkt_valid != undefined ) {
                             self.revisitdate = data.revisittkt_valid.thedate;
                             self.revisittktid = data.revisittkt_valid.id;
+                            self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
                         }
                     }else {
                         self.$dispatch('show-alert', response.errmsg);
@@ -222,6 +285,11 @@ h4 {
                 }
             },
         },
+        // watch: {
+        //     'yuyue_platform': function(old, newvalue) {
+        //         console.log(old, '----', newvalue);
+        //     }
+        // },
         methods: {
             pointer: function(row, col) {
                 if (this.schedules[row*7+col].tdpointer.trim() == 'tdpointer') {
@@ -334,6 +402,8 @@ h4 {
                     self.$dispatch('show-alert', "请选择预约日期!");
                     return ;
                 }
+                console.log(this.yuyue_platform);
+                // return ;
                 $.ajax({
                     url: api.get('patient.addormodifyappointmentjson'),
                     type: 'POST',
@@ -343,6 +413,7 @@ h4 {
                         revisittktid: self.revisittktid,
                         thedate: self.revisitdate,
                         checkuptplids: self.checkuptplids_selectedtkt,
+                        yuyue_platform: self.yuyue_platform,
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
@@ -378,6 +449,7 @@ h4 {
                                 if (data.revisittkt_valid != undefined ) {
                                     self.revisitdate = data.revisittkt_valid.thedate;
                                     self.revisittktid = data.revisittkt_valid.id;
+                                    self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
                                 }
                             }else {
                                 self.$dispatch('show-alert', response.errmsg);
@@ -424,6 +496,19 @@ h4 {
                     return '0' + (value+1);
                 }else {
                     return value+1;
+                }
+            },
+            yuyue_platformFilter: function(value) {
+                switch (value) {
+                    case '114':
+                        return "114平台";
+                        break;
+                    case 'fangcun': 
+                        return "方寸医生";
+                        break;
+                    case 'xieheapp': 
+                        return '协和App';
+                        break;
                 }
             }
         }

@@ -147,7 +147,7 @@
                                 <label>姓名</label>
                             </div>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input class="form-control" type="text" value="{{patientinfo.spare_contacts_name}}" v-model="item.name">
+                                <input class="form-control" type="text"  v-model="item.name">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -170,7 +170,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <label class="col-lg-3 col-sm-3 clear-padding-left">手机</label>
                             <div class="col-lg-8 col-sm-8 clearPadding">
-                                <input name="spare_contacts_mobile{{$index}}" class="form-control" type="text" value="{{patientinfo.spare_contacts_mobile}}" v-model="item.mobile">
+                                <input name="spare_contacts_mobile{{$index}}" class="form-control" type="text"  v-model="item.mobile">
                             </div>
                         </div>
                     </div>

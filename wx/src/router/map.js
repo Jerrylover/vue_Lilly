@@ -84,7 +84,7 @@ module.exports =
             },
             {
                 path: 'list/:patientid',
-                name: 'bedtkt-list',
+                // name: 'bedtkt-list',
                 component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
             },
             {
@@ -126,6 +126,11 @@ module.exports =
                 path: 'patientstatus',
                 name: 'bedtkt-patientstatus',
                 component: resolve => require(['../pages/bedtkt/PatientBookStatus.vue'], resolve)
+            },
+            {
+                path: 'patientstatus/:patientid',
+                // name: 'bedtkt-patientstatus',
+                component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
             },
         ]
     },
@@ -200,6 +205,13 @@ module.exports =
     },
     {
         path: '*',
-        redirect: '/error',
+        // redirect: '/error',
+        redirect: to => {
+            console.log('redirect',to);
+            sessionStorage.setItem('_errorurl_', to.path);
+            localStorage.setItem('_errorwxurl_', to.path);
+            localStorage.setItem('_errorhref_', window.location.href);
+            return '/error';
+        }
     }
 ]
