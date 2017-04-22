@@ -36,6 +36,7 @@ var urls = {
     },
     'doctor': {
         'menu': '/menu/one',
+        'simplemenu': '/menu/simple'
     },
     'checkuptpl': {
         'one': '/checkuptpl/one',
@@ -93,6 +94,10 @@ var urls = {
       'dg_patientimportpatients': '/dg_patient/bataddpatientlist',
       'dg_patientimportpost': '/dg_patient/bataddpost',
       'dg_patientremovepost': '/dg_patient/batremovepost',
+  },
+  export: {
+      checkup: '/export/checkup',
+      joblist: '/export_job/list',
   }
 }
 

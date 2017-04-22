@@ -31,6 +31,9 @@
                     <li v-if="username == 'wangqian'" v-bind:class="{activeFix: active == 'doctorgroup'}">
                         <a href="javascript:" v-link="{name:'doctorgroup-projectlist'}">医生团队</a>
                     </li>
+                    <li v-bind:class="{activeFix: active == 'checkup-export'}">
+                        <a href="javascript:" v-link="{name:'checkup-export'}">数据导出</a>
+                    </li>
                     <li>
                         <a href="javascript:" @click="logout($event)">退出 [{{name}}]</a>
                     </li>
