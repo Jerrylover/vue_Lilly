@@ -270,5 +270,12 @@ module.exports = {
                 }
             }
         }
+    },
+    '/checkup/export': {
+        name: 'checkup-export',
+        auth: true,
+        component: function(resolve) {
+            require(['../pages/checkup/Export.vue'], resolve);
+        }
     }
 }
