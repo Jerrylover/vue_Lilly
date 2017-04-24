@@ -10,13 +10,13 @@
                 <div class="row" style="padding: 0">
                     <div class="form-group">
                         <div class="">
-                            <label>协作时间:&nbsp;&nbsp;&nbsp;</label>
+                            <label>复诊的日期:&nbsp;&nbsp;&nbsp;</label>
                             <input id="thedate" name="patient-birthday" class="form-control" type="text" @click="showCalendar" name="" v-model="thedate">
                             <calendar :defaultdate="true" :show.sync="showForThedate" :value.sync="thedate" :x="x" :y="y" :begin="begin" :end="end" :range="range"></calendar>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>请描述医生需要助理处理的内容:&nbsp;&nbsp;&nbsp;</label>
+                        <label>备注:&nbsp;&nbsp;&nbsp;</label>
                         <textarea class="form-control" rows="8" v-model="content" @focus="hideerrmsg"></textarea>
                         <span v-show="errmsg" class="errmsg">请输入需要助理处理的内容</span>
                     </div>

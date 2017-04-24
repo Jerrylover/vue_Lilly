@@ -68,7 +68,7 @@
                     <a href="javascript:" :class="{'currentactive': currentactive=='thistime'}" style="text-decoration: none; margin-right: 15px" @click="clickthistime">本次预约</a>
                     <a href="javascript:" :class="{'currentactive': currentactive=='history'}" style="text-decoration: none" @click="clickhistory">已预约</a>
                     <div style="display: inline-block; float: right">
-                        <addaudittask btnname="其他途径预约" :patientid="patientid"></addaudittask>
+                        <addaudittask btnname="其他途径预约复诊" :patientid="patientid"></addaudittask>
                     </div>
                 </div>
                 <div v-show="currentactive == 'thistime'">
