@@ -67,6 +67,9 @@
                 <div class="row" style="border-bottom: 1px solid #ccc; margin: 0;padding-bottom:10px;font-size: 18px">
                     <a href="javascript:" :class="{'currentactive': currentactive=='thistime'}" style="text-decoration: none; margin-right: 15px" @click="clickthistime">本次预约</a>
                     <a href="javascript:" :class="{'currentactive': currentactive=='history'}" style="text-decoration: none" @click="clickhistory">已预约</a>
+                    <div style="display: inline-block; float: right">
+                        <addaudittask btnname="其他途径预约复诊" :patientid="patientid"></addaudittask>
+                    </div>
                 </div>
                 <div v-show="currentactive == 'thistime'">
                     <div class="row" style="border: 1px solid #ccc; margin: 10px 0px 0px 0px; padding: 10px">
@@ -77,7 +80,7 @@
                             <span>复诊日期:&nbsp;&nbsp;&nbsp;{{revisitdate}}</span>
                         </div>
                     </div>
-                    <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 10px 0px; padding: 10px">
+                    <!-- <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 10px 0px; padding: 10px">
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-2" style="width:17px">
                                 <img src="../../assets/item.png">
@@ -100,7 +103,7 @@
                                 <label for="114" style="font-size: 16px; cursor: pointer;line-height:1.1">114平台</label>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row" style="border: 1px solid #ccc;margin: 10px 0px 10px 0px; padding: 10px">
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-2" style="width:17px">
@@ -131,7 +134,7 @@
                                 <img src="../../assets/item.png">
                             </div>
                             <div class="col-sm-10">
-                                <span style="font-size: 16px">复诊日期:&nbsp;&nbsp;&nbsp;{{revisittkt.thedate}}&nbsp;&nbsp;&nbsp;{{revisittkt.yuyue_platform | yuyue_platformFilter}}</span>
+                                <span style="font-size: 16px">复诊日期:&nbsp;&nbsp;&nbsp;{{revisittkt.thedate}}&nbsp;&nbsp;</span>
                             </div>
                         </div>
                         <div class="row" style="margin: 0px 0px 40px 0px; padding: 0px 0px 0px 15px">
@@ -208,7 +211,7 @@ h4 {
     module.exports = {
         data: function() {
             return {
-                yuyue_platform: 'fangcun',
+                // yuyue_platform: 'fangcun',
 
                 patientid: '',
                 patientname: '',
@@ -263,7 +266,7 @@ h4 {
                         if (data.revisittkt_valid != undefined ) {
                             self.revisitdate = data.revisittkt_valid.thedate;
                             self.revisittktid = data.revisittkt_valid.id;
-                            self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
+                            // self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
                         }
                     }else {
                         self.$dispatch('show-alert', response.errmsg);
@@ -273,7 +276,10 @@ h4 {
         },
         components: {
             'appHeader': require('../../components/Header.vue'),
-            'appFooter': require('../../components/Footer.vue')
+            'appFooter': require('../../components/Footer.vue'),
+            'addaudittask': function(resolve) {
+                require(['../../components/doctormemo/addAuditTask.vue'], resolve);
+            }
         },
         computed: {
             getrows: function() {
@@ -402,7 +408,6 @@ h4 {
                     self.$dispatch('show-alert', "请选择预约日期!");
                     return ;
                 }
-                console.log(this.yuyue_platform);
                 // return ;
                 $.ajax({
                     url: api.get('patient.addormodifyappointmentjson'),
@@ -413,7 +418,7 @@ h4 {
                         revisittktid: self.revisittktid,
                         thedate: self.revisitdate,
                         checkuptplids: self.checkuptplids_selectedtkt,
-                        yuyue_platform: self.yuyue_platform,
+                        // yuyue_platform: self.yuyue_platform,
                     }
                 }).done(function(response){
                     if (response.errno == 0) {
@@ -449,7 +454,7 @@ h4 {
                                 if (data.revisittkt_valid != undefined ) {
                                     self.revisitdate = data.revisittkt_valid.thedate;
                                     self.revisittktid = data.revisittkt_valid.id;
-                                    self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
+                                    // self.yuyue_platform = data.revisittkt_valid.yuyue_platform;
                                 }
                             }else {
                                 self.$dispatch('show-alert', response.errmsg);
@@ -498,19 +503,19 @@ h4 {
                     return value+1;
                 }
             },
-            yuyue_platformFilter: function(value) {
-                switch (value) {
-                    case '114':
-                        return "114平台";
-                        break;
-                    case 'fangcun': 
-                        return "方寸医生";
-                        break;
-                    case 'xieheapp': 
-                        return '协和App';
-                        break;
-                }
-            }
+            // yuyue_platformFilter: function(value) {
+            //     switch (value) {
+            //         case '114':
+            //             return "114平台";
+            //             break;
+            //         case 'fangcun': 
+            //             return "方寸医生";
+            //             break;
+            //         case 'xieheapp': 
+            //             return '协和App';
+            //             break;
+            //     }
+            // }
         }
     }
 </script>

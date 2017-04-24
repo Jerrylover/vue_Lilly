@@ -82,6 +82,10 @@ var urls = {
         'changenewjson': '/common/changenewjson',
         'uploadimage': '/picture/uploadimagepost',
         'uploadcase': '/common/wxpicmsgbatuploadcasepost',
+    },
+    'doctormemo': {
+        'addpost': '/doctormemo/addpost',
+        'list': '/doctormemo/list',
     }
 }
 

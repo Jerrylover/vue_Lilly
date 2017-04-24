@@ -24,6 +24,9 @@
                 <li :class="{activeFix: active == 'sickbed-order'}">
                     <a v-link="{name: 'sickbed-listofpendingoperation'}">住院预约</a>
                 </li>
+                <li :class="{activeFix: active == 'doctormemo'}">
+                    <a v-link="{name: 'doctormemo-list'}">备忘录列表</a>
+                </li>
                 <li v-bind:class="{activeFix: active == 'user'}">
                     <a href="#" v-link="{path: '/user'}">个人中心</a>
                 </li>
