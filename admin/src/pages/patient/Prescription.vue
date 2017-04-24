@@ -337,6 +337,9 @@
             'appFooter': require('../../components/Footer.vue'),
             'modal': function(resolve) {
                 require(['../../components/Modal.vue'], resolve);
+            },
+            addaudittask: function(resolve) {
+                require(['../../components/doctormemo/addAuditTask.vue'], resolve);
             }
         },
         route: {

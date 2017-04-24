@@ -111,6 +111,20 @@ module.exports = {
         component: function(resolve) {
             require(['../pages/sickbedorder/DoctorOperateHistory.vue'], resolve);
         }
+    },
+    '/doctormemo': {
+        component: {
+            template: '<router-view></router-view>'
+        },
+        subRoutes: {
+            'list': {
+                name: 'doctormemo-list',
+                auth: true,
+                component: function(resolve) {
+                    require(['../pages/doctormemo/List.vue'], resolve)
+                },
+            },
+        }
     }
     // '/schedule/revisit4patient': {//约复诊
     //   name: 'schedule-revisit4patient',
