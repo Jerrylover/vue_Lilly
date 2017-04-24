@@ -298,10 +298,10 @@
                 labelStatus: 1,
 
                 patient: {
-                    name: '张三',
-                    sexstr: '男',
-                    agestr: '35岁',
-                    disease: '肺癌',  //多疾病的情况没考虑
+                    // name: '张三',
+                    // sexstr: '男',
+                    // agestr: '35岁',
+                    // disease: '肺癌',  //多疾病的情况没考虑
                 },
             }
         },
@@ -357,6 +357,17 @@
                 self.groups.map(function(one){
                     one.openstatus = true;
                 })
+            })
+            var url = api.get('patient.info');
+            var params = {
+                openid: openid,
+                patientid: patientid,
+            }
+            common.post(url, params, function(response){
+                console.log(response);
+                var data = response.data;
+                self.patient = data;
+                self.patient.id = patientid;
             })
         },
         mounted: function() {
