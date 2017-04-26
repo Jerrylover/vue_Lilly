@@ -6,9 +6,9 @@
             <img id="picture" :src="photourls[myCurrentIndex]" />
         </div>
 
-        <i class="fa fa-times-circle fa-3x photoclose" @click="clickClose"></i>
-        <i class="fa fa-chevron-circle-left fa-3x prev" @click="clickPrev"></i>
-        <i class="fa fa-chevron-circle-right fa-3x next" @click="clickNext"></i>
+        <i class="el-icon-close fa-2x photoclose" @click="clickClose"></i>
+        <i class="el-icon-arrow-left fa-2x prev" @click="clickPrev"></i>
+        <i class="el-icon-arrow-right fa-2x next" @click="clickNext"></i>
         <div class="circle text-center">
             <div class="page-icon" v-for="(photourl, index) in photourls" :key="index">
                     <i v-if="index == myCurrentIndex" class="fa fa-circle fa-md i-circle" style="color:#20A0FF"></i>
@@ -24,7 +24,7 @@
 .photoclose {
     position: absolute;
     z-index: 200000;
-    top: 2%;
+    top: 10%;
     right: 5%;
     color: #fff;
     cursor: pointer;
@@ -227,6 +227,10 @@ export default {
     watch: {
         myCurrentIndex: function(newval, oldval) {
             Bus.$emit('change-photo-index', newval)
+        },
+        currentindex: function(newval, oldval) {
+            // console.log('newval ',newval, 'oldval', oldval )
+            this.myCurrentIndex = newval
         }
     }
 }

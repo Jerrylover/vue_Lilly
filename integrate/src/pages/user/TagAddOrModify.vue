@@ -4,11 +4,11 @@
         <div class="page-content">
             <div class="col-sm-6" style="padding:0">
                 <div class="form-group">
-                <label class="control-label">标签名称</label>
+                <label class="control-label" style="font-weight:normal">标签名称</label>
                     <input type="text" class="form-control"  placeholder="请输入标签名" v-model="name"/>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">标签描述</label>
+                    <label class="control-label" style="font-weight:normal">标签描述</label>
                     <textarea class="form-control" rows="5" placeholder="请输入描述" v-model="content"></textarea>
                 </div>
                 <a href="javascript:" class="btn btn-default btn-success" @click="addormodifypost">提交</a>
