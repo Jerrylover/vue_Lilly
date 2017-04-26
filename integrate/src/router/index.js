@@ -144,6 +144,14 @@ export default new Router({
             component: function(resolve) {
                 require(['../pages/patient/Aftertreatment.vue'], resolve)
             }
+        },
+        {//上传图片
+            name: 'patient-medicalpic',
+            path: ':patientid/medicalpic',
+            meta: {auth: true},
+            component: function(resolve) {
+                require(['../pages/patient/MedicalPic.vue'], resolve)
+            }
         }
     ]
     },

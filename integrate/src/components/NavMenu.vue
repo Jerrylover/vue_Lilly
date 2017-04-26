@@ -392,6 +392,11 @@ export default {
               name: '评估量表',
               link: '',
               isactive: false,
+          },
+          {
+              name: '病历图',
+              link: '',
+              isactive: false,
           }
       ]
     }
@@ -549,6 +554,14 @@ export default {
             case '诊后管理':
                 this.$router.push({
                     name: 'patient-list-aftertreatment',
+                    params: {
+                        patientid: this.patientid
+                    }
+                })
+                break;
+            case '病历图':
+                this.$router.push({
+                    name: 'patient-medicalpic',
                     params: {
                         patientid: this.patientid
                     }

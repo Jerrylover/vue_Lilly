@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-12" style="margin: 0 5px 0 5px;">
                 <ul class="list-unstyled list-inline">
-                    <li v-for="(key, image) in images" track-by="$index">
+                    <li v-for="(image, key) in images" v-bind:key="image.key">
                         <div class="div-img" @mouseenter="doMouseenter($event)" @mouseleave="doMouseleave($event)">
                             <img :src="image" />
                             <div class="menubar">
@@ -42,7 +42,7 @@
             </div>
             <div class="col-sm-6">
                 <a v-show="uploadStatus == 0 " class="btn btn-primary btn-sm" href="javascript:" @click="addPic">继续添加</a>
-                <a class="btn btn-warning btn-sm" href="javascript:" @click='uploadImage' style="margin-right:20px;" :disabled="uploadStatus == 1">{{{uploadStatus | filterUploadStatus}}}</a>
+                <a class="btn btn-warning btn-sm" href="javascript:" @click='uploadImage' style="margin-right:20px;" :disabled="uploadStatus == 1" v-html="filterUploadStatus(uploadStatus)"></a>
             </div>
         </div>
 
@@ -134,10 +134,12 @@ export default {
             uploadFailCnt: 0,
             uploadStatus: 0, //0 未开始 1正在进行中 2上传完毕
             statusArr: [], //已上传成功的图片索引数组
+            pictureids: this.propPictureids,
+            imgurls: this.propImgurls
         }
     },
     props: {
-        imgurls: {
+        propImgurls: {
             type: Array,
             require: true,
             twoway: true,
@@ -145,7 +147,7 @@ export default {
                 return [];
             },
         },
-        pictureids: {
+        propPictureids: {
             type: Array,
             require: true,
             twoway: true,
@@ -169,6 +171,9 @@ export default {
         }
     },
     filters: {
+
+    },
+    methods: {
         filterUploadStatus: function(val) {
             if (val == 0) {
                 return "开始上传";
@@ -178,9 +183,7 @@ export default {
                 return "重新上传";
             }
             return "未知";
-        }
-    },
-    methods: {
+        },
         addPic(e) {
             e.preventDefault();
             $('input[type=file]').trigger('click');
@@ -212,10 +215,10 @@ export default {
             }
         },
         delImage: function(index) {
-            this.images.$remove(this.images[index]);
-            this.imgurls.$remove(this.imgurls[index]);
-            this.pictureids.$remove(this.pictureids[index]);
-            this.files.$remove(this.files[index]);
+            this.images.splice(index, 1)
+            this.imgurls.splice(index, 1)
+            this.pictureids.splice(index, 1)
+            this.files.splice(index, 1)
         },
         removeImage: function(e) {
             this.images = [];
@@ -244,14 +247,14 @@ export default {
                         that.uploadSucCnt += 1;
                         that.imgurls.push(d.thumb);
                         that.pictureids.push(d.pictureid);
-                        that.statusArr.$set(i, 1);
+                        that.statusArr[i] = 1
                     } else {
                         that.uploadFailCnt += 1;
-                        that.statusArr.$set(i, 0);
+                        that.statusArr[i] = 0
                     }
                 }).fail(function() {
                     that.uploadFailCnt += 1;
-                    that.statusArr.$set(i, 0);
+                    that.statusArr[i] = 0
                     //todo
                 }).always(function() {
                     if (i >= that.files.length - 1) {
@@ -278,6 +281,10 @@ export default {
             });;
         }
     },
-    ready: function() {}
+    watch: {
+        pictureids: function(newVal, oldVal) {
+            Bus.$emit('change-pictureids', newVal)
+        }
+    }
 }
 </script>
