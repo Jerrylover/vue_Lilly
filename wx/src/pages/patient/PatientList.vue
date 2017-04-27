@@ -75,7 +75,7 @@
                         console.log(self.patients);
                     }
                 })
-                
+
             },
             loadMore: function() {
                 this.fetchData();

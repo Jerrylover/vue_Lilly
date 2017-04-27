@@ -1,67 +1,26 @@
 var config = require('./config.js');
 var cookie = require('../lib/cookie.js');
+
 var urls = {
-    'index': '/index/index',
-    'user': {
-        'isbind': '/bind/isbind',
-    },
+    'show': '/doctor/show',
     'pipe': {
         'listofday': '/pipe/listofday',
         'pipelist': '/pipe/list',
     },
-    'bind': {
-        'binduserpost': '/bind/binduserpost',
-        'unbindpost': '/bind/unbindpost',
-    },
-    'sickbed': {
-        'list': '/bedtkt/list',
-        'refuse': '/bedtkt/refuse',
-        'refusejson': '/bedtkt/refusejson',
-        'pass': '/bedtkt/pass',
-        'passjson': '/bedtkt/passjson',
-        'senddate': '/bedtkt/sendjson',
-        'historylist': '/bedtkt/historylist',
-        // ''
-    },
-    'bedtkt': {
-        'one': '/bedtkt/one',
-        'info': '/bedtkt/info',
-        'history4onepatient': '/bedtkt/history4onepatient',
-    },
-    'bedtktlog': {
-        'list': '/bedtktlog/list',
-    },
-    'appointment': {
-        'list': '/revisittkt/list',
-        'schedulelist': '/revisittkt/schedulelist',
-    },
     'patient': {
         'list': '/patient/list',
         'info': '/patient/info',
-        'allinfo': '/patient/allinfo', 
+        'allinfo': '/patient/allinfo',
     },
     'doctor': {
-        'config': '/doctor/config',
         'info': '/doctor/info',
-        'modifypwdjson': '/doctor/modifypwdjson',
         'configpost': '/doctor/configpost',
+        'statistic': '/doctor/statistic',
     },
     'paper': {
         'tpllist4onepatient': '/papertpl/list4onepatient',
         'list': '/paper/list',
         'one': '/paper/one',
-    },
-    'revisitrecord': {
-        'list': '/revisitrecord/list4onepatient'
-    },
-    'pushmsg': {
-        'sendmsg2onepatient': "/pushmsg/sendmsg2onepatient",
-    },
-    'picture': {
-        'addjson': '/picture/addjson',
-    },
-    'wxpicmsgmgr': {
-        'sendpic2onepatient': '/wxpicmsgmgr/sendpic2onepatient',
     }
 }
 

@@ -1,34 +1,17 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <!-- 底栏菜单 -->
+    <navmenu></navmenu>
   </div>
 </template>
 
 <script>
 module.exports = {
-  name: 'app',
-  mounted: function() {
-    var self = this;
-    $(document).ajaxSuccess(function(event, xhr, settings){
-      if (xhr.responseJSON.errno == '1002') {
-        localStorage.setItem('_openid_', '');
-        localStorage.setItem('_isbind_', '');
-        let instance = self.$toast('授权失效,请重新进入本页面.');
-        setTimeout(() => {
-          instance.close();
-          WeixinJSBridge.call('closeWindow');
-        }, 2000);
-      }else if(xhr.responseJSON.errno == '1001') {
-        console.log('33333');
-        localStorage.setItem('_isbind_', '');
-        let instance = self.$toast('用户未绑定,请前往绑定页面进行绑定');
-        setTimeout(() => {
-          instance.close();
-          WeixinJSBridge.call('closeWindow');
-        }, 2000);
-      }
-    })
-  }
+    name: 'app',
+    components: {
+        'navmenu': require('./components/NavMenu.vue'),
+    }
 }
 </script>
 
@@ -41,6 +24,7 @@ module.exports = {
   color: #2c3e50;
   width:100%;
   margin-top: 60px;
+  margin-bottom: 80px;
 }
  .cn-btn-cancel {
   color: #fff;

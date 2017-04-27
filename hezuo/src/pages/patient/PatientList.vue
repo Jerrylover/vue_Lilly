@@ -1,6 +1,8 @@
 <template>
     <div class="patientlist">
-        <div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
+        <mt-header fixed title="患者列表" style="height: 60px; font-size: 20px;">
+		</mt-header>
+        <div style="position: fixed; top: 60px; left: 0px; width: 100%; z-index: 100;">
             <mt-search v-model="patient_name" :show="true" v-on:keyup.13.native="doSearch">
             </mt-search>
         </div>
@@ -48,15 +50,6 @@
                 console.log(patient);
                 this.$router.push({name: 'patient-main', params:{'patientid': patient.patientid}})
             },
-            clickdiv: function() {
-                console.log('aaaaa');
-            },
-            clicka: function() {
-                 console.log('aaaaa');
-            },
-            hello: function() {
-                console.log('22222');
-            },
             doSearch: function(){
                 this.pagenum = 1;
                 this.flag = 1;
@@ -75,7 +68,7 @@
                         console.log(self.patients);
                     }
                 })
-                
+
             },
             loadMore: function() {
                 this.fetchData();
@@ -99,7 +92,7 @@
                         if (data.patients.length != 0) {
                             self.pagenum++;
                             self.patients = self.patients.concat(data.patients);
-                            console.log(self.patients);
+                            // console.log(self.patients);
                         }
                         self.flag =1;
                     }
@@ -109,10 +102,6 @@
         created: function() {
             this.openid = localStorage.getItem('_openid_');
             this.fetchData();
-        },
-        mounted: function() {
-            console.log('xxxxxx');
-            document.title="患者列表";
         }
 
     }
@@ -123,7 +112,8 @@
     }
     .body-container {
         background-color: #eee;
-        padding:  0px 0px 0px 0px;
+        /*padding:  30px 0px 60px 0px;*/
+        margin:  110px 0px 60px 0px;
         /*overflow-scrolling: touch;*/
         /*-webkit-overflow-scrolling: touch;*/
         /*overflow: auto;*/

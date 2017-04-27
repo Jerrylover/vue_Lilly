@@ -213,7 +213,7 @@ export default {
 
                     })
                     // option.series.splice(3, 1)
-                    console.log('....option', option)
+                    // console.log('....option', option)
                     myChart.setOption(option);
                 }
             })

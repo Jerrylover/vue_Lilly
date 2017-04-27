@@ -9,7 +9,7 @@ import 'mint-ui/lib/style.css'
 Vue.use(Mint)
 /* eslint-disable no-new */
 
-var common = require('./lib/common.js')
+// var common = require('./lib/common.js')
 
 router.beforeEach((to, from, next) => {
     var openid = to.query.openid;
@@ -33,16 +33,13 @@ router.beforeEach((to, from, next) => {
     //common.checkOpenid(queryString);
     if (to.meta.requireBind === true) {
         var status = common.checkLoginSync(queryString);
-        if (status === true) {
-            next();
-        }else {
+        if (status === false) {
             console.log('test');
             next({name: 'doctor-bind'});
         }
-    }else {
-        console.log('test1');
-        next();
     }
+    console.log('test1');
+    next();
 })
 new Vue({
   router,

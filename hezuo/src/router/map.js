@@ -1,36 +1,41 @@
-const Doctor = {
-    template: '<router-view></router-view>',
-}
-const Patient = {
-    template: '<router-view></router-view>',
-}
 const EmptyTemplate = {
     template: '<router-view></router-view>',
 }
 module.exports =
 [
     {
-        path: '/doctor/',
-        name: 'doctor',
-        component: Doctor,
+        path: '/show',
+        name: 'show',
+        component: EmptyTemplate,
         children: [
             {
-                path: 'bind',
-                name: 'doctor-bind',
-                component: function(resolve) {
-                  require(['../pages/doctor/BindUser.vue'], resolve);
-                },
-            },
+                path: 'info',
+                name: 'show-info',
+                component: resolve => require(['../pages/show/Info.vue'], resolve)
+            }
+        ]
+
+
+    },
+    {
+        path: '/statistic',
+        name: 'statistic',
+        component: EmptyTemplate,
+        children: [
             {
-                path: 'config',
-                name: 'doctor-config',
-                component: resolve => require(['../pages/doctor/SetConfig.vue'], resolve),
-            },
-            {
-                path: 'modifypwd',
-                name: 'doctor-modifypwd',
-                component: resolve => require(['../pages/doctor/ModifyPwd.vue'], resolve),
-            },
+                path: 'panel',
+                name: 'statistic-panel',
+                component: resolve => require(['../pages/statistic/Panel.vue'], resolve)
+            }
+        ]
+
+
+    },
+    {
+        path: '/doctor/',
+        name: 'doctor',
+        component: EmptyTemplate,
+        children: [
             {
                 path: 'info',
                 name: 'doctor-info',
@@ -41,7 +46,7 @@ module.exports =
     {
         path: '/patient',
         name: 'patient',
-        component: Patient,
+        component: EmptyTemplate,
         children: [
             {
                 path: ':patientid/main',
@@ -73,82 +78,6 @@ module.exports =
 
     },
     {
-        path: '/bedtkt',
-        name: 'bedtkt',
-        component: EmptyTemplate,
-        children: [
-            {
-                path: 'list',
-                name: 'bedtkt-list',
-                component: resolve => require(['../pages/bedtkt/BookSickBed.vue'], resolve)
-            },
-            {
-                path: ':bedtktid/main',
-                name: 'bedtkt-main',
-                component: resolve => require(['../pages/bedtkt/BedtktMain.vue'], resolve)
-            },
-            {
-                path: ':bedtktid/applicationinfomation',
-                name: 'bedtkt-applicationinfomation',
-                component: resolve => require(['../pages/bedtkt/ApplicationInformation.vue'], resolve)
-            },
-            {
-                path: ':patientid/patienthistory',
-                name: 'bedtkt-patienthistory',
-                component: resolve => require(['../pages/bedtkt/PatientHistory.vue'], resolve)
-            },
-            {
-                path: 'historylist',
-                name: 'bedtkt-historylist',
-                component: resolve => require(['../pages/bedtkt/OperationHistory.vue'], resolve)
-            },
-            {
-                path: 'refuse',
-                name: 'bedtkt-refuse',
-                component: resolve => require(['../pages/bedtkt/RefuseEnter.vue'], resolve)
-            },
-            {
-                path: 'pass',
-                name: 'bedtkt-pass',
-                component: resolve => require(['../pages/bedtkt/ConfirmEnter.vue'], resolve)
-            },
-            {
-                path: 'sendentermsg',
-                name: 'bedtkt-sendentermsg',
-                component: resolve => require(['../pages/bedtkt/SendEnterMsg.vue'], resolve)
-            },
-            {
-                path: 'patientstatus',
-                name: 'bedtkt-patientstatus',
-                component: resolve => require(['../pages/bedtkt/PatientBookStatus.vue'], resolve)
-            },
-        ]
-    },
-    {
-        path: '/bedtktlog',
-        name: 'bedtktlog',
-        component: EmptyTemplate,
-        children: [
-            {
-                path: ':bedtktid/list',
-                name: 'bedtktlog-list',
-                component: resolve => require(['../pages/bedtkt/BedtktlogList.vue'], resolve)
-            }
-        ]
-    },
-    {
-        path: '/revisittkt',
-        name: 'revisittkt',
-        component: EmptyTemplate,
-        children: [
-            {
-                path: 'list',
-                name: 'revisittkt-list',
-                component: resolve => require(['../pages/revisittkt/Appointment.vue'], resolve)
-            }
-        ]
-    },
-    {
         path: '/paper',
         name: 'paper',
         component: EmptyTemplate,
@@ -171,18 +100,6 @@ module.exports =
         ]
     },
     {
-        path: '/revisitrecord',
-        name: 'revisitrecord',
-        component: EmptyTemplate,
-        children: [
-            {
-                path: 'list',
-                name: 'revisitrecord-list',
-                component: resolve => require(['../pages/revisitrecord/RevisitRecordList.vue'], resolve)
-            },
-        ]
-    },
-    {
         path: '/error',
         name: 'error',
         component: resolve => require(['../pages/doctor/error.vue'], resolve)
@@ -190,14 +107,7 @@ module.exports =
     {
         path: '/',
         name: 'empty',
-        component: Patient,
-        children: [
-            {
-                path: '/',
-                name: 'patient-list',
-                component: resolve => require(['../pages/patient/PatientList.vue'], resolve)
-            }
-        ]
+        component: resolve => require(['../pages/patient/PatientList.vue'], resolve)
     },
     {
         path: '*',
